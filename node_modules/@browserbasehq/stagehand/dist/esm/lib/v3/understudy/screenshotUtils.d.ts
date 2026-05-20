@@ -1,0 +1,15 @@
+import type { CDPSessionLike } from "./cdp.js";
+import type { Frame } from "./frame.js";
+import type { Locator } from "./locator.js";
+import type { Page } from "./page.js";
+import type { ScreenshotClip, ScreenshotScaleOption } from "../types/public/screenshotTypes.js";
+export type ScreenshotCleanup = () => Promise<void> | void;
+export declare function collectFramesForScreenshot(page: Page): Frame[];
+export declare function normalizeScreenshotClip(clip: ScreenshotClip): ScreenshotClip;
+export declare function computeScreenshotScale(page: Page, mode: ScreenshotScaleOption): Promise<number | undefined>;
+export declare function setTransparentBackground(session: CDPSessionLike): Promise<ScreenshotCleanup>;
+export declare function applyStyleToFrames(frames: Frame[], css: string, label: string): Promise<ScreenshotCleanup>;
+export declare function disableAnimations(frames: Frame[]): Promise<ScreenshotCleanup>;
+export declare function hideCaret(frames: Frame[]): Promise<ScreenshotCleanup>;
+export declare function applyMaskOverlays(locators: Locator[], color: string): Promise<ScreenshotCleanup>;
+export declare function runScreenshotCleanups(cleanups: ScreenshotCleanup[]): Promise<void>;
