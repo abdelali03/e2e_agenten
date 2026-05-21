@@ -47,14 +47,7 @@ class DirectRunner {
             const snapshot = await (0, AomExtractor_1.extractAomSnapshot)(this.browser.page);
             logger.info(`AOM extracted: ${snapshot.filteredNodeCount} filtered nodes from ${snapshot.url}`);
             const previousError = currentStep.retryCount > 0 ? currentStep.error : undefined;
-            const decision = await this.analyst.analyze({
-                instruction: currentStep.instruction,
-                // Wichtig: ganzen Snapshot geben, nicht nur snapshot.nodes.
-                // Dadurch sieht der Analyst URL, Title und Node-Struktur zusammen.
-                aomTree: snapshot,
-                previousError,
-            });
-            const result = await executor.execute(decision);
+            const result = await this.analyzeAndExecute(executor, currentStep.instruction, snapshot, previousError);
             if (result.success) {
                 state.markStepSuccess(result);
                 if (this.config.stepDelayMs > 0) {
@@ -75,13 +68,21 @@ class DirectRunner {
                 }
             }
             const failureSnapshot = await (0, AomExtractor_1.extractAomSnapshot)(this.browser.page);
-            const criticDecision = await this.critic.evaluate({
-                failedInstruction: currentStep.instruction,
-                errorMessage: result.errorMessage ?? "Unknown error",
-                // Auch hier ganzen Snapshot geben.
-                aomTreeAfterFailure: failureSnapshot,
-                retryCount: currentStep.retryCount,
-            });
+            let criticDecision;
+            try {
+                criticDecision = await this.critic.evaluate({
+                    failedInstruction: currentStep.instruction,
+                    errorMessage: result.errorMessage ?? "Unknown error",
+                    // Auch hier ganzen Snapshot geben.
+                    aomTreeAfterFailure: failureSnapshot,
+                    retryCount: currentStep.retryCount,
+                });
+            }
+            catch (criticError) {
+                const criticMessage = criticError instanceof Error ? criticError.message : String(criticError);
+                state.markStepFailed(`Critic failed while evaluating recovery: ${criticMessage}. Original error: ${result.errorMessage ?? "Unknown error"}`);
+                continue;
+            }
             if (criticDecision.abort) {
                 state.markStepFailed(result.errorMessage ?? "Aborted by Critic");
             }
@@ -95,6 +96,30 @@ class DirectRunner {
         }
         console.log(state.getSummary());
         return state;
+    }
+    async analyzeAndExecute(executor, instruction, snapshot, previousError) {
+        const start = Date.now();
+        try {
+            const decision = await this.analyst.analyze({
+                instruction,
+                // Wichtig: ganzen Snapshot geben, nicht nur snapshot.nodes.
+                // Dadurch sieht der Analyst URL, Title und Node-Struktur zusammen.
+                aomTree: snapshot,
+                previousError,
+            });
+            return await executor.execute(decision);
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            const durationMs = Date.now() - start;
+            logger.warn(`Analyze/execute failed after ${durationMs}ms: ${errorMessage}`);
+            return {
+                success: false,
+                actionPerformed: `Analyze/execute step "${instruction}"`,
+                errorMessage,
+                durationMs,
+            };
+        }
     }
     sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));

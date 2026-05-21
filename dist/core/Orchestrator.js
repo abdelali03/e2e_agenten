@@ -45,47 +45,38 @@ class Orchestrator {
         logger.info(` Goal: ${input.goal}`);
         logger.info(`${"═".repeat(60)}\n`);
         const state = new StateManager_1.StateManager(sessionId, input.goal, input.url);
-        // 1) Browser starten & navigieren
         await this.browser.initialize();
         await this.browser.navigateTo(input.url);
-        // 2) Plan erstellen
         const plan = await this.planner.plan(input);
         state.loadSteps(plan.steps);
         const executor = new ExecutorAgent_1.ExecutorAgent(this.browser.page);
-        // 3) Haupt-Loop
         while (!state.isFinished()) {
             const currentStep = state.getCurrentStep();
             if (!currentStep)
                 break;
             logger.info(`\n── Step ${currentStep.stepIndex + 1}: "${currentStep.instruction}" ──`);
             state.markStepRunning();
-            // AOM-Snapshot für diesen Schritt
             const snapshot = await (0, AomExtractor_1.extractAomSnapshot)(this.browser.page);
-            // Analyst: Was soll getan werden?
             const previousError = currentStep.retryCount > 0 ? currentStep.error : undefined;
             const decision = await this.analyst.analyze({
                 instruction: currentStep.instruction,
                 aomTree: snapshot.nodes,
                 previousError,
             });
-            // Executor: Aktion ausführen
             const result = await executor.execute(decision);
             if (result.success) {
                 state.markStepSuccess(result);
-                // Kurze Pause damit React/Angular rendern kann
                 if (this.config.stepDelayMs > 0) {
                     await this.sleep(this.config.stepDelayMs);
                 }
             }
             else {
-                // ── Self-Healing Loop ──────────────────────────────────────────
                 logger.warn(`Step failed. Invoking Critic...`);
                 if (this.config.screenshotOnFailure) {
                     const screenshot = await this.browser.takeScreenshot();
                     result.screenshotBase64 = screenshot;
                     logger.debug(`Screenshot captured for failed step.`);
                 }
-                // DOM-Zustand nach Fehlschlag für Critic
                 const failureSnapshot = await (0, AomExtractor_1.extractAomSnapshot)(this.browser.page);
                 const criticDecision = await this.critic.evaluate({
                     failedInstruction: currentStep.instruction,

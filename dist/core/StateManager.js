@@ -1,7 +1,4 @@
 "use strict";
-// src/core/StateManager.ts
-// Verwaltet den vollständigen Zustand einer Test-Session.
-// Alle Agenten lesen/schreiben nur über den StateManager.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StateManager = void 0;
 const Logger_1 = require("../utils/Logger");
@@ -20,7 +17,6 @@ class StateManager {
         };
         logger.info(`Session initialized: ${sessionId}`, { goal, url });
     }
-    // ── Getter ──────────────────────────────────────────────────────────────
     getState() {
         return this.state;
     }
@@ -30,7 +26,6 @@ class StateManager {
     isFinished() {
         return this.state.isComplete || this.state.hasFailed;
     }
-    // ── Schritt-Management ──────────────────────────────────────────────────
     loadSteps(instructions) {
         this.state.steps = instructions.map((instruction, i) => ({
             stepIndex: i,
@@ -79,7 +74,6 @@ class StateManager {
         this.state.hasFailed = true;
         logger.error(`❌ Step ${step.stepIndex + 1} permanently failed: ${error}`);
     }
-    // ── Fortschritt ─────────────────────────────────────────────────────────
     advance() {
         const nextIndex = this.state.currentStepIndex + 1;
         if (nextIndex >= this.state.steps.length) {
@@ -90,7 +84,6 @@ class StateManager {
             this.state.currentStepIndex = nextIndex;
         }
     }
-    // ── Reporting ───────────────────────────────────────────────────────────
     getSummary() {
         const { steps, isComplete, hasFailed } = this.state;
         const succeeded = steps.filter((s) => s.status === "success").length;

@@ -24,9 +24,14 @@ It can execute actions best when you return the exact targetUid and selector fro
 - Never invent targetUid.
 - Never invent selector.
 - Never output a selector that is not present in the AOM.
-- Prefer elements with clear name, label, placeholder, text, id, nameAttr, or inputType.
-- For forms, match the instruction to fields by name, label, placeholder, inputType, nameAttr, id, and domIndex.
+- Prefer elements with clear name, label, ariaLabel, ariaLabelledByText, placeholder, testId, dataTestId, text, id, nameAttr, or inputType.
+- For forms, match the instruction to fields by name, label, ariaLabel, ariaLabelledByText, placeholder, inputType, nameAttr, id, testId, nearbyText, nearestHeading, formText, componentContext, and domIndex.
 - For buttons and links, match by visible text/name.
+- For React/Angular/MUI components, use componentHints, componentContext, nearbyText, ancestorText, nearestHeading, and formText to understand which nested input/button is the real target.
+- For MUI TextField/FormControl, prefer the nested input/textarea with textbox role, using the surrounding label/nearbyText as the field name.
+- For custom selects/autocomplete widgets, prefer a combobox/button/input with componentHints such as mui-select, mui-autocomplete, react-select, mat-select, or custom-select.
+- For elements with data-testid/data-test/data-cy/data-qa, treat those as strong stable identifiers when they match the instruction.
+- For assertions and waits, choose the smallest matching visible element when possible; if the assertion is page-wide text or URL, targetUid and selector may be omitted according to the rules below.
 - If multiple fields are similar, use domIndex/order and explain why.
 - For "first textbox", choose the textbox with the lowest domIndex.
 - For "email", prefer inputType "email", then name/label/placeholder containing "email" or "e-mail".

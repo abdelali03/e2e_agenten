@@ -10,6 +10,7 @@ import { ExecutorAgent } from "../agents/ExecutorAgent";
 import { CriticAgent } from "../agents/CriticAgent";
 import { extractAomSnapshot } from "../utils/AomExtractor";
 import { Logger } from "../utils/Logger";
+import type { ActionResult } from "./types";
 
 const logger = new Logger("DirectRunner");
 
@@ -85,15 +86,12 @@ export class DirectRunner {
       const previousError =
         currentStep.retryCount > 0 ? currentStep.error : undefined;
 
-      const decision = await this.analyst.analyze({
-        instruction: currentStep.instruction,
-        // Wichtig: ganzen Snapshot geben, nicht nur snapshot.nodes.
-        // Dadurch sieht der Analyst URL, Title und Node-Struktur zusammen.
-        aomTree: snapshot as any,
-        previousError,
-      });
-
-      const result = await executor.execute(decision);
+      const result = await this.analyzeAndExecute(
+        executor,
+        currentStep.instruction,
+        snapshot,
+        previousError
+      );
 
       if (result.success) {
         state.markStepSuccess(result);
@@ -123,13 +121,27 @@ export class DirectRunner {
 
       const failureSnapshot = await extractAomSnapshot(this.browser.page);
 
-      const criticDecision = await this.critic.evaluate({
-        failedInstruction: currentStep.instruction,
-        errorMessage: result.errorMessage ?? "Unknown error",
-        // Auch hier ganzen Snapshot geben.
-        aomTreeAfterFailure: failureSnapshot as any,
-        retryCount: currentStep.retryCount,
-      });
+      let criticDecision;
+
+      try {
+        criticDecision = await this.critic.evaluate({
+          failedInstruction: currentStep.instruction,
+          errorMessage: result.errorMessage ?? "Unknown error",
+          // Auch hier ganzen Snapshot geben.
+          aomTreeAfterFailure: failureSnapshot as any,
+          retryCount: currentStep.retryCount,
+        });
+      } catch (criticError) {
+        const criticMessage =
+          criticError instanceof Error ? criticError.message : String(criticError);
+
+        state.markStepFailed(
+          `Critic failed while evaluating recovery: ${criticMessage}. Original error: ${
+            result.errorMessage ?? "Unknown error"
+          }`
+        );
+        continue;
+      }
 
       if (criticDecision.abort) {
         state.markStepFailed(result.errorMessage ?? "Aborted by Critic");
@@ -148,6 +160,39 @@ export class DirectRunner {
     console.log(state.getSummary());
 
     return state;
+  }
+
+  private async analyzeAndExecute(
+    executor: ExecutorAgent,
+    instruction: string,
+    snapshot: unknown,
+    previousError?: string
+  ): Promise<ActionResult> {
+    const start = Date.now();
+
+    try {
+      const decision = await this.analyst.analyze({
+        instruction,
+        // Wichtig: ganzen Snapshot geben, nicht nur snapshot.nodes.
+        // Dadurch sieht der Analyst URL, Title und Node-Struktur zusammen.
+        aomTree: snapshot as any,
+        previousError,
+      });
+
+      return await executor.execute(decision);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const durationMs = Date.now() - start;
+
+      logger.warn(`Analyze/execute failed after ${durationMs}ms: ${errorMessage}`);
+
+      return {
+        success: false,
+        actionPerformed: `Analyze/execute step "${instruction}"`,
+        errorMessage,
+        durationMs,
+      };
+    }
   }
 
   private sleep(ms: number): Promise<void> {

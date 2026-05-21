@@ -43,9 +43,34 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       id?: string;
       className?: string;
       nameAttr?: string;
+      title?: string;
+      ariaLabel?: string;
+      ariaLabelledBy?: string;
+      ariaLabelledByText?: string;
+      ariaDescribedBy?: string;
+      ariaDescribedByText?: string;
+      testId?: string;
+      dataTestId?: string;
+      dataTest?: string;
+      dataCy?: string;
+      dataQa?: string;
+      autoComplete?: string;
+      href?: string;
+      nearestHeading?: string;
+      nearbyText?: string;
+      ancestorText?: string;
+      formText?: string;
+      componentContext?: string;
+      componentHints?: string[];
+      options?: string[];
+      bounds?: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      };
       children: ExtractedNode[];
     };
-
 
     function cleanText(value: unknown): string {
       if (value === null || value === undefined) return "";
@@ -59,7 +84,11 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       }
 
       return "";
-}
+    }
+
+    function attr(el: Element, name: string): string {
+      return cleanText(el.getAttribute(name));
+    }
 
     function isVisible(el: Element): boolean {
       const htmlEl = el as HTMLElement;
@@ -91,15 +120,21 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       return cleanText(label?.textContent);
     }
 
-    function getAriaLabelledBy(el: Element): string {
-      const labelledBy = el.getAttribute("aria-labelledby");
-      if (!labelledBy) return "";
+    function getReferencedText(idList: string | null): string {
+      if (!idList) return "";
 
-      return labelledBy
+      return idList
         .split(/\s+/)
         .map((id) => cleanText(document.getElementById(id)?.textContent))
         .filter(Boolean)
         .join(" ");
+    }
+
+    function getAriaLabelledBy(el: Element): string {
+      const labelledBy = el.getAttribute("aria-labelledby");
+      if (!labelledBy) return "";
+
+      return getReferencedText(labelledBy);
     }
 
     function getMuiLikeLabel(el: Element): string {
@@ -130,6 +165,179 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       );
 
       return cleanText(clone.textContent).slice(0, 120);
+    }
+
+    function getAncestorText(el: Element): string {
+      const candidates = [
+        el.closest("[role='dialog']"),
+        el.closest("form"),
+        el.closest("fieldset"),
+        el.closest("section"),
+        el.closest("article"),
+        el.closest("[class*='MuiFormControl-root']"),
+        el.closest("[class*='MuiTextField-root']"),
+        el.closest("[class*='mat-form-field']"),
+        el.closest("[class*='ng-select']"),
+        el.parentElement?.parentElement,
+      ].filter((candidate): candidate is Element => Boolean(candidate));
+
+      const ancestor = candidates[0];
+      if (!ancestor) return "";
+
+      const clone = ancestor.cloneNode(true) as HTMLElement;
+      clone
+        .querySelectorAll("script, style, svg, path")
+        .forEach((node) => node.remove());
+
+      return cleanText(clone.textContent).slice(0, 240);
+    }
+
+    function getNearestHeading(el: Element): string {
+      const headingSelector = "h1,h2,h3,h4,h5,h6,[role='heading']";
+      const container =
+        el.closest("[role='dialog']") ||
+        el.closest("form") ||
+        el.closest("section") ||
+        el.closest("main") ||
+        document.body;
+
+      const headings = Array.from(container.querySelectorAll(headingSelector));
+      if (headings.length === 0) return "";
+
+      const elementRect = el.getBoundingClientRect();
+      let bestHeading = "";
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      for (const heading of headings) {
+        const text = cleanText(heading.textContent);
+        if (!text) continue;
+
+        const rect = heading.getBoundingClientRect();
+        const distance =
+          Math.abs(elementRect.top - rect.bottom) +
+          Math.abs(elementRect.left - rect.left);
+
+        if (rect.top <= elementRect.top + 20 && distance < bestDistance) {
+          bestDistance = distance;
+          bestHeading = text;
+        }
+      }
+
+      return bestHeading.slice(0, 120);
+    }
+
+    function getFormText(el: Element): string {
+      const form =
+        el.closest("form") ||
+        el.closest("[role='form']") ||
+        el.closest("fieldset") ||
+        el.closest("[class*='MuiFormControl-root']") ||
+        el.closest("[class*='mat-form-field']");
+
+      if (!form) return "";
+
+      const clone = form.cloneNode(true) as HTMLElement;
+      clone
+        .querySelectorAll("input, textarea, select, button, a, svg, path")
+        .forEach((node) => node.remove());
+
+      return cleanText(clone.textContent).slice(0, 200);
+    }
+
+    function getComponentHints(el: Element): string[] {
+      const hints = new Set<string>();
+
+      let current: Element | null = el;
+      let depth = 0;
+
+      while (current && depth < 5) {
+        const className =
+          typeof (current as HTMLElement).className === "string"
+            ? (current as HTMLElement).className
+            : "";
+        const tagName = current.tagName.toLowerCase();
+
+        if (className.includes("Mui")) hints.add("mui");
+        if (className.includes("MuiAutocomplete")) hints.add("mui-autocomplete");
+        if (className.includes("MuiSelect")) hints.add("mui-select");
+        if (className.includes("MuiTextField")) hints.add("mui-textfield");
+        if (className.includes("MuiInputBase")) hints.add("mui-input");
+        if (className.includes("MuiButton")) hints.add("mui-button");
+        if (className.includes("MuiDialog") || current.getAttribute("role") === "dialog") {
+          hints.add("dialog");
+        }
+        if (className.includes("mat-")) hints.add("angular-material");
+        if (className.includes("mat-select")) hints.add("mat-select");
+        if (className.includes("mat-form-field")) hints.add("mat-form-field");
+        if (className.includes("ng-") || current.hasAttribute("ng-reflect-name")) {
+          hints.add("angular");
+        }
+        if (className.includes("react-select")) hints.add("react-select");
+        if (className.includes("ant-")) hints.add("ant-design");
+        if (className.includes("chakra-")) hints.add("chakra-ui");
+        if (className.includes("select") && tagName !== "select") hints.add("custom-select");
+        if (current.hasAttribute("contenteditable")) hints.add("rich-text");
+
+        current = current.parentElement;
+        depth += 1;
+      }
+
+      return Array.from(hints);
+    }
+
+    function getComponentContext(el: Element): string {
+      const parts: string[] = [];
+      let current: Element | null = el;
+      let depth = 0;
+
+      while (current && depth < 4) {
+        const htmlEl = current as HTMLElement;
+        const tag = current.tagName.toLowerCase();
+        const role = attr(current, "role");
+        const id = attr(current, "id");
+        const className =
+          typeof htmlEl.className === "string"
+            ? cleanText(htmlEl.className).slice(0, 90)
+            : "";
+
+        const segment = [
+          tag,
+          role ? `role=${role}` : "",
+          id ? `id=${id}` : "",
+          className ? `class=${className}` : "",
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        if (segment) parts.push(segment);
+
+        current = current.parentElement;
+        depth += 1;
+      }
+
+      return parts.join(" <- ").slice(0, 360);
+    }
+
+    function getOptions(el: Element): string[] | undefined {
+      if (el.tagName.toLowerCase() !== "select") return undefined;
+
+      const select = el as HTMLSelectElement;
+      const options = Array.from(select.options)
+        .map((option) => cleanText(option.label || option.textContent || option.value))
+        .filter(Boolean);
+
+      return options.length > 0 ? options.slice(0, 30) : undefined;
+    }
+
+    function getBounds(el: Element): ExtractedNode["bounds"] {
+      const rect = el.getBoundingClientRect();
+
+      return {
+        x: Math.round(rect.x),
+        y: Math.round(rect.y),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+      };
     }
 
     function getRole(el: Element): string {
@@ -182,6 +390,14 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       const nameAttr = cleanText(el.getAttribute("name"));
       const id = cleanText(el.getAttribute("id"));
       const value = cleanText("value" in inputEl ? inputEl.value : "");
+      const testId =
+        attr(el, "data-testid") ||
+        attr(el, "data-test") ||
+        attr(el, "data-cy") ||
+        attr(el, "data-qa");
+      const nearbyText = getNearbyText(el);
+      const ancestorText = getAncestorText(el);
+      const nearestHeading = getNearestHeading(el);
 
       const label =
         ariaLabel ||
@@ -192,6 +408,10 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
         placeholder ||
         title ||
         text ||
+        testId ||
+        nearbyText ||
+        nearestHeading ||
+        ancestorText ||
         nameAttr ||
         id ||
         value;
@@ -205,15 +425,7 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
     }
 
     function getDescription(el: Element): string | undefined {
-      const describedBy = el.getAttribute("aria-describedby");
-      if (!describedBy) return undefined;
-
-      const description = describedBy
-        .split(/\s+/)
-        .map((id) => cleanText(document.getElementById(id)?.textContent))
-        .filter(Boolean)
-        .join(" ");
-
+      const description = getReferencedText(el.getAttribute("aria-describedby"));
       return description || undefined;
     }
 
@@ -228,6 +440,13 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       "[aria-labelledby]",
       "[placeholder]",
       "[contenteditable='true']",
+      "[contenteditable='']",
+      "[tabindex]:not([tabindex='-1'])",
+      "[data-testid]",
+      "[data-test]",
+      "[data-cy]",
+      "[data-qa]",
+      "summary",
     ].join(",");
 
     const elements = Array.from(document.querySelectorAll(selector)).filter(
@@ -255,6 +474,10 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
 
       const bestName = getBestName(el);
       const role = getRole(el);
+      const ariaDescribedBy = attr(el, "aria-describedby");
+      const ariaLabelledBy = attr(el, "aria-labelledby");
+      const componentHints = getComponentHints(el);
+      const rect = getBounds(el);
 
       const disabled =
         "disabled" in inputEl
@@ -300,6 +523,32 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
             ? htmlEl.className
             : undefined,
         nameAttr: el.getAttribute("name") || undefined,
+        title: attr(el, "title") || undefined,
+        ariaLabel: attr(el, "aria-label") || undefined,
+        ariaLabelledBy: ariaLabelledBy || undefined,
+        ariaLabelledByText: getReferencedText(ariaLabelledBy) || undefined,
+        ariaDescribedBy: ariaDescribedBy || undefined,
+        ariaDescribedByText: getReferencedText(ariaDescribedBy) || undefined,
+        testId:
+          attr(el, "data-testid") ||
+          attr(el, "data-test") ||
+          attr(el, "data-cy") ||
+          attr(el, "data-qa") ||
+          undefined,
+        dataTestId: attr(el, "data-testid") || undefined,
+        dataTest: attr(el, "data-test") || undefined,
+        dataCy: attr(el, "data-cy") || undefined,
+        dataQa: attr(el, "data-qa") || undefined,
+        autoComplete: attr(el, "autocomplete") || undefined,
+        href: attr(el, "href") || undefined,
+        nearestHeading: getNearestHeading(el) || undefined,
+        nearbyText: getNearbyText(el) || undefined,
+        ancestorText: getAncestorText(el) || undefined,
+        formText: getFormText(el) || undefined,
+        componentContext: getComponentContext(el) || undefined,
+        componentHints: componentHints.length > 0 ? componentHints : undefined,
+        options: getOptions(el),
+        bounds: rect,
         children: [],
       };
     });

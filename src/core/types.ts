@@ -1,4 +1,4 @@
-export type LlmProvider = "openai" | "anthropic";
+export type LlmProvider = "groq" | "openrouter" | "minimax";
 
 export interface AgentStep {
   stepIndex: number;
@@ -44,6 +44,32 @@ export interface AomNode {
   id?: string;
   className?: string;
   nameAttr?: string;
+  title?: string;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  ariaLabelledByText?: string;
+  ariaDescribedBy?: string;
+  ariaDescribedByText?: string;
+  testId?: string;
+  dataTestId?: string;
+  dataTest?: string;
+  dataCy?: string;
+  dataQa?: string;
+  autoComplete?: string;
+  href?: string;
+  nearestHeading?: string;
+  nearbyText?: string;
+  ancestorText?: string;
+  formText?: string;
+  componentContext?: string;
+  componentHints?: string[];
+  options?: string[];
+  bounds?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 
   role: string;
   name: string;

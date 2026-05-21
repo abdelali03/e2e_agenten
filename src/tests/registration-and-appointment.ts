@@ -13,20 +13,21 @@ const logger = new Logger("Test:RegistrationAndAppointment");
 const START_URL = "http://localhost:82/login";
 
 const steps: TestStep[] = [
-  { id: 11, instruction: "Fill the username or email field with test@conet.de" },
-  { id: 12, instruction: "Fill the login password field with Passwort123" },
+  { id: 11, instruction: "Fill the username or email field with aelamine@conet.de" },
+  { id: 12, instruction: "Fill the login password field with 12345678" },
   { id: 13, instruction: "Click the ANMELDEN login button" },
 
   // ── Termin erstellen ─────────────────────────────────────────────────
-  { id: 14, instruction: "Wait until the Termine navigation button is visible, then click it" },
-  { id: 15, instruction: "Fill the Name des Termins field with testtermin" },
-  { id: 16, instruction: "Fill the Kurzbeschreibung field with terminbeschreibung" },
-  { id: 17, instruction: "Set Start time hour to 09" },
-  { id: 18, instruction: "Set Start time minute to 00" },
-  { id: 19, instruction: "Set Ende time hour to 10" },
-  { id: 20, instruction: "Set Ende time minute to 00" },
-  { id: 21, instruction: "Set date field to 19.05.2026" },
-  { id: 22, instruction: "Click the Termin erstellen button" },
+  { id: 14, instruction: "Wait until the Termine navigation button is visible" },
+  { id: 15, instruction: "Click the Termine navigation button" },
+  { id: 16, instruction: "Fill the Name des Termins field with testtermin" },
+  { id: 17, instruction: "Fill the Kurzbeschreibung field with terminbeschreibung" },
+  { id: 18, instruction: "Set Start time hour to 09" },
+  { id: 19, instruction: "Set Start time minute to 00" },
+  { id: 20, instruction: "Set Ende time hour to 10" },
+  { id: 21, instruction: "Set Ende time minute to 00" },
+  { id: 22, instruction: "Set date field to 19.05.2026" },
+  { id: 23, instruction: "Click the Termin erstellen button" },
 ];
 
 async function main(): Promise<void> {

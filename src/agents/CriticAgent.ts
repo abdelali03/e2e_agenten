@@ -25,7 +25,7 @@ Your job: Analyze why a browser action failed and decide the best recovery strat
 6. **Unrecoverable** → Set abort: true (e.g. page crashed, required element truly missing)
 
 ## Response format
-Respond ONLY with valid JSON:
+Respond ONLY with valid JSON. Do not include markdown, explanations before/after JSON, or <think> blocks:
 {
   "shouldRetry": true | false,
   "revisedInstruction": "New instruction if the original needs to change (omit if retrying as-is)",
@@ -72,10 +72,11 @@ export class CriticAgent {
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userMessage },
       ],
-      512
+      2048
     );
 
     const output = LlmClient.parseJsonResponse<CriticOutput>(response.content);
+    this.validateOutput(output);
 
     if (output.abort) {
       logger.error(`Critic decided to abort: ${output.reasoning}`);
@@ -96,5 +97,23 @@ export class CriticAgent {
       `## Retry Attempt\n${input.retryCount} of ${MAX_RETRIES}`,
       `## Current Page State After Failure (AOM)\n${aomContext}`,
     ].join("\n\n");
+  }
+
+  private validateOutput(output: CriticOutput): void {
+    if (!output || typeof output !== "object") {
+      throw new Error("Critic returned invalid empty output");
+    }
+
+    if (typeof output.shouldRetry !== "boolean") {
+      throw new Error("Critic output is missing boolean shouldRetry");
+    }
+
+    if (typeof output.abort !== "boolean") {
+      throw new Error("Critic output is missing boolean abort");
+    }
+
+    if (!output.reasoning) {
+      throw new Error("Critic output is missing reasoning");
+    }
   }
 }
