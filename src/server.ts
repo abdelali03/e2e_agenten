@@ -4,14 +4,27 @@ dotenv.config();
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import { readFile } from "fs/promises";
 import { extname, join } from "path";
-import { AdaptiveOrchestrator } from "./core/AdaptiveOrchestrator";
-import { BrowserManager } from "./core/BrowserManager";
+import { AdaptiveOrchestrator } from "./systems/deterministic-playwright/core/AdaptiveOrchestrator";
+import { AllLlmOrchestrator } from "./systems/llm-command/core/AllLlmOrchestrator";
+import { AllLlmMcpOrchestrator } from "./systems/mcp-single-agent/core/AllLlmMcpOrchestrator";
+import { McpMultiAgentOrchestrator } from "./systems/mcp-multi-agent/core/McpMultiAgentOrchestrator";
+import { BrowserManager } from "./systems/deterministic-playwright/core/BrowserManager";
 import { Logger, LogEvent } from "./utils/Logger";
 import type { GoalInput } from "./core/types";
 
 const logger = new Logger("UiServer");
 const PORT = Number(process.env.UI_PORT || 3000);
 const PUBLIC_DIR = join(process.cwd(), "public");
+
+type AgentMode =
+  | "adaptive"
+  | "all-llm"
+  | "all-llm-mcp"
+  | "mcp-multi-agent";
+
+interface RunRequest extends GoalInput {
+  mode?: AgentMode;
+}
 
 let isRunActive = false;
 const recentLogs: LogEvent[] = [];
@@ -64,9 +77,7 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  logger.info(`UI ready at http://localhost:${PORT}`);
-});
+startServer(PORT);
 
 async function handleRun(req: IncomingMessage, res: ServerResponse): Promise<void> {
   if (isRunActive) {
@@ -76,10 +87,12 @@ async function handleRun(req: IncomingMessage, res: ServerResponse): Promise<voi
     return;
   }
 
-  const body = await readJsonBody<GoalInput>(req);
+  const body = await readJsonBody<RunRequest>(req);
   const input = normalizeGoalInput(body);
+  const mode = normalizeAgentMode(body.mode || process.env.AGENT_MODE);
 
-  logger.info("UI requested adaptive test run", {
+  logger.info("UI requested test run", {
+    mode,
     goal: input.goal,
     url: input.url,
   });
@@ -87,19 +100,36 @@ async function handleRun(req: IncomingMessage, res: ServerResponse): Promise<voi
   isRunActive = true;
 
   try {
-    const runner = new AdaptiveOrchestrator({
-      maxActions: 30,
-      maxRetriesPerAction: 3,
-      stepDelayMs: 1000,
-      screenshotOnFailure: true,
-      verifyEveryActions: 3,
-    });
+    const result =
+      mode === "mcp-multi-agent"
+        ? await new McpMultiAgentOrchestrator({
+            maxToolCalls: 70,
+            recursionLimit: 180,
+          }).run(input, `ui-mcp-multi-agent-${Date.now()}`)
+        : mode === "all-llm-mcp"
+        ? await new AllLlmMcpOrchestrator({
+            maxToolCalls: 50,
+          }).run(input, `ui-all-llm-mcp-${Date.now()}`)
+        : mode === "all-llm"
+        ? await new AllLlmOrchestrator({
+            maxActions: 40,
+            stepDelayMs: 1000,
+            verifyEveryActions: 4,
+          }).run(input, `ui-all-llm-${Date.now()}`)
+        : await new AdaptiveOrchestrator({
+            maxActions: 30,
+            maxRetriesPerAction: 3,
+            stepDelayMs: 1000,
+            screenshotOnFailure: true,
+            verifyEveryActions: 3,
+          }).run(input, `ui-${Date.now()}`);
 
-    const result = await runner.run(input, `ui-${Date.now()}`);
     sendJson(res, 200, result);
   } finally {
     isRunActive = false;
-    await BrowserManager.getInstance().close();
+    if (mode !== "all-llm-mcp" && mode !== "mcp-multi-agent") {
+      await BrowserManager.getInstance().close();
+    }
   }
 }
 
@@ -170,6 +200,23 @@ function normalizeGoalInput(input: GoalInput): GoalInput {
   };
 }
 
+function normalizeAgentMode(mode: string | undefined): AgentMode {
+  const normalized = (mode || "adaptive").toLowerCase();
+
+  if (
+    normalized === "adaptive" ||
+    normalized === "all-llm" ||
+    normalized === "all-llm-mcp" ||
+    normalized === "mcp-multi-agent"
+  ) {
+    return normalized;
+  }
+
+  throw new Error(
+    `Unknown agent mode "${mode}". Use adaptive, all-llm, all-llm-mcp, or mcp-multi-agent.`
+  );
+}
+
 function readJsonBody<T>(req: IncomingMessage): Promise<T> {
   return new Promise((resolve, reject) => {
     let raw = "";
@@ -216,4 +263,34 @@ function sendSse(res: ServerResponse, event: LogEvent): void {
   res.write(`id: ${event.id}\n`);
   res.write("event: log\n");
   res.write(`data: ${JSON.stringify(event)}\n\n`);
+}
+
+function startServer(port: number, attemptsLeft = 10): void {
+  let currentPort = port;
+  let remainingAttempts = attemptsLeft;
+
+  server.on("error", (error: NodeJS.ErrnoException) => {
+    if (error.code === "EADDRINUSE" && remainingAttempts > 1) {
+      const nextPort = currentPort + 1;
+      logger.warn(
+        `UI port ${currentPort} is already in use. Trying http://localhost:${nextPort}`
+      );
+      currentPort = nextPort;
+      remainingAttempts -= 1;
+      server.listen(currentPort);
+      return;
+    }
+
+    logger.error("UI server failed to start:", error);
+    process.exit(1);
+  });
+
+  server.on("listening", () => {
+    const address = server.address();
+    const actualPort =
+      typeof address === "object" && address !== null ? address.port : currentPort;
+    logger.info(`UI ready at http://localhost:${actualPort}`);
+  });
+
+server.listen(currentPort);
 }

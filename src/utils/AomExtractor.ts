@@ -9,6 +9,26 @@ export interface AomSnapshot {
   title: string;
   timestamp: string;
   visibleText: string;
+  viewport: {
+    width: number;
+    height: number;
+    scrollX: number;
+    scrollY: number;
+  };
+  accessibility: {
+    available: boolean;
+    source: "playwright-aria-snapshot" | "unavailable";
+    snapshot?: string;
+    error?: string;
+  };
+  layoutHints: {
+    activeElementUid?: string;
+    dialogs: string[];
+    headings: string[];
+    forms: string[];
+    tables: string[];
+    navigation: string[];
+  };
   nodes: AomNode[];
   rawNodeCount: number;
   filteredNodeCount: number;
@@ -21,6 +41,7 @@ function countNodes(nodes: AomNode[]): number {
 export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
   const url = page.url();
   const title = await page.title();
+  const accessibility = await extractAccessibilitySnapshot(page);
 
   const pageData = await page.evaluate(() => {
     type ExtractedNode = {
@@ -69,8 +90,20 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
         y: number;
         width: number;
         height: number;
+        centerX: number;
+        centerY: number;
+        inViewport: boolean;
       };
       children: ExtractedNode[];
+    };
+
+    type LayoutHints = {
+      activeElementUid?: string;
+      dialogs: string[];
+      headings: string[];
+      forms: string[];
+      tables: string[];
+      navigation: string[];
     };
 
     function cleanText(value: unknown): string {
@@ -266,6 +299,10 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
         if (className.includes("MuiTextField")) hints.add("mui-textfield");
         if (className.includes("MuiInputBase")) hints.add("mui-input");
         if (className.includes("MuiButton")) hints.add("mui-button");
+        if (className.includes("MuiPickers") || className.includes("MuiDate")) {
+          hints.add("mui-picker");
+        }
+        if (className.includes("MuiDataGrid")) hints.add("mui-datagrid");
         if (className.includes("MuiDialog") || current.getAttribute("role") === "dialog") {
           hints.add("dialog");
         }
@@ -277,8 +314,26 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
         }
         if (className.includes("react-select")) hints.add("react-select");
         if (className.includes("ant-")) hints.add("ant-design");
+        if (className.includes("ant-picker")) hints.add("ant-picker");
+        if (className.includes("ant-select")) hints.add("ant-select");
         if (className.includes("chakra-")) hints.add("chakra-ui");
+        if (className.includes("v-") || current.hasAttribute("data-v-app")) hints.add("vue");
+        if (className.includes("svelte-")) hints.add("svelte");
         if (className.includes("select") && tagName !== "select") hints.add("custom-select");
+        if (className.includes("datepicker") || className.includes("date-picker")) {
+          hints.add("date-picker");
+        }
+        if (className.includes("timepicker") || className.includes("time-picker")) {
+          hints.add("time-picker");
+        }
+        if (tagName === "table" || current.getAttribute("role") === "table") hints.add("table");
+        if (current.getAttribute("role") === "grid") hints.add("grid");
+        if (current.getAttribute("role") === "menu") hints.add("menu");
+        if (current.getAttribute("role") === "listbox") hints.add("listbox");
+        if (current.getAttribute("role") === "option") hints.add("option");
+        if (current.getAttribute("role") === "tablist") hints.add("tabs");
+        if (current.getAttribute("role") === "alert") hints.add("alert");
+        if (current.getAttribute("aria-live")) hints.add("live-region");
         if (current.hasAttribute("contenteditable")) hints.add("rich-text");
 
         current = current.parentElement;
@@ -334,12 +389,43 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
 
     function getBounds(el: Element): ExtractedNode["bounds"] {
       const rect = el.getBoundingClientRect();
+      const centerX = Math.round(rect.x + rect.width / 2);
+      const centerY = Math.round(rect.y + rect.height / 2);
 
       return {
         x: Math.round(rect.x),
         y: Math.round(rect.y),
         width: Math.round(rect.width),
         height: Math.round(rect.height),
+        centerX,
+        centerY,
+        inViewport:
+          rect.bottom >= 0 &&
+          rect.right >= 0 &&
+          rect.top <= window.innerHeight &&
+          rect.left <= window.innerWidth,
+      };
+    }
+
+    function getLayoutText(selector: string, limit: number): string[] {
+      return Array.from(document.querySelectorAll(selector))
+        .filter((el) => isVisible(el))
+        .map((el) => cleanText(el.textContent || el.getAttribute("aria-label")))
+        .filter(Boolean)
+        .slice(0, limit);
+    }
+
+    function getLayoutHints(): LayoutHints {
+      return {
+        dialogs: getLayoutText("[role='dialog'],dialog,[aria-modal='true']", 8),
+        headings: getLayoutText("h1,h2,h3,h4,h5,h6,[role='heading']", 20),
+        forms: getLayoutText("form,[role='form'],fieldset", 10).map((text) =>
+          text.slice(0, 180)
+        ),
+        tables: getLayoutText("table,[role='table'],[role='grid']", 10).map((text) =>
+          text.slice(0, 180)
+        ),
+        navigation: getLayoutText("nav,[role='navigation'],[role='menubar']", 10),
       };
     }
 
@@ -572,8 +658,22 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       };
     });
 
+    const activeElement = document.activeElement as HTMLElement | null;
+    const activeElementUid = activeElement?.getAttribute("data-ai-uid") || undefined;
+    const layoutHints = {
+      ...getLayoutHints(),
+      activeElementUid,
+    };
+
     return {
       visibleText: cleanText(document.body.innerText).slice(0, 5000),
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        scrollX: Math.round(window.scrollX),
+        scrollY: Math.round(window.scrollY),
+      },
+      layoutHints,
       nodes,
     };
   });
@@ -590,10 +690,51 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
     title,
     timestamp: new Date().toISOString(),
     visibleText: pageData.visibleText,
+    viewport: pageData.viewport,
+    accessibility,
+    layoutHints: pageData.layoutHints,
     nodes,
     rawNodeCount: nodes.length,
     filteredNodeCount: filteredCount,
   };
+}
+
+async function extractAccessibilitySnapshot(
+  page: Page
+): Promise<AomSnapshot["accessibility"]> {
+  try {
+    const ariaSnapshot = (page as unknown as {
+      ariaSnapshot?: (options?: {
+        mode?: "ai" | "raw";
+        timeout?: number;
+      }) => Promise<string>;
+    }).ariaSnapshot;
+
+    if (!ariaSnapshot) {
+      return {
+        available: false,
+        source: "unavailable",
+        error: "page.ariaSnapshot() is not available in this Playwright version.",
+      };
+    }
+
+    const snapshot = await ariaSnapshot.call(page, {
+      mode: "ai",
+      timeout: 2_000,
+    });
+
+    return {
+      available: true,
+      source: "playwright-aria-snapshot",
+      snapshot: snapshot.slice(0, 12_000),
+    };
+  } catch (error) {
+    return {
+      available: false,
+      source: "unavailable",
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }
 
 export function aomToPromptString(snapshot: AomSnapshot): string {
@@ -602,7 +743,16 @@ export function aomToPromptString(snapshot: AomSnapshot): string {
     `Title: ${snapshot.title}`,
     `Timestamp: ${snapshot.timestamp}`,
     `Nodes: ${snapshot.filteredNodeCount}`,
+    `Viewport: ${snapshot.viewport.width}x${snapshot.viewport.height} scroll=(${snapshot.viewport.scrollX},${snapshot.viewport.scrollY})`,
     `Visible text excerpt: ${snapshot.visibleText.slice(0, 2500)}`,
+    "",
+    `=== LAYOUT HINTS ===`,
+    JSON.stringify(snapshot.layoutHints, null, 2),
+    "",
+    `=== PLAYWRIGHT ARIA SNAPSHOT (${snapshot.accessibility.available ? "available" : "unavailable"}) ===`,
+    snapshot.accessibility.snapshot ||
+      snapshot.accessibility.error ||
+      "No accessibility snapshot available.",
     "",
   ].join("\n");
 

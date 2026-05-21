@@ -1,0 +1,81 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.McpVerifierAgent = void 0;
+const LlmClient_1 = require("../../../utils/LlmClient");
+const Logger_1 = require("../../../utils/Logger");
+const McpMultiAgentState_1 = require("../core/McpMultiAgentState");
+const logger = new Logger_1.Logger("McpVerifierAgent");
+const SYSTEM_PROMPT = `You are the VerifierAgent for a Playwright MCP multi-agent browser workflow.
+
+Your job:
+Decide whether the original user goal is actually complete using current MCP observations and history.
+
+Rules:
+- Be strict. Do not mark complete only because a tool succeeded.
+- Prefer visible evidence in snapshots: success toast, created record, final page state, target text/value.
+- If evidence is weak, route "continue".
+- If the app blocks progress or required data is missing, route "blocked".
+
+Return ONLY valid JSON:
+{
+  "isComplete": true,
+  "confidence": "low" | "medium" | "high",
+  "route": "complete" | "continue" | "blocked",
+  "evidence": ["visible proof"],
+  "missing": ["missing evidence/actions"],
+  "reasoning": "brief evidence-based explanation"
+}`;
+class McpVerifierAgent {
+    llm = new LlmClient_1.LlmClient();
+    async verify(state) {
+        logger.info("Verifying MCP multi-agent goal");
+        const response = await this.llm.complete([
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: this.buildUserMessage(state) },
+        ], 2048);
+        const decision = this.normalize(LlmClient_1.LlmClient.parseJsonResponse(response.content));
+        logger.info(`Verifier route: ${decision.route}`, decision);
+        return decision;
+    }
+    buildUserMessage(state) {
+        return [
+            `## Goal`,
+            state.goal.goal,
+            ``,
+            `## Structured Test Data`,
+            JSON.stringify(state.goal.testData ?? {}, null, 2),
+            ``,
+            `## Current Subgoal`,
+            state.currentSubgoal ?? "None",
+            ``,
+            `## Expected Outcome`,
+            state.expectedOutcome ?? "None",
+            ``,
+            `## Recent Observations`,
+            JSON.stringify((0, McpMultiAgentState_1.compactObservations)(state.observations, 14_000, 2_000), null, 2),
+            ``,
+            `Decide whether the full goal is complete.`,
+        ].join("\n");
+    }
+    normalize(raw) {
+        const confidence = ["low", "medium", "high"].includes(raw.confidence ?? "")
+            ? raw.confidence
+            : "low";
+        const isComplete = Boolean(raw.isComplete);
+        const route = raw.route && ["complete", "continue", "blocked"].includes(raw.route)
+            ? raw.route
+            : isComplete && confidence !== "low"
+                ? "complete"
+                : "continue";
+        return {
+            isComplete,
+            confidence,
+            route,
+            evidence: Array.isArray(raw.evidence) ? raw.evidence : [],
+            missing: Array.isArray(raw.missing) ? raw.missing : [],
+            reasoning: raw.reasoning?.trim() ||
+                `Verifier returned no reasoning; route=${route}.`,
+        };
+    }
+}
+exports.McpVerifierAgent = McpVerifierAgent;

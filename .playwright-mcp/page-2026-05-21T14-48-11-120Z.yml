@@ -1,0 +1,179 @@
+- generic [ref=e574]:
+  - banner [ref=e576]:
+    - generic [ref=e577]:
+      - generic [ref=e578] [cursor=pointer]:
+        - img "ZEIT-PRO Logo" [ref=e579]
+        - heading "Leistungsnachweise" [level=6] [ref=e580]
+      - generic [ref=e585]:
+        - img [ref=e587]
+        - combobox "Suchen... (Strg+K)" [ref=e589]
+        - generic [ref=e591]: STRG K
+        - group
+      - generic [ref=e592]:
+        - button "Benachrichtigungen" [ref=e593] [cursor=pointer]:
+          - generic [ref=e594]:
+            - img [ref=e595]
+            - generic: "0"
+        - button "Hilfe & FAQ" [ref=e597] [cursor=pointer]:
+          - img [ref=e598]
+        - button "Account Einstellungen" [ref=e601] [cursor=pointer]:
+          - generic [ref=e602]:
+            - generic [ref=e603]: A
+            - generic [ref=e604]: aelamine
+  - generic [ref=e609]:
+    - button "Start" [ref=e610] [cursor=pointer]:
+      - img [ref=e612]
+      - text: Start
+    - button "Termine" [ref=e614] [cursor=pointer]:
+      - img [ref=e616]
+      - text: Termine
+    - button "Template" [ref=e618] [cursor=pointer]:
+      - img [ref=e620]
+      - text: Template
+  - main [ref=e623]:
+    - generic [ref=e625]:
+      - generic [ref=e626]:
+        - heading "Termin-Editor" [level=5] [ref=e627]
+        - group [ref=e628]:
+          - button "Einzeltermin" [pressed] [ref=e629] [cursor=pointer]
+          - button "Regeltermin" [ref=e630] [cursor=pointer]
+      - generic [ref=e631]:
+        - generic [ref=e632]:
+          - generic [ref=e633]: Name des Termins
+          - textbox "Name des Termins" [ref=e635]
+        - generic [ref=e636]:
+          - generic [ref=e637]: Kurzbeschreibung
+          - textbox "Kurzbeschreibung" [ref=e639]
+        - generic [ref=e640]:
+          - generic [ref=e641]:
+            - generic [ref=e642]: Start
+            - group "Start" [ref=e643]:
+              - generic [ref=e644]:
+                - generic [ref=e645]:
+                  - spinbutton "Hours" [ref=e646]: "08"
+                  - text: ":"
+                - spinbutton "Minutes" [ref=e648]: "00"
+              - button "Choose time, selected time is 08:00" [ref=e650] [cursor=pointer]:
+                - img [ref=e651]
+              - textbox [ref=e654]: 08:00
+          - generic [ref=e655]:
+            - generic [ref=e656]: Ende
+            - group "Ende" [ref=e657]:
+              - generic [ref=e658]:
+                - generic [ref=e659]:
+                  - spinbutton "Hours" [ref=e660]: "09"
+                  - text: ":"
+                - spinbutton "Minutes" [ref=e662]: "00"
+              - button "Choose time, selected time is 09:00" [ref=e664] [cursor=pointer]:
+                - img [ref=e665]
+              - textbox [ref=e668]: 09:00
+      - generic [ref=e669]:
+        - generic [ref=e670] [cursor=pointer]:
+          - switch "Öffentlicher Termin" [ref=e673]
+          - generic [ref=e676]: Öffentlicher Termin
+        - generic [ref=e677]:
+          - paragraph [ref=e678]: "Teilnehmer: 1"
+          - button [ref=e679] [cursor=pointer]:
+            - img [ref=e680]
+      - separator [ref=e682]
+      - generic [ref=e684]:
+        - generic [ref=e685]: Datum
+        - textbox "Datum" [ref=e687]: 2026-05-21
+      - button "Termine erstellen" [ref=e689] [cursor=pointer]
+    - separator [ref=e690]
+    - generic [ref=e691]:
+      - heading "Gespeicherte Termine" [level=5] [ref=e692]
+      - generic [ref=e694]:
+        - generic [ref=e695]:
+          - heading "Aktuelle Termine" [level=5] [ref=e696]
+          - button "Archiv anzeigen" [ref=e697] [cursor=pointer]:
+            - img [ref=e699]
+            - text: Archiv anzeigen
+        - separator [ref=e701]
+        - heading "Einzeltermine" [level=6] [ref=e702]
+        - table [ref=e704]:
+          - rowgroup [ref=e705]:
+            - row "Name Datum Zeit Status Aktionen" [ref=e706]:
+              - columnheader "Name" [ref=e707]
+              - columnheader "Datum" [ref=e708]
+              - columnheader "Zeit" [ref=e709]
+              - columnheader "Status" [ref=e710]
+              - columnheader "Aktionen" [ref=e711]
+          - rowgroup [ref=e712]:
+            - row "testtermin 19.05.2026 09:00 - 10:00 Privat In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e713]:
+              - cell "testtermin" [ref=e714]
+              - cell "19.05.2026" [ref=e715]
+              - cell "09:00 - 10:00" [ref=e716]
+              - cell "Privat" [ref=e717]:
+                - generic [ref=e719]: Privat
+              - cell "In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e720]:
+                - generic [ref=e721]:
+                  - button "In Leistungsnachweis übernehmen" [ref=e722] [cursor=pointer]:
+                    - img [ref=e723]
+                  - generic "Bearbeiten" [ref=e725]:
+                    - button [ref=e726] [cursor=pointer]:
+                      - img [ref=e727]
+                  - generic "Löschen" [ref=e729]:
+                    - button [ref=e730] [cursor=pointer]:
+                      - img [ref=e731]
+            - row "dailymeeting 30.04.2026 08:00 - 09:00 Öffentlich In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e733]:
+              - cell "dailymeeting" [ref=e734]
+              - cell "30.04.2026" [ref=e735]
+              - cell "08:00 - 09:00" [ref=e736]
+              - cell "Öffentlich" [ref=e737]:
+                - generic [ref=e739]: Öffentlich
+              - cell "In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e740]:
+                - generic [ref=e741]:
+                  - button "In Leistungsnachweis übernehmen" [ref=e742] [cursor=pointer]:
+                    - img [ref=e743]
+                  - generic "Bearbeiten" [ref=e745]:
+                    - button [ref=e746] [cursor=pointer]:
+                      - img [ref=e747]
+                  - generic "Löschen" [ref=e749]:
+                    - button [ref=e750] [cursor=pointer]:
+                      - img [ref=e751]
+        - heading "Regeltermine" [level=6] [ref=e753]
+        - table [ref=e755]:
+          - rowgroup [ref=e756]:
+            - row "Name Wochentag Zeitraum Zeit Status Aktionen" [ref=e757]:
+              - columnheader "Name" [ref=e758]
+              - columnheader "Wochentag" [ref=e759]
+              - columnheader "Zeitraum" [ref=e760]
+              - columnheader "Zeit" [ref=e761]
+              - columnheader "Status" [ref=e762]
+              - columnheader "Aktionen" [ref=e763]
+          - rowgroup [ref=e764]:
+            - row "regeltermine Dienstag 02.04.2026 - 30.04.2026 08:00 - 09:00 Öffentlich In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e765]:
+              - cell "regeltermine" [ref=e766]
+              - cell "Dienstag" [ref=e767]
+              - cell "02.04.2026 - 30.04.2026" [ref=e768]
+              - cell "08:00 - 09:00" [ref=e769]
+              - cell "Öffentlich" [ref=e770]:
+                - generic [ref=e772]: Öffentlich
+              - cell "In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e773]:
+                - generic [ref=e774]:
+                  - button "In Leistungsnachweis übernehmen" [ref=e775] [cursor=pointer]:
+                    - img [ref=e776]
+                  - generic "Bearbeiten" [ref=e778]:
+                    - button [ref=e779] [cursor=pointer]:
+                      - img [ref=e780]
+                  - generic "Löschen" [ref=e782]:
+                    - button [ref=e783] [cursor=pointer]:
+                      - img [ref=e784]
+            - row "regeltermine Mittwoch 01.04.2026 - 30.04.2026 08:00 - 09:00 Privat In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e786]:
+              - cell "regeltermine" [ref=e787]
+              - cell "Mittwoch" [ref=e788]
+              - cell "01.04.2026 - 30.04.2026" [ref=e789]
+              - cell "08:00 - 09:00" [ref=e790]
+              - cell "Privat" [ref=e791]:
+                - generic [ref=e793]: Privat
+              - cell "In Leistungsnachweis übernehmen Bearbeiten Löschen" [ref=e794]:
+                - generic [ref=e795]:
+                  - button "In Leistungsnachweis übernehmen" [ref=e796] [cursor=pointer]:
+                    - img [ref=e797]
+                  - generic "Bearbeiten" [ref=e799]:
+                    - button [ref=e800] [cursor=pointer]:
+                      - img [ref=e801]
+                  - generic "Löschen" [ref=e803]:
+                    - button [ref=e804] [cursor=pointer]:
+                      - img [ref=e805]

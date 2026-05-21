@@ -3,63 +3,140 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI Test Agent</title>
+    <title>AI Test Agent Dashboard</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <section class="workspace">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">Adaptive E2E Agent</p>
-            <h1>Goal Runner</h1>
-          </div>
-          <div class="status-pill" id="statusPill">Bereit</div>
-        </header>
+    <main class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">AI E2E Control Center</p>
+          <h1>Agentic Test Dashboard</h1>
+          <p class="hero-copy">
+            Starte und vergleiche deterministische, All-LLM und Playwright-MCP
+            Agentensysteme mit Live-Telemetrie.
+          </p>
+        </div>
+        <div class="status-card">
+          <span>Run Status</span>
+          <strong id="statusPill">Bereit</strong>
+        </div>
+      </header>
 
-        <form id="goalForm" class="single-layout">
-          <section class="panel main-panel">
-            <label class="field full">
-              <span>Ziel</span>
-              <textarea
-                id="goal"
-                rows="8"
-                required
-              >Melde dich mit aelamine@conet.de und Passwort 12345678 an und erstelle einen neuen Termin: Name testtermin, Beschreibung terminbeschreibung, Datum 19.05.2026, Start 09:00, Ende 10:00.</textarea>
-            </label>
-
-            <label class="field full">
-              <span>Start URL</span>
-              <input id="url" value="http://localhost:82/login" required />
-            </label>
-
-            <label class="field full">
-              <span>Kontext</span>
-              <textarea id="context" rows="5" placeholder="Optional: Hinweise zur App, Testdaten, bekannte Routen oder Dinge, die der Agent beachten soll.">Nutze die sichtbare UI und aktuelle URL. Erwarte keine Dashboard-Route, wenn die Anwendung nach Login auf '/' landet.</textarea>
-            </label>
-
+      <section class="dashboard-grid">
+        <form id="goalForm" class="control-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Mission Control</h2>
+              <p>Goal, Umgebung und Agentenarchitektur auswählen.</p>
+            </div>
             <button class="run-button" id="runButton" type="submit">
               Test starten
             </button>
-          </section>
+          </div>
+
+          <input id="mode" type="hidden" value="adaptive" />
+
+          <div class="mode-grid" id="modeGrid">
+            <button class="mode-card active" type="button" data-mode="adaptive">
+              <span>Stable</span>
+              <strong>Deterministic Multi-Agent</strong>
+              <small>Planner, DOM Analyst, Executor, Critic, Verifier</small>
+            </button>
+            <button class="mode-card" type="button" data-mode="all-llm">
+              <span>LLM Command</span>
+              <strong>All-LLM + Executor</strong>
+              <small>LLM entscheidet Commands, lokaler Executor klickt</small>
+            </button>
+            <button class="mode-card" type="button" data-mode="all-llm-mcp">
+              <span>MCP Single</span>
+              <strong>Single-Agent MCP</strong>
+              <small>Ein LLM-Agent ruft Playwright MCP Tools direkt auf</small>
+            </button>
+            <button class="mode-card" type="button" data-mode="mcp-multi-agent">
+              <span>LangGraph</span>
+              <strong>Multi-Agent MCP</strong>
+              <small>Planner, Observer, Analyst, Critic, Verifier über MCP</small>
+            </button>
+          </div>
+
+          <label class="field">
+            <span>Ziel</span>
+            <textarea id="goal" rows="7" required>Melde dich mit aelamine@conet.de und Passwort 12345678 an und erstelle einen neuen Termin: Name testtermin, Beschreibung terminbeschreibung, Datum 19.05.2026, Start 09:00, Ende 10:00.</textarea>
+          </label>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Start URL</span>
+              <input id="url" value="http://localhost:82/login" required />
+            </label>
+            <label class="field">
+              <span>Aktiver Modus</span>
+              <input id="modeLabel" value="Deterministic Multi-Agent" readonly />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Kontext</span>
+            <textarea id="context" rows="4" placeholder="Optional: Hinweise zur App, Testdaten, bekannte Routen oder Dinge, die der Agent beachten soll.">Nutze die sichtbare UI und aktuelle URL. Erwarte keine Dashboard-Route, wenn die Anwendung nach Login auf '/' landet.</textarea>
+          </label>
         </form>
 
-        <section class="results" id="results" aria-live="polite">
-          <div class="empty-state">
-            <strong>Noch kein Lauf gestartet.</strong>
-            <span>Nach dem Start erscheinen Status, Verifikation und ausgeführte Aktionen hier.</span>
-          </div>
-        </section>
-
-        <section class="logs-panel">
-          <div class="logs-head">
+        <aside class="telemetry-panel">
+          <div class="panel-head compact">
             <div>
-              <h2>Live Logs</h2>
-              <p>Agenten, Entscheidungen, Aktionen und Recovery-Schritte.</p>
+              <h2>Telemetry</h2>
+              <p>Live aus Logs und Run-Ergebnis aggregiert.</p>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <span>Events</span>
+              <strong id="metricEvents">0</strong>
+            </div>
+            <div class="metric">
+              <span>Agents</span>
+              <strong id="metricAgents">0</strong>
+            </div>
+            <div class="metric">
+              <span>Warnings</span>
+              <strong id="metricWarnings">0</strong>
+            </div>
+            <div class="metric">
+              <span>Errors</span>
+              <strong id="metricErrors">0</strong>
+            </div>
+          </div>
+
+          <section class="result-panel" id="results" aria-live="polite">
+            <div class="empty-state">
+              <strong>Noch kein Lauf gestartet.</strong>
+              <span>Nach dem Start erscheinen Status, Metriken und History hier.</span>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="activity-grid">
+        <section class="agents-panel">
+          <div class="panel-head compact">
+            <div>
+              <h2>Agent Activity</h2>
+              <p>Aktive Rollen, letzte Entscheidungen und Recovery-Signale.</p>
             </div>
             <div class="active-agent" id="activeAgent">Idle</div>
           </div>
           <div class="agent-strip" id="agentStrip"></div>
+        </section>
+
+        <section class="logs-panel">
+          <div class="panel-head compact">
+            <div>
+              <h2>Live Logs</h2>
+              <p>Streaming Logs aus Server, Agenten, Orchestratoren und MCP.</p>
+            </div>
+          </div>
           <div class="log-console" id="logConsole" aria-live="polite"></div>
         </section>
       </section>

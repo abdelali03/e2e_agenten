@@ -79,6 +79,65 @@ export interface AdaptiveHistoryEntry {
   observedAfter?: string;
 }
 
+export type LlmLocatorStrategy =
+  | "none"
+  | "uid"
+  | "role"
+  | "label"
+  | "placeholder"
+  | "text"
+  | "testId"
+  | "css"
+  | "xpath"
+  | "coordinate";
+
+export interface LlmLocatorSpec {
+  strategy: LlmLocatorStrategy;
+  value?: string;
+  role?: string;
+  name?: string;
+  exact?: boolean;
+  x?: number;
+  y?: number;
+}
+
+export interface LlmBrowserCommand {
+  status: "continue" | "complete" | "blocked";
+  actionType?:
+    | "navigate"
+    | "click"
+    | "doubleClick"
+    | "fill"
+    | "type"
+    | "clear"
+    | "press"
+    | "selectOption"
+    | "check"
+    | "uncheck"
+    | "hover"
+    | "waitForVisible"
+    | "waitForText"
+    | "assertVisible"
+    | "assertText"
+    | "assertUrl"
+    | "scroll"
+    | "wait";
+  locator?: LlmLocatorSpec;
+  value?: string;
+  expectedOutcome?: string;
+  reasoning: string;
+}
+
+export interface AllLlmHistoryEntry {
+  index: number;
+  command: LlmBrowserCommand;
+  success: boolean;
+  actionPerformed: string;
+  errorMessage?: string;
+  urlAfter: string;
+  observedAfter?: string;
+}
+
 
 export interface AomNode {
   uid?: string;
@@ -118,6 +177,9 @@ export interface AomNode {
     y: number;
     width: number;
     height: number;
+    centerX?: number;
+    centerY?: number;
+    inViewport?: boolean;
   };
 
   role: string;

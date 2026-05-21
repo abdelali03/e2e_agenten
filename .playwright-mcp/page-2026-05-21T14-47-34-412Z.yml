@@ -1,0 +1,405 @@
+- generic [ref=e23]:
+  - banner [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27] [cursor=pointer]:
+        - img "ZEIT-PRO Logo" [ref=e28]
+        - heading "Leistungsnachweise" [level=6] [ref=e29]
+      - generic [ref=e34]:
+        - img [ref=e36]
+        - combobox "Suchen... (Strg+K)" [ref=e38]
+        - generic [ref=e40]: STRG K
+        - group
+      - generic [ref=e41]:
+        - button "Benachrichtigungen" [ref=e42] [cursor=pointer]:
+          - generic [ref=e43]:
+            - img [ref=e44]
+            - generic: "0"
+        - button "Hilfe & FAQ" [ref=e46] [cursor=pointer]:
+          - img [ref=e47]
+        - button "Account Einstellungen" [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]:
+            - generic [ref=e52]: A
+            - generic [ref=e53]: aelamine
+  - generic [ref=e56]:
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - button "Start" [ref=e59] [cursor=pointer]:
+          - img [ref=e61]
+          - text: Start
+        - button "Termine" [ref=e63] [cursor=pointer]:
+          - img [ref=e65]
+          - text: Termine
+        - button "Template" [ref=e67] [cursor=pointer]:
+          - img [ref=e69]
+          - text: Template
+      - generic [ref=e72]:
+        - group [ref=e76]:
+          - button "Excel Importieren" [ref=e77] [cursor=pointer]:
+            - img [ref=e79]
+            - text: Excel Importieren
+          - button [ref=e81] [cursor=pointer]:
+            - img [ref=e82]
+        - group [ref=e84]:
+          - button "Excel Exportieren" [ref=e85] [cursor=pointer]:
+            - img [ref=e87]
+            - text: Excel Exportieren
+          - button [ref=e89] [cursor=pointer]:
+            - img [ref=e90]
+    - generic [ref=e92]:
+      - generic [ref=e93]:
+        - img [ref=e94]
+        - generic [ref=e96]:
+          - generic [ref=e97]: Vertragsnummer
+          - textbox "Vertragsnummer" [ref=e99]: Test
+        - button "Vertragsnummer bearbeiten" [ref=e101] [cursor=pointer]: ÄNDERN
+      - generic [ref=e103]:
+        - generic [ref=e104]:
+          - generic [ref=e105]: "ZEITRAUM:"
+          - generic [ref=e106]: "Heute: 21.05.2026"
+        - generic [ref=e107] [cursor=pointer]:
+          - paragraph [ref=e108]: Mai 2026
+          - img [ref=e109]
+  - generic [ref=e112]:
+    - generic [ref=e114]:
+      - generic [ref=e115]:
+        - text: GEARBEITETE GESAMTSTUNDEN
+        - generic [ref=e116]:
+          - heading "0,00h" [level=3] [ref=e117]
+          - paragraph [ref=e118]: Summe aller Einträge
+        - separator [ref=e119]
+        - generic [ref=e120]:
+          - generic [ref=e121]: "Durchschnitt pro Tag:"
+          - generic [ref=e122]: 0,00h
+      - generic [ref=e123]:
+        - text: DOKUMENTATIONS-FORTSCHRITT
+        - meter [ref=e125]:
+          - generic [ref=e130]: 0%
+        - generic [ref=e132]: 0 von 21 Arbeitstagen erfasst
+      - generic [ref=e133]:
+        - generic [ref=e134]: PAUSEN-ÜBERSICHT
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - heading "0.0h" [level=4] [ref=e137]
+            - text: Gesamtpausenzeit
+          - generic [ref=e138]:
+            - heading "0" [level=6] [ref=e139]
+            - text: Minuten gesamt
+        - separator [ref=e140]
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - generic [ref=e143]: DURCHSCHNITT / TAG
+            - paragraph [ref=e144]: 0 Min.
+          - generic [ref=e145]:
+            - generic [ref=e146]: TAGE MIT PAUSEN
+            - paragraph [ref=e147]: 0 Tage
+      - generic [ref=e148]:
+        - text: "WOCHENBILANZ: ARBEIT & PAUSE"
+        - generic [ref=e150]:
+          - list [ref=e151]:
+            - listitem [ref=e152]:
+              - generic [ref=e153]:
+                - img [ref=e156]
+                - generic [ref=e158]: Arbeit
+            - listitem [ref=e159]:
+              - generic [ref=e160]:
+                - img [ref=e163]
+                - generic [ref=e165]: Pause
+          - img [ref=e166]:
+            - generic [ref=e167]:
+              - generic [ref=e169]: W1
+              - generic [ref=e171]: W2
+              - generic [ref=e173]: W3
+              - generic [ref=e175]: W4
+              - generic [ref=e177]: W5
+              - generic [ref=e179]: W6
+            - generic [ref=e182]: 0.0…
+    - table [ref=e185]:
+      - rowgroup [ref=e186]:
+        - row "Datum Arbeitszeit (h) Pause (h) Tagestyp" [ref=e187]:
+          - columnheader "Datum" [ref=e188]
+          - columnheader "Arbeitszeit (h)" [ref=e189]
+          - columnheader "Pause (h)" [ref=e190]
+          - columnheader "Tagestyp" [ref=e191]
+      - rowgroup [ref=e192]:
+        - row "01.05.2026 (Fr) --,-- --,--" [ref=e193] [cursor=pointer]:
+          - cell "01.05.2026 (Fr)" [ref=e194]:
+            - paragraph [ref=e196]: 01.05.2026 (Fr)
+          - cell "--,--" [ref=e197]
+          - cell "--,--" [ref=e198]
+          - cell [ref=e199]:
+            - button [ref=e201]:
+              - img [ref=e202]
+        - row "02.05.2026 (Sa) --,-- --,--" [ref=e204] [cursor=pointer]:
+          - cell "02.05.2026 (Sa)" [ref=e205]:
+            - paragraph [ref=e207]: 02.05.2026 (Sa)
+          - cell "--,--" [ref=e208]
+          - cell "--,--" [ref=e209]
+          - cell [ref=e210]:
+            - button [ref=e212]:
+              - img [ref=e213]
+        - row "03.05.2026 (So) --,-- --,--" [ref=e215] [cursor=pointer]:
+          - cell "03.05.2026 (So)" [ref=e216]:
+            - paragraph [ref=e218]: 03.05.2026 (So)
+          - cell "--,--" [ref=e219]
+          - cell "--,--" [ref=e220]
+          - cell [ref=e221]:
+            - button [ref=e223]:
+              - img [ref=e224]
+        - row "04.05.2026 (Mo) --,-- --,--" [ref=e226] [cursor=pointer]:
+          - cell "04.05.2026 (Mo)" [ref=e227]:
+            - paragraph [ref=e229]: 04.05.2026 (Mo)
+          - cell "--,--" [ref=e230]
+          - cell "--,--" [ref=e231]
+          - cell [ref=e232]:
+            - button [ref=e234]:
+              - img [ref=e235]
+        - row "05.05.2026 (Di) --,-- --,--" [ref=e237] [cursor=pointer]:
+          - cell "05.05.2026 (Di)" [ref=e238]:
+            - paragraph [ref=e240]: 05.05.2026 (Di)
+          - cell "--,--" [ref=e241]
+          - cell "--,--" [ref=e242]
+          - cell [ref=e243]:
+            - button [ref=e245]:
+              - img [ref=e246]
+        - row "06.05.2026 (Mi) --,-- --,--" [ref=e248] [cursor=pointer]:
+          - cell "06.05.2026 (Mi)" [ref=e249]:
+            - paragraph [ref=e251]: 06.05.2026 (Mi)
+          - cell "--,--" [ref=e252]
+          - cell "--,--" [ref=e253]
+          - cell [ref=e254]:
+            - button [ref=e256]:
+              - img [ref=e257]
+        - row "07.05.2026 (Do) --,-- --,--" [ref=e259] [cursor=pointer]:
+          - cell "07.05.2026 (Do)" [ref=e260]:
+            - paragraph [ref=e262]: 07.05.2026 (Do)
+          - cell "--,--" [ref=e263]
+          - cell "--,--" [ref=e264]
+          - cell [ref=e265]:
+            - button [ref=e267]:
+              - img [ref=e268]
+        - row "08.05.2026 (Fr) --,-- --,--" [ref=e270] [cursor=pointer]:
+          - cell "08.05.2026 (Fr)" [ref=e271]:
+            - paragraph [ref=e273]: 08.05.2026 (Fr)
+          - cell "--,--" [ref=e274]
+          - cell "--,--" [ref=e275]
+          - cell [ref=e276]:
+            - button [ref=e278]:
+              - img [ref=e279]
+        - row "09.05.2026 (Sa) --,-- --,--" [ref=e281] [cursor=pointer]:
+          - cell "09.05.2026 (Sa)" [ref=e282]:
+            - paragraph [ref=e284]: 09.05.2026 (Sa)
+          - cell "--,--" [ref=e285]
+          - cell "--,--" [ref=e286]
+          - cell [ref=e287]:
+            - button [ref=e289]:
+              - img [ref=e290]
+        - row "10.05.2026 (So) --,-- --,--" [ref=e292] [cursor=pointer]:
+          - cell "10.05.2026 (So)" [ref=e293]:
+            - paragraph [ref=e295]: 10.05.2026 (So)
+          - cell "--,--" [ref=e296]
+          - cell "--,--" [ref=e297]
+          - cell [ref=e298]:
+            - button [ref=e300]:
+              - img [ref=e301]
+        - row "11.05.2026 (Mo) --,-- --,--" [ref=e303] [cursor=pointer]:
+          - cell "11.05.2026 (Mo)" [ref=e304]:
+            - paragraph [ref=e306]: 11.05.2026 (Mo)
+          - cell "--,--" [ref=e307]
+          - cell "--,--" [ref=e308]
+          - cell [ref=e309]:
+            - button [ref=e311]:
+              - img [ref=e312]
+        - row "12.05.2026 (Di) --,-- --,--" [ref=e314] [cursor=pointer]:
+          - cell "12.05.2026 (Di)" [ref=e315]:
+            - paragraph [ref=e317]: 12.05.2026 (Di)
+          - cell "--,--" [ref=e318]
+          - cell "--,--" [ref=e319]
+          - cell [ref=e320]:
+            - button [ref=e322]:
+              - img [ref=e323]
+        - row "13.05.2026 (Mi) --,-- --,--" [ref=e325] [cursor=pointer]:
+          - cell "13.05.2026 (Mi)" [ref=e326]:
+            - paragraph [ref=e328]: 13.05.2026 (Mi)
+          - cell "--,--" [ref=e329]
+          - cell "--,--" [ref=e330]
+          - cell [ref=e331]:
+            - button [ref=e333]:
+              - img [ref=e334]
+        - row "14.05.2026 (Do) --,-- --,--" [ref=e336] [cursor=pointer]:
+          - cell "14.05.2026 (Do)" [ref=e337]:
+            - paragraph [ref=e339]: 14.05.2026 (Do)
+          - cell "--,--" [ref=e340]
+          - cell "--,--" [ref=e341]
+          - cell [ref=e342]:
+            - button [ref=e344]:
+              - img [ref=e345]
+        - row "15.05.2026 (Fr) --,-- --,--" [ref=e347] [cursor=pointer]:
+          - cell "15.05.2026 (Fr)" [ref=e348]:
+            - paragraph [ref=e350]: 15.05.2026 (Fr)
+          - cell "--,--" [ref=e351]
+          - cell "--,--" [ref=e352]
+          - cell [ref=e353]:
+            - button [ref=e355]:
+              - img [ref=e356]
+        - row "16.05.2026 (Sa) --,-- --,--" [ref=e358] [cursor=pointer]:
+          - cell "16.05.2026 (Sa)" [ref=e359]:
+            - paragraph [ref=e361]: 16.05.2026 (Sa)
+          - cell "--,--" [ref=e362]
+          - cell "--,--" [ref=e363]
+          - cell [ref=e364]:
+            - button [ref=e366]:
+              - img [ref=e367]
+        - row "17.05.2026 (So) --,-- --,--" [ref=e369] [cursor=pointer]:
+          - cell "17.05.2026 (So)" [ref=e370]:
+            - paragraph [ref=e372]: 17.05.2026 (So)
+          - cell "--,--" [ref=e373]
+          - cell "--,--" [ref=e374]
+          - cell [ref=e375]:
+            - button [ref=e377]:
+              - img [ref=e378]
+        - row "18.05.2026 (Mo) --,-- --,--" [ref=e380] [cursor=pointer]:
+          - cell "18.05.2026 (Mo)" [ref=e381]:
+            - paragraph [ref=e383]: 18.05.2026 (Mo)
+          - cell "--,--" [ref=e384]
+          - cell "--,--" [ref=e385]
+          - cell [ref=e386]:
+            - button [ref=e388]:
+              - img [ref=e389]
+        - row "19.05.2026 (Di) --,-- --,--" [ref=e391] [cursor=pointer]:
+          - cell "19.05.2026 (Di)" [ref=e392]:
+            - paragraph [ref=e394]: 19.05.2026 (Di)
+          - cell "--,--" [ref=e395]
+          - cell "--,--" [ref=e396]
+          - cell [ref=e397]:
+            - button [ref=e399]:
+              - img [ref=e400]
+        - row "20.05.2026 (Mi) --,-- --,--" [ref=e402] [cursor=pointer]:
+          - cell "20.05.2026 (Mi)" [ref=e403]:
+            - paragraph [ref=e405]: 20.05.2026 (Mi)
+          - cell "--,--" [ref=e406]
+          - cell "--,--" [ref=e407]
+          - cell [ref=e408]:
+            - button [ref=e410]:
+              - img [ref=e411]
+        - row "21.05.2026 (Do) Heute --,-- --,--" [ref=e413] [cursor=pointer]:
+          - cell "21.05.2026 (Do) Heute" [ref=e414]:
+            - generic [ref=e415]:
+              - paragraph [ref=e416]: 21.05.2026 (Do)
+              - generic [ref=e419]: Heute
+          - cell "--,--" [ref=e420]
+          - cell "--,--" [ref=e421]
+          - cell [ref=e422]:
+            - button [ref=e424]:
+              - img [ref=e425]
+        - row "22.05.2026 (Fr) --,-- --,--" [ref=e427] [cursor=pointer]:
+          - cell "22.05.2026 (Fr)" [ref=e428]:
+            - paragraph [ref=e430]: 22.05.2026 (Fr)
+          - cell "--,--" [ref=e431]
+          - cell "--,--" [ref=e432]
+          - cell [ref=e433]:
+            - button [ref=e435]:
+              - img [ref=e436]
+        - row "23.05.2026 (Sa) --,-- --,--" [ref=e438] [cursor=pointer]:
+          - cell "23.05.2026 (Sa)" [ref=e439]:
+            - paragraph [ref=e441]: 23.05.2026 (Sa)
+          - cell "--,--" [ref=e442]
+          - cell "--,--" [ref=e443]
+          - cell [ref=e444]:
+            - button [ref=e446]:
+              - img [ref=e447]
+        - row "24.05.2026 (So) --,-- --,--" [ref=e449] [cursor=pointer]:
+          - cell "24.05.2026 (So)" [ref=e450]:
+            - paragraph [ref=e452]: 24.05.2026 (So)
+          - cell "--,--" [ref=e453]
+          - cell "--,--" [ref=e454]
+          - cell [ref=e455]:
+            - button [ref=e457]:
+              - img [ref=e458]
+        - row "25.05.2026 (Mo) --,-- --,--" [ref=e460] [cursor=pointer]:
+          - cell "25.05.2026 (Mo)" [ref=e461]:
+            - paragraph [ref=e463]: 25.05.2026 (Mo)
+          - cell "--,--" [ref=e464]
+          - cell "--,--" [ref=e465]
+          - cell [ref=e466]:
+            - button [ref=e468]:
+              - img [ref=e469]
+        - row "26.05.2026 (Di) --,-- --,--" [ref=e471] [cursor=pointer]:
+          - cell "26.05.2026 (Di)" [ref=e472]:
+            - paragraph [ref=e474]: 26.05.2026 (Di)
+          - cell "--,--" [ref=e475]
+          - cell "--,--" [ref=e476]
+          - cell [ref=e477]:
+            - button [ref=e479]:
+              - img [ref=e480]
+        - row "27.05.2026 (Mi) --,-- --,--" [ref=e482] [cursor=pointer]:
+          - cell "27.05.2026 (Mi)" [ref=e483]:
+            - paragraph [ref=e485]: 27.05.2026 (Mi)
+          - cell "--,--" [ref=e486]
+          - cell "--,--" [ref=e487]
+          - cell [ref=e488]:
+            - button [ref=e490]:
+              - img [ref=e491]
+        - row "28.05.2026 (Do) --,-- --,--" [ref=e493] [cursor=pointer]:
+          - cell "28.05.2026 (Do)" [ref=e494]:
+            - paragraph [ref=e496]: 28.05.2026 (Do)
+          - cell "--,--" [ref=e497]
+          - cell "--,--" [ref=e498]
+          - cell [ref=e499]:
+            - button [ref=e501]:
+              - img [ref=e502]
+        - row "29.05.2026 (Fr) --,-- --,--" [ref=e504] [cursor=pointer]:
+          - cell "29.05.2026 (Fr)" [ref=e505]:
+            - paragraph [ref=e507]: 29.05.2026 (Fr)
+          - cell "--,--" [ref=e508]
+          - cell "--,--" [ref=e509]
+          - cell [ref=e510]:
+            - button [ref=e512]:
+              - img [ref=e513]
+        - row "30.05.2026 (Sa) --,-- --,--" [ref=e515] [cursor=pointer]:
+          - cell "30.05.2026 (Sa)" [ref=e516]:
+            - paragraph [ref=e518]: 30.05.2026 (Sa)
+          - cell "--,--" [ref=e519]
+          - cell "--,--" [ref=e520]
+          - cell [ref=e521]:
+            - button [ref=e523]:
+              - img [ref=e524]
+        - row "31.05.2026 (So) --,-- --,--" [ref=e526] [cursor=pointer]:
+          - cell "31.05.2026 (So)" [ref=e527]:
+            - paragraph [ref=e529]: 31.05.2026 (So)
+          - cell "--,--" [ref=e530]
+          - cell "--,--" [ref=e531]
+          - cell [ref=e532]:
+            - button [ref=e534]:
+              - img [ref=e535]
+    - generic [ref=e538]:
+      - generic [ref=e539]:
+        - heading "Im Leistungsnachweis" [level=6] [ref=e540]:
+          - img [ref=e541]
+          - text: Im Leistungsnachweis
+        - list [ref=e544]: Keine Einträge vorhanden.
+      - generic [ref=e545]:
+        - heading "Offene Termine (Kalender)" [level=6] [ref=e546]:
+          - img [ref=e547]
+          - text: Offene Termine (Kalender)
+        - list [ref=e550]:
+          - listitem [ref=e551]:
+            - generic [ref=e552]:
+              - generic [ref=e553]:
+                - img [ref=e554]
+                - generic [ref=e556]: Einmalig
+              - generic [ref=e557]: 09:00 - 10:00
+              - text: 19.05.2026
+            - generic [ref=e558]:
+              - paragraph [ref=e559]: testtermin
+              - paragraph [ref=e560]:
+                - generic [ref=e561]:
+                  - generic [ref=e562]: terminbeschreibung
+                  - generic [ref=e563]:
+                    - img [ref=e564]
+                    - generic [ref=e566]:
+                      - text: "Von:"
+                      - strong [ref=e567]: Abdelali Elamine
+            - button "In Leistungsnachweis übernehmen" [ref=e569] [cursor=pointer]:
+              - img [ref=e570]
+  - contentinfo [ref=e572]:
+    - paragraph [ref=e573]: © 2026 Leistungsnachweis Projekt | Version V1.1

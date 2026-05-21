@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { AdaptiveOrchestrator } from "../core/AdaptiveOrchestrator";
-import { BrowserManager } from "../core/BrowserManager";
+import { AdaptiveOrchestrator } from "../systems/deterministic-playwright/core/AdaptiveOrchestrator";
+import { BrowserManager } from "../systems/deterministic-playwright/core/BrowserManager";
 import { Logger } from "../utils/Logger";
 import type { GoalInput } from "../core/types";
 

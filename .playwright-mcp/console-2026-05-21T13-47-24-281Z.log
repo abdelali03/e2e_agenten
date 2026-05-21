@@ -1,0 +1,10 @@
+[     261ms] [LOG] WS-DEBUG: Kein Token gefunden. Warte auf Login... @ http://localhost:82/assets/index-BcapL9Q1.js:472
+[   12423ms] [LOG] {user: Object, token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZWxhbWluZSIsInJvb…jU2fQ.FM5RhX0iI_bZXg9Xp_v1OdOgstm-BpSJXkQzcasvLLU} @ http://localhost:82/assets/index-BcapL9Q1.js:240
+[   12424ms] [LOG] Login erfolgreich! {user: Object, token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZWxhbWluZSIsInJvb…jU2fQ.FM5RhX0iI_bZXg9Xp_v1OdOgstm-BpSJXkQzcasvLLU} @ http://localhost:82/assets/index-BcapL9Q1.js:240
+[   13736ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   13821ms] [LOG] Hole aktuelle Daten vom Server... @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   13835ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   13929ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   13937ms] [LOG] Vertragsnummer für 2026-05-21 erfolgreich aufgerufen: Test @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[   13957ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   14292ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464

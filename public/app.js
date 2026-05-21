@@ -5,15 +5,34 @@ const statusPill = document.querySelector("#statusPill");
 const logConsole = document.querySelector("#logConsole");
 const activeAgent = document.querySelector("#activeAgent");
 const agentStrip = document.querySelector("#agentStrip");
+const modeInput = document.querySelector("#mode");
+const modeLabel = document.querySelector("#modeLabel");
+const modeGrid = document.querySelector("#modeGrid");
+
+const metricEvents = document.querySelector("#metricEvents");
+const metricAgents = document.querySelector("#metricAgents");
+const metricWarnings = document.querySelector("#metricWarnings");
+const metricErrors = document.querySelector("#metricErrors");
+
+const modeNames = {
+  adaptive: "Deterministic Multi-Agent",
+  "all-llm": "All-LLM Command Agent",
+  "all-llm-mcp": "Single-Agent Playwright MCP",
+  "mcp-multi-agent": "Multi-Agent MCP + LangGraph",
+};
+
 const logEvents = [];
 const agentState = new Map();
 
 connectLogs();
+bindModeCards();
+updateMetrics();
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const payload = {
+    mode: valueOf("mode"),
     goal: valueOf("goal"),
     url: valueOf("url"),
     context: valueOf("context"),
@@ -22,7 +41,7 @@ form.addEventListener("submit", async (event) => {
 
   setRunning(true);
   clearLogs();
-  renderLoading();
+  renderLoading(payload.mode);
 
   try {
     const response = await fetch("/api/run", {
@@ -37,7 +56,7 @@ form.addEventListener("submit", async (event) => {
       throw new Error(body.error || "Test run failed");
     }
 
-    renderResult(body);
+    renderResult(body, payload.mode);
     setStatus(body.status);
   } catch (error) {
     renderError(error instanceof Error ? error.message : String(error));
@@ -46,6 +65,21 @@ form.addEventListener("submit", async (event) => {
     setRunning(false);
   }
 });
+
+function bindModeCards() {
+  modeGrid.addEventListener("click", (event) => {
+    const card = event.target.closest(".mode-card");
+    if (!card) return;
+
+    const mode = card.dataset.mode;
+    modeInput.value = mode;
+    modeLabel.value = modeNames[mode] || mode;
+
+    document
+      .querySelectorAll(".mode-card")
+      .forEach((item) => item.classList.toggle("active", item === card));
+  });
+}
 
 function valueOf(id) {
   return document.querySelector(`#${id}`).value.trim();
@@ -74,6 +108,7 @@ function clearLogs() {
   logConsole.innerHTML = "";
   activeAgent.textContent = "Startet";
   agentStrip.innerHTML = "";
+  updateMetrics();
 }
 
 function appendSystemLog(level, context, message) {
@@ -89,12 +124,13 @@ function appendSystemLog(level, context, message) {
 function appendLog(entry) {
   logEvents.push(entry);
 
-  if (logEvents.length > 300) {
+  if (logEvents.length > 500) {
     logEvents.shift();
     logConsole.firstElementChild?.remove();
   }
 
   updateAgents(entry);
+  updateMetrics();
 
   const row = document.createElement("div");
   row.className = `log-row ${entry.level}`;
@@ -119,22 +155,28 @@ function updateAgents(entry) {
   activeAgent.textContent = context;
 
   agentStrip.innerHTML = Array.from(agentState.entries())
-    .slice(-10)
+    .slice(-14)
     .map(
       ([name, state]) => `
         <div class="agent-chip ${state.level}">
+          <div class="agent-dot"></div>
           <strong>${escapeHtml(name)}</strong>
-          <span>${escapeHtml(shortMessage(state.message))}</span>
+          <span>${escapeHtml(shortMessage(state.message, 84))}</span>
         </div>
       `
     )
     .join("");
 }
 
-function formatLogMessage(entry) {
-  const meta =
-    entry.meta === undefined ? "" : ` ${safeStringify(entry.meta)}`;
+function updateMetrics() {
+  metricEvents.textContent = String(logEvents.length);
+  metricAgents.textContent = String(agentState.size);
+  metricWarnings.textContent = String(logEvents.filter((e) => e.level === "warn").length);
+  metricErrors.textContent = String(logEvents.filter((e) => e.level === "error").length);
+}
 
+function formatLogMessage(entry) {
+  const meta = entry.meta === undefined ? "" : ` ${safeStringify(entry.meta)}`;
   return `${entry.message}${meta}`;
 }
 
@@ -146,9 +188,9 @@ function safeStringify(value) {
   }
 }
 
-function shortMessage(value) {
+function shortMessage(value, max = 64) {
   const text = String(value || "");
-  return text.length > 64 ? `${text.slice(0, 61)}...` : text;
+  return text.length > max ? `${text.slice(0, max - 3)}...` : text;
 }
 
 function formatTime(timestamp) {
@@ -162,17 +204,17 @@ function formatTime(timestamp) {
 
 function setRunning(isRunning) {
   runButton.disabled = isRunning;
-  runButton.textContent = isRunning ? "Test laeuft..." : "Test starten";
+  runButton.textContent = isRunning ? "Agenten laufen..." : "Test starten";
 
   if (isRunning) {
     statusPill.textContent = "Laeuft";
-    statusPill.className = "status-pill running";
+    statusPill.className = "running";
   }
 }
 
 function setStatus(status) {
   statusPill.textContent = statusLabel(status);
-  statusPill.className = `status-pill ${status}`;
+  statusPill.className = status;
 }
 
 function statusLabel(status) {
@@ -182,38 +224,53 @@ function statusLabel(status) {
   return "Bereit";
 }
 
-function renderLoading() {
+function renderLoading(mode) {
   results.innerHTML = `
-    <div class="empty-state">
-      <strong>Der Agent arbeitet.</strong>
-      <span>Browser wird gesteuert, der Lauf kann je nach LLM-Antwortzeit einige Minuten dauern.</span>
+    <div class="run-card loading">
+      <div>
+        <span class="run-kicker">${escapeHtml(modeNames[mode] || mode)}</span>
+        <strong>Agenten arbeiten</strong>
+        <p>Browser wird gesteuert. MCP- und LLM-basierte Modi koennen einige Minuten dauern.</p>
+      </div>
+      <div class="pulse-ring"></div>
     </div>
   `;
 }
 
-function renderResult(result) {
+function renderResult(result, mode) {
   const history = Array.isArray(result.history) ? result.history : [];
   const verification = result.verification;
   const succeeded = history.filter((entry) => entry.success).length;
+  const failed = history.length - succeeded;
+  const metrics = result.metrics || {};
 
   results.innerHTML = `
-    <div class="summary">
+    <div class="summary-card">
       <div class="summary-head">
-        <div class="summary-title">
+        <div>
+          <span class="run-kicker">${escapeHtml(modeNames[mode] || mode)}</span>
           <strong>${escapeHtml(result.goal || "Goal run")}</strong>
-          <span>${succeeded}/${history.length} Aktionen erfolgreich${
-            verification
-              ? ` · Verifikation: ${verification.confidence}, complete=${verification.isComplete}`
-              : ""
-          }</span>
+          <p>${escapeHtml(result.finalSummary || result.errorMessage || "Run abgeschlossen.")}</p>
         </div>
         <div class="result-badge ${result.status}">${statusLabel(result.status)}</div>
       </div>
+
+      <div class="run-metrics">
+        <div><span>Success</span><strong>${succeeded}</strong></div>
+        <div><span>Failed</span><strong>${failed}</strong></div>
+        <div><span>Total</span><strong>${history.length}</strong></div>
+        <div><span>Tool Calls</span><strong>${metrics.toolCalls ?? "-"}</strong></div>
+      </div>
+
       ${
-        result.errorMessage
-          ? `<p class="error-text">${escapeHtml(result.errorMessage)}</p>`
+        verification
+          ? `<div class="verification">
+              <span>Verification</span>
+              <strong>${escapeHtml(verification.confidence)} · complete=${escapeHtml(verification.isComplete)}</strong>
+            </div>`
           : ""
       }
+
       ${renderHistory(history)}
     </div>
   `;
@@ -221,30 +278,43 @@ function renderResult(result) {
 
 function renderHistory(history) {
   if (history.length === 0) {
-    return `<div class="empty-state"><strong>Keine Aktionen aufgezeichnet.</strong></div>`;
+    return `<div class="empty-state compact"><strong>Keine Schritte aufgezeichnet.</strong></div>`;
   }
 
   return `
     <ol class="history">
       ${history
-        .map(
-          (entry) => `
+        .slice(-18)
+        .map((entry, index) => {
+          const title =
+            entry.instruction ||
+            entry.actionPerformed ||
+            [entry.phase, entry.agentName, entry.toolName].filter(Boolean).join(" · ") ||
+            entry.command?.actionType ||
+            "Schritt";
+          const detail =
+            entry.urlAfter ||
+            entry.reasoning ||
+            entry.resultText ||
+            (entry.arguments ? JSON.stringify(entry.arguments) : "");
+
+          return `
             <li>
               <div class="step-status ${entry.success ? "ok" : "fail"}">${
                 entry.success ? "OK" : "FAIL"
               }</div>
               <div class="step-text">
-                <strong>${entry.index}. ${escapeHtml(entry.instruction)}</strong>
-                <span>${escapeHtml(entry.urlAfter || "")}</span>
+                <strong>${escapeHtml(entry.index || index + 1)}. ${escapeHtml(title)}</strong>
+                <span>${escapeHtml(shortMessage(detail || "", 220))}</span>
                 ${
                   entry.errorMessage
-                    ? `<span>${escapeHtml(entry.errorMessage)}</span>`
+                    ? `<span class="step-error">${escapeHtml(shortMessage(entry.errorMessage, 220))}</span>`
                     : ""
                 }
               </div>
             </li>
-          `
-        )
+          `;
+        })
         .join("")}
     </ol>
   `;
@@ -252,11 +322,12 @@ function renderHistory(history) {
 
 function renderError(message) {
   results.innerHTML = `
-    <div class="summary">
+    <div class="summary-card">
       <div class="summary-head">
-        <div class="summary-title">
+        <div>
+          <span class="run-kicker">Run Error</span>
           <strong>Test konnte nicht gestartet werden.</strong>
-          <span>${escapeHtml(message)}</span>
+          <p>${escapeHtml(message)}</p>
         </div>
         <div class="result-badge failed">Fehlgeschlagen</div>
       </div>

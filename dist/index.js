@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const BrowserManager_1 = require("./core/BrowserManager");
+const BrowserManager_1 = require("./systems/deterministic-playwright/core/BrowserManager");
 const Logger_1 = require("./utils/Logger");
 const logger = new Logger_1.Logger("Bootstrap");
 async function main() {

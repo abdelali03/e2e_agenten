@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { BrowserManager } from "./core/BrowserManager";
+import { BrowserManager } from "./systems/deterministic-playwright/core/BrowserManager";
 import { Logger } from "./utils/Logger";
 
 const logger = new Logger("Bootstrap");

@@ -1,0 +1,18 @@
+[     228ms] [LOG] WS-DEBUG: Kein Token gefunden. Warte auf Login... @ http://localhost:82/assets/index-BcapL9Q1.js:472
+[   28929ms] [LOG] {user: Object, token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZWxhbWluZSIsInJvb…TI5fQ.TRoG_x2AH-ta4vtjCsEBeyd6V9GwBnesIr3Q9b9V1rw} @ http://localhost:82/assets/index-BcapL9Q1.js:240
+[   28929ms] [LOG] Login erfolgreich! {user: Object, token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZWxhbWluZSIsInJvb…TI5fQ.TRoG_x2AH-ta4vtjCsEBeyd6V9GwBnesIr3Q9b9V1rw} @ http://localhost:82/assets/index-BcapL9Q1.js:240
+[   30243ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   30331ms] [LOG] Hole aktuelle Daten vom Server... @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   30346ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   30439ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   30463ms] [LOG] Vertragsnummer für 2026-05-21 erfolgreich aufgerufen: Test @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[   30503ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   30845ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[   70658ms] [LOG] Vertragsnummer für 2026-05-01 erfolgreich aufgerufen: Test @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[   70693ms] [ERROR] {timestamp: 2026-05-21T13:47:17, eintraege: Array(0)} @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[   70693ms] [LOG] Synchronisiere mit Server-Daten... @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[   71243ms] [LOG] Status für 01.05.2026 automatisch auf GRÜN gesetzt. @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[  113576ms] [LOG] Status für 01.05.2026 automatisch auf ROT gesetzt. @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[  348231ms] [LOG] Status für 01.05.2026 automatisch auf ROT gesetzt. @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[  425173ms] [LOG] Status für 01.05.2026 automatisch auf ROT gesetzt. @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[  961398ms] [LOG] Status für 01.05.2026 automatisch auf ROT gesetzt. @ http://localhost:82/assets/index-BcapL9Q1.js:334

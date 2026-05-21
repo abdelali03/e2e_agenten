@@ -8,8 +8,11 @@ dotenv_1.default.config();
 const http_1 = require("http");
 const promises_1 = require("fs/promises");
 const path_1 = require("path");
-const AdaptiveOrchestrator_1 = require("./core/AdaptiveOrchestrator");
-const BrowserManager_1 = require("./core/BrowserManager");
+const AdaptiveOrchestrator_1 = require("./systems/deterministic-playwright/core/AdaptiveOrchestrator");
+const AllLlmOrchestrator_1 = require("./systems/llm-command/core/AllLlmOrchestrator");
+const AllLlmMcpOrchestrator_1 = require("./systems/mcp-single-agent/core/AllLlmMcpOrchestrator");
+const McpMultiAgentOrchestrator_1 = require("./systems/mcp-multi-agent/core/McpMultiAgentOrchestrator");
+const BrowserManager_1 = require("./systems/deterministic-playwright/core/BrowserManager");
 const Logger_1 = require("./utils/Logger");
 const logger = new Logger_1.Logger("UiServer");
 const PORT = Number(process.env.UI_PORT || 3000);
@@ -57,9 +60,7 @@ const server = (0, http_1.createServer)(async (req, res) => {
         });
     }
 });
-server.listen(PORT, () => {
-    logger.info(`UI ready at http://localhost:${PORT}`);
-});
+startServer(PORT);
 async function handleRun(req, res) {
     if (isRunActive) {
         sendJson(res, 409, {
@@ -69,25 +70,43 @@ async function handleRun(req, res) {
     }
     const body = await readJsonBody(req);
     const input = normalizeGoalInput(body);
-    logger.info("UI requested adaptive test run", {
+    const mode = normalizeAgentMode(body.mode || process.env.AGENT_MODE);
+    logger.info("UI requested test run", {
+        mode,
         goal: input.goal,
         url: input.url,
     });
     isRunActive = true;
     try {
-        const runner = new AdaptiveOrchestrator_1.AdaptiveOrchestrator({
-            maxActions: 30,
-            maxRetriesPerAction: 3,
-            stepDelayMs: 1000,
-            screenshotOnFailure: true,
-            verifyEveryActions: 3,
-        });
-        const result = await runner.run(input, `ui-${Date.now()}`);
+        const result = mode === "mcp-multi-agent"
+            ? await new McpMultiAgentOrchestrator_1.McpMultiAgentOrchestrator({
+                maxToolCalls: 70,
+                recursionLimit: 180,
+            }).run(input, `ui-mcp-multi-agent-${Date.now()}`)
+            : mode === "all-llm-mcp"
+                ? await new AllLlmMcpOrchestrator_1.AllLlmMcpOrchestrator({
+                    maxToolCalls: 50,
+                }).run(input, `ui-all-llm-mcp-${Date.now()}`)
+                : mode === "all-llm"
+                    ? await new AllLlmOrchestrator_1.AllLlmOrchestrator({
+                        maxActions: 40,
+                        stepDelayMs: 1000,
+                        verifyEveryActions: 4,
+                    }).run(input, `ui-all-llm-${Date.now()}`)
+                    : await new AdaptiveOrchestrator_1.AdaptiveOrchestrator({
+                        maxActions: 30,
+                        maxRetriesPerAction: 3,
+                        stepDelayMs: 1000,
+                        screenshotOnFailure: true,
+                        verifyEveryActions: 3,
+                    }).run(input, `ui-${Date.now()}`);
         sendJson(res, 200, result);
     }
     finally {
         isRunActive = false;
-        await BrowserManager_1.BrowserManager.getInstance().close();
+        if (mode !== "all-llm-mcp" && mode !== "mcp-multi-agent") {
+            await BrowserManager_1.BrowserManager.getInstance().close();
+        }
     }
 }
 function handleEvents(req, res) {
@@ -143,6 +162,16 @@ function normalizeGoalInput(input) {
         testData: input.testData ?? {},
     };
 }
+function normalizeAgentMode(mode) {
+    const normalized = (mode || "adaptive").toLowerCase();
+    if (normalized === "adaptive" ||
+        normalized === "all-llm" ||
+        normalized === "all-llm-mcp" ||
+        normalized === "mcp-multi-agent") {
+        return normalized;
+    }
+    throw new Error(`Unknown agent mode "${mode}". Use adaptive, all-llm, all-llm-mcp, or mcp-multi-agent.`);
+}
 function readJsonBody(req) {
     return new Promise((resolve, reject) => {
         let raw = "";
@@ -179,4 +208,26 @@ function sendSse(res, event) {
     res.write(`id: ${event.id}\n`);
     res.write("event: log\n");
     res.write(`data: ${JSON.stringify(event)}\n\n`);
+}
+function startServer(port, attemptsLeft = 10) {
+    let currentPort = port;
+    let remainingAttempts = attemptsLeft;
+    server.on("error", (error) => {
+        if (error.code === "EADDRINUSE" && remainingAttempts > 1) {
+            const nextPort = currentPort + 1;
+            logger.warn(`UI port ${currentPort} is already in use. Trying http://localhost:${nextPort}`);
+            currentPort = nextPort;
+            remainingAttempts -= 1;
+            server.listen(currentPort);
+            return;
+        }
+        logger.error("UI server failed to start:", error);
+        process.exit(1);
+    });
+    server.on("listening", () => {
+        const address = server.address();
+        const actualPort = typeof address === "object" && address !== null ? address.port : currentPort;
+        logger.info(`UI ready at http://localhost:${actualPort}`);
+    });
+    server.listen(currentPort);
 }

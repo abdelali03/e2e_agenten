@@ -1,0 +1,127 @@
+- generic [ref=e1]:
+  - main [ref=e574]:
+    - generic [ref=e575]:
+      - generic [ref=e578]:
+        - generic [ref=e580]:
+          - generic [ref=e581] [cursor=pointer]:
+            - img "ZEIT-PRO Logo" [ref=e582]
+            - heading "Leistungsnachweise" [level=6] [ref=e583]
+          - generic [ref=e588]:
+            - img [ref=e590]
+            - combobox "Suchen... (Strg+K)" [ref=e592]: QS Daily
+            - generic [ref=e594]: STRG K
+            - group
+          - generic [ref=e595]:
+            - button "Benachrichtigungen" [ref=e596] [cursor=pointer]:
+              - generic [ref=e597]:
+                - img [ref=e598]
+                - generic: "0"
+            - button "Hilfe & FAQ" [ref=e600] [cursor=pointer]:
+              - img [ref=e601]
+            - button "Account Einstellungen" [ref=e604] [cursor=pointer]:
+              - generic [ref=e605]:
+                - generic [ref=e606]: A
+                - generic [ref=e607]: aelamine
+        - generic [ref=e612]:
+          - button "Start" [ref=e613] [cursor=pointer]:
+            - img [ref=e615]
+            - text: Start
+          - button "Termine" [ref=e617] [cursor=pointer]:
+            - img [ref=e619]
+            - text: Termine
+          - button "Template" [ref=e621] [cursor=pointer]:
+            - img [ref=e623]
+            - text: Template
+        - generic [ref=e627]:
+          - generic [ref=e628]:
+            - button "Zurück zur Monatsübersicht" [ref=e629] [cursor=pointer]:
+              - img [ref=e631]
+              - text: Zurück zur Monatsübersicht
+            - generic [ref=e634]:
+              - generic [ref=e635]:
+                - img [ref=e715]
+                - paragraph [ref=e638]: Lokal gespeichert
+              - generic [ref=e717]:
+                - img [ref=e718]
+                - button "Änderungen verwerfen" [ref=e720] [cursor=pointer]
+          - 'heading "Zeiterfassung: 01.05.2026" [level=1] [ref=e639]'
+          - grid [ref=e642]:
+            - row "Startzeit Endzeit Pause Beschreibung" [ref=e643]:
+              - columnheader [ref=e644]:
+                - img [ref=e646]
+              - columnheader "Startzeit" [ref=e648]:
+                - generic [ref=e650]: Startzeit
+                - img [ref=e652]
+              - columnheader "Endzeit" [ref=e654]:
+                - generic [ref=e656]: Endzeit
+                - img [ref=e658]
+              - columnheader "Pause" [ref=e660]:
+                - generic [ref=e662]: Pause
+                - img [ref=e664]
+              - columnheader "Beschreibung" [ref=e666]:
+                - generic [ref=e668]: Beschreibung
+                - img [ref=e670]
+              - columnheader [ref=e672]:
+                - img [ref=e674]
+            - rowgroup [ref=e721]:
+              - row "Die Beschreibung muss länger als 3 Zeichen sein. Zeile darüber einfügen Zeile darunter einfügen Zeile löschen" [ref=e722]:
+                - gridcell [ref=e723]:
+                  - img [ref=e725]
+                - gridcell [ref=e727]:
+                  - group [ref=e730]:
+                    - generic [ref=e731]:
+                      - generic [ref=e732]:
+                        - spinbutton "Hours" [ref=e733]: "09"
+                        - text: ":"
+                      - spinbutton "Minutes" [ref=e735]: "00"
+                    - button "Choose time, selected time is 09:00" [ref=e771] [cursor=pointer]:
+                      - img [ref=e738]
+                    - group
+                    - textbox [ref=e741]: 09:00
+                - gridcell [ref=e742]:
+                  - group [ref=e745]:
+                    - generic [ref=e746]:
+                      - generic [ref=e747]:
+                        - spinbutton "Hours" [ref=e748]: "10"
+                        - text: ":"
+                      - spinbutton "Minutes" [ref=e750]: "00"
+                    - button "Choose time, selected time is 10:00" [ref=e777] [cursor=pointer]:
+                      - img [ref=e773]
+                    - group
+                    - textbox [ref=e752]: 10:00
+                - gridcell [ref=e753]:
+                  - generic [ref=e754]:
+                    - generic:
+                      - switch [disabled]
+                - gridcell "Die Beschreibung muss länger als 3 Zeichen sein." [active] [ref=e756]:
+                  - generic "Die Beschreibung muss länger als 3 Zeichen sein." [ref=e757]
+                - gridcell "Zeile darüber einfügen Zeile darunter einfügen Zeile löschen" [ref=e758]:
+                  - generic [ref=e759]:
+                    - button "Zeile darüber einfügen" [ref=e760] [cursor=pointer]:
+                      - img [ref=e761]
+                    - button "Zeile darunter einfügen" [ref=e763] [cursor=pointer]:
+                      - img [ref=e764]
+                    - generic "Zeile löschen" [ref=e766]:
+                      - button [ref=e767] [cursor=pointer]:
+                        - img [ref=e768]
+          - button "Zeile hinzufügen" [ref=e681] [cursor=pointer]:
+            - img [ref=e682]
+          - generic [ref=e684]:
+            - button "TEMPLATE EINFÜGEN" [ref=e685] [cursor=pointer]:
+              - img [ref=e687]
+              - text: TEMPLATE EINFÜGEN
+            - button "TAG KOPIEREN" [ref=e690] [cursor=pointer]
+            - button "TAG EINFÜGEN" [disabled]
+          - button "Prüfen und Speichern" [ref=e692] [cursor=pointer]
+      - separator [ref=e693]
+      - generic [ref=e694]:
+        - generic [ref=e696]:
+          - heading "Einzeltermine am 01.05.2026" [level=6] [ref=e697]
+          - list [ref=e699]:
+            - paragraph [ref=e701]: Keine Einzeltermine gefunden.
+        - separator [ref=e702]
+        - generic [ref=e704]:
+          - heading "Regeltermine am 01.05.2026" [level=6] [ref=e705]
+          - list [ref=e707]:
+            - paragraph [ref=e709]: Keine Regeltermine gefunden.
+  - button "Open the dialog" [ref=e711] [cursor=pointer]
