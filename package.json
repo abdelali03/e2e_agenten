@@ -10,6 +10,8 @@
     "test": "playwright test",
     "lint": "eslint src/**/*.ts",
     "test:registration": "ts-node src/tests/registration-and-appointment.ts",
+    "test:goal": "ts-node src/tests/goal-registration-and-appointment.ts",
+    "ui": "ts-node src/server.ts",
     "test:run": "ts-node"
   },
   "dependencies": {

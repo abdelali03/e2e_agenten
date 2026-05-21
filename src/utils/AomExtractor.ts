@@ -8,6 +8,7 @@ export interface AomSnapshot {
   url: string;
   title: string;
   timestamp: string;
+  visibleText: string;
   nodes: AomNode[];
   rawNodeCount: number;
   filteredNodeCount: number;
@@ -21,7 +22,7 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
   const url = page.url();
   const title = await page.title();
 
-  const nodes = await page.evaluate(() => {
+  const pageData = await page.evaluate(() => {
     type ExtractedNode = {
       uid: string;
       selector: string;
@@ -170,6 +171,8 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
     function getAncestorText(el: Element): string {
       const candidates = [
         el.closest("[role='dialog']"),
+        el.closest("[role='row']"),
+        el.closest("tr"),
         el.closest("form"),
         el.closest("fieldset"),
         el.closest("section"),
@@ -435,7 +438,13 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
       "input:not([type='hidden'])",
       "textarea",
       "select",
+      "tr",
+      "td",
+      "th",
       "[role]",
+      "[role='row']",
+      "[role='cell']",
+      "[role='gridcell']",
       "[aria-label]",
       "[aria-labelledby]",
       "[placeholder]",
@@ -458,11 +467,21 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
           if (type === "hidden") return false;
         }
 
-        return isVisible(el);
+        if (!isVisible(el)) return false;
+
+        if (tagName === "td" || tagName === "th") {
+          return cleanText(el.textContent).length > 0;
+        }
+
+        if (tagName === "tr" || el.getAttribute("role") === "row") {
+          return cleanText(el.textContent).length > 0;
+        }
+
+        return true;
       }
     );
 
-    return elements.map((el, index): ExtractedNode => {
+    const nodes = elements.map((el, index): ExtractedNode => {
       const htmlEl = el as HTMLElement;
       const inputEl = el as HTMLInputElement;
       const tagName = el.tagName.toLowerCase();
@@ -552,9 +571,15 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
         children: [],
       };
     });
+
+    return {
+      visibleText: cleanText(document.body.innerText).slice(0, 5000),
+      nodes,
+    };
   });
 
-  const filteredCount = countNodes(nodes as unknown as AomNode[]);
+  const nodes = pageData.nodes as unknown as AomNode[];
+  const filteredCount = countNodes(nodes);
 
   logger.debug(`DOM snapshot: ${nodes.length} executable elements -> ${filteredCount} nodes`, {
     url,
@@ -564,7 +589,8 @@ export async function extractAomSnapshot(page: Page): Promise<AomSnapshot> {
     url,
     title,
     timestamp: new Date().toISOString(),
-    nodes: nodes as unknown as AomNode[],
+    visibleText: pageData.visibleText,
+    nodes,
     rawNodeCount: nodes.length,
     filteredNodeCount: filteredCount,
   };
@@ -576,6 +602,7 @@ export function aomToPromptString(snapshot: AomSnapshot): string {
     `Title: ${snapshot.title}`,
     `Timestamp: ${snapshot.timestamp}`,
     `Nodes: ${snapshot.filteredNodeCount}`,
+    `Visible text excerpt: ${snapshot.visibleText.slice(0, 2500)}`,
     "",
   ].join("\n");
 

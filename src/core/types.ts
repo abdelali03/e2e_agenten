@@ -30,6 +30,55 @@ export interface PlannerOutput {
   steps: string[];
 }
 
+export interface GoalTestData {
+  credentials?: {
+    username?: string;
+    password?: string;
+  };
+  appointment?: {
+    name?: string;
+    description?: string;
+    date?: string;
+    startTime?: string;
+    endTime?: string;
+  };
+  [key: string]: unknown;
+}
+
+export interface GoalInput {
+  goal: string;
+  url: string;
+  testData?: GoalTestData;
+  context?: string;
+}
+
+export type AdaptivePlanStatus = "continue" | "complete" | "blocked";
+
+export interface AdaptiveNextActionOutput {
+  status: AdaptivePlanStatus;
+  instruction?: string;
+  expectedOutcome?: string;
+  reasoning: string;
+}
+
+export interface GoalVerificationOutput {
+  isComplete: boolean;
+  confidence: "low" | "medium" | "high";
+  missing: string[];
+  reasoning: string;
+}
+
+export interface AdaptiveHistoryEntry {
+  index: number;
+  instruction: string;
+  expectedOutcome?: string;
+  success: boolean;
+  errorMessage?: string;
+  actionPerformed?: string;
+  urlAfter: string;
+  observedAfter?: string;
+}
+
 
 export interface AomNode {
   uid?: string;
@@ -84,18 +133,42 @@ export interface AomNode {
 }
 
 export type BrowserActionType =
+  | "observePage"
   | "click"
+  | "clickText"
+  | "clickNearest"
+  | "clickRowContaining"
+  | "clickCellContaining"
+  | "clickOutside"
   | "doubleClick"
   | "rightClick"
   | "fill"
+  | "setValue"
+  | "fillField"
+  | "fillForm"
   | "type"
+  | "appendText"
   | "clear"
+  | "clearValue"
   | "select"
+  | "selectOption"
+  | "openDropdown"
+  | "closeDropdown"
   | "check"
   | "uncheck"
+  | "toggle"
+  | "selectRadio"
   | "hover"
+  | "focus"
+  | "blur"
   | "press"
+  | "pressShortcut"
   | "navigate"
+  | "goBack"
+  | "goForward"
+  | "reload"
+  | "waitForPageReady"
+  | "waitForNavigationOrStateChange"
   | "waitForVisible"
   | "waitForHidden"
   | "waitForText"
@@ -103,11 +176,39 @@ export type BrowserActionType =
   | "assertVisible"
   | "assertHidden"
   | "assertText"
+  | "verifyTextVisible"
+  | "assertTextNotVisible"
   | "assertValue"
   | "assertUrl"
+  | "assertTitle"
+  | "assertEnabled"
+  | "assertDisabled"
+  | "assertChecked"
   | "scrollIntoView"
+  | "scrollToText"
+  | "scrollPage"
+  | "scrollContainer"
   | "setDate"
   | "setTime"
+  | "pickDate"
+  | "pickTime"
+  | "openDatePicker"
+  | "openTimePicker"
+  | "submitForm"
+  | "resetForm"
+  | "addRow"
+  | "deleteRow"
+  | "sortColumn"
+  | "filterColumn"
+  | "verifyRowExists"
+  | "verifyCellValue"
+  | "waitForDialog"
+  | "confirmDialog"
+  | "cancelDialog"
+  | "closeDialog"
+  | "dismissOverlay"
+  | "waitForToast"
+  | "verifyToast"
   | "uploadFile";
 
 export interface AnalystOutput {
@@ -125,6 +226,7 @@ export interface AnalystInput {
   instruction: string;
   aomTree: AomNode[];
   previousError?: string;
+  visualContext?: string;
 }
 
 
@@ -142,6 +244,7 @@ export interface CriticInput {
   errorMessage: string;
   aomTreeAfterFailure: AomNode[];
   retryCount: number;
+  visualContext?: string;
 }
 
 export interface CriticOutput {

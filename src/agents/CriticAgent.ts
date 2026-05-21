@@ -95,8 +95,13 @@ export class CriticAgent {
       `## Failed Instruction\n${input.failedInstruction}`,
       `## Error Message\n${input.errorMessage}`,
       `## Retry Attempt\n${input.retryCount} of ${MAX_RETRIES}`,
+      input.visualContext
+        ? `## Visual Recovery Context\n${input.visualContext}`
+        : "",
       `## Current Page State After Failure (AOM)\n${aomContext}`,
-    ].join("\n\n");
+    ]
+      .filter((part) => part.length > 0)
+      .join("\n\n");
   }
 
   private validateOutput(output: CriticOutput): void {

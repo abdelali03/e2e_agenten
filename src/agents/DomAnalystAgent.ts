@@ -7,7 +7,7 @@ import { LlmClient } from "../utils/LlmClient";
 import { Logger } from "../utils/Logger";
 import { aomToPromptString } from "../utils/AomExtractor";
 import type { AomSnapshot } from "../utils/AomExtractor";
-import { AnalystInput, AnalystOutput } from "../core/types";
+import { AnalystInput, AnalystOutput, AomNode } from "../core/types";
 
 const logger = new Logger("DomAnalystAgent");
 
@@ -29,8 +29,11 @@ It can execute actions best when you return the exact targetUid and selector fro
 - Prefer elements with clear name, label, ariaLabel, ariaLabelledByText, placeholder, testId, dataTestId, text, id, nameAttr, or inputType.
 - For forms, match the instruction to fields by name, label, ariaLabel, ariaLabelledByText, placeholder, inputType, nameAttr, id, testId, nearbyText, nearestHeading, formText, componentContext, and domIndex.
 - For buttons and links, match by visible text/name.
+- For table row/cell instructions, prefer a row, tr, td, th, cell, or gridcell whose name/text/ancestorText contains the requested date or exact text. Do not click a row action button like "Offene Termine" unless the instruction explicitly asks for that button.
 - For React/Angular/MUI components, use componentHints, componentContext, nearbyText, ancestorText, nearestHeading, and formText to understand which nested input/button is the real target.
 - For MUI TextField/FormControl, prefer the nested input/textarea with textbox role, using the surrounding label/nearbyText as the field name.
+- For fill/type/setDate/setTime, choose a truly editable element: input, textarea, select, or contenteditable. Avoid non-editable div/span wrappers, MUI section containers, and MUI picker spinbutton sections unless no editable input exists.
+- For MUI date/time pickers, prefer the visible textbox/input whose name or label is "Datum", "Start", or "Ende" and whose value looks like a date or time. Do not fill individual non-editable picker section divs.
 - For custom selects/autocomplete widgets, prefer a combobox/button/input with componentHints such as mui-select, mui-autocomplete, react-select, mat-select, or custom-select.
 - For elements with data-testid/data-test/data-cy/data-qa, treat those as strong stable identifiers when they match the instruction.
 - For assertions and waits, choose the smallest matching visible element when possible; if the assertion is page-wide text or URL, targetUid and selector may be omitted according to the rules below.
@@ -49,17 +52,28 @@ It can execute actions best when you return the exact targetUid and selector fro
 
 ## Action mapping
 - "Click ..." => actionType "click"
+- "Click text ..." => actionType "clickText"
+- "Click row containing ..." or "Click the row for ..." => actionType "clickRowContaining"
+- "Click cell containing ..." => actionType "clickCellContaining"
+- "Click outside" => actionType "clickOutside"
 - "Double click ..." => actionType "doubleClick"
 - "Right click ..." or context menu => actionType "rightClick"
-- "Fill ..." => actionType "fill"
+- "Fill ...", "Set value ...", "Enter ... into field" => actionType "setValue"
 - "Type ..." => actionType "type"
+- "Append ..." => actionType "appendText"
 - "Clear ..." => actionType "clear"
-- "Select ..." or dropdown option => actionType "select" or "click", depending on the target element
+- "Select ..." or dropdown option => actionType "selectOption"
+- "Open dropdown/date picker/time picker" => actionType "openDropdown" | "openDatePicker" | "openTimePicker"
+- "Close dropdown/menu/overlay" or dismiss backdrop => actionType "dismissOverlay"
 - "Check ..." => actionType "check"
 - "Uncheck ..." => actionType "uncheck"
-- "Open dropdown" => actionType "click"
+- "Toggle ..." => actionType "toggle"
+- "Focus ..." => actionType "focus"
+- "Blur ..." => actionType "blur"
 - "Press Enter/Tab/..." => actionType "press"
 - "Navigate to URL" => actionType "navigate"
+- "Go back/forward/reload" => actionType "goBack" | "goForward" | "reload"
+- "Wait for page ready" => actionType "waitForPageReady"
 - "Wait until ... is visible" => actionType "waitForVisible"
 - "Wait until ... disappears/is hidden" => actionType "waitForHidden"
 - "Wait until text ... appears" => actionType "waitForText"
@@ -69,14 +83,24 @@ It can execute actions best when you return the exact targetUid and selector fro
 - "Verify/Assert text ..." => actionType "assertText"
 - "Verify/Assert field value ..." => actionType "assertValue"
 - "Verify/Assert URL ..." => actionType "assertUrl"
+- "Verify row exists ..." => actionType "verifyRowExists"
+- "Verify cell value ..." => actionType "verifyCellValue"
 - "Scroll to ..." => actionType "scrollIntoView"
+- "Scroll to text ..." => actionType "scrollToText"
+- "Scroll page/container up/down" => actionType "scrollPage" | "scrollContainer"
 - "Set date ..." => actionType "setDate"
 - "Set time ..." => actionType "setTime"
+- "Submit form" => actionType "submitForm"
+- "Reset form" => actionType "resetForm"
+- "Add row" => actionType "addRow"
+- "Delete row" => actionType "deleteRow"
+- "Wait for dialog/toast" => actionType "waitForDialog" | "waitForToast"
+- "Confirm/cancel/close dialog" => actionType "confirmDialog" | "cancelDialog" | "closeDialog"
 - "Upload file ..." => actionType "uploadFile"
 
 ## Response format
 {
-  "actionType": "click" | "doubleClick" | "rightClick" | "fill" | "type" | "clear" | "select" | "check" | "uncheck" | "hover" | "press" | "navigate" | "waitForVisible" | "waitForHidden" | "waitForText" | "waitForUrl" | "assertVisible" | "assertHidden" | "assertText" | "assertValue" | "assertUrl" | "scrollIntoView" | "setDate" | "setTime" | "uploadFile",
+  "actionType": "click" | "clickText" | "clickNearest" | "clickRowContaining" | "clickCellContaining" | "clickOutside" | "doubleClick" | "rightClick" | "fill" | "setValue" | "fillField" | "fillForm" | "type" | "appendText" | "clear" | "clearValue" | "select" | "selectOption" | "openDropdown" | "closeDropdown" | "check" | "uncheck" | "toggle" | "selectRadio" | "hover" | "focus" | "blur" | "press" | "pressShortcut" | "navigate" | "goBack" | "goForward" | "reload" | "waitForPageReady" | "waitForNavigationOrStateChange" | "waitForVisible" | "waitForHidden" | "waitForText" | "waitForUrl" | "assertVisible" | "assertHidden" | "assertText" | "verifyTextVisible" | "assertTextNotVisible" | "assertValue" | "assertUrl" | "assertTitle" | "assertEnabled" | "assertDisabled" | "assertChecked" | "scrollIntoView" | "scrollToText" | "scrollPage" | "scrollContainer" | "setDate" | "setTime" | "pickDate" | "pickTime" | "openDatePicker" | "openTimePicker" | "submitForm" | "resetForm" | "addRow" | "deleteRow" | "sortColumn" | "filterColumn" | "verifyRowExists" | "verifyCellValue" | "waitForDialog" | "confirmDialog" | "cancelDialog" | "closeDialog" | "dismissOverlay" | "waitForToast" | "verifyToast" | "uploadFile",
   "targetUid": "exact uid from AOM, e.g. ai_el_0004",
   "selector": "exact selector from AOM, e.g. [data-ai-uid=\\"ai_el_0004\\"]",
   "targetDescription": "short human-readable description of the chosen target",
@@ -140,6 +164,15 @@ export class DomAnalystAgent {
       `## Current Page State (AOM)`,
       aomContext,
       ``,
+      ...(input.visualContext
+        ? [
+            `## Visual Recovery Context`,
+            input.visualContext,
+            ``,
+            `Use this screenshot description to resolve ambiguity, but still choose a real AOM target and selector when the action needs a target.`,
+            ``,
+          ]
+        : []),
       `## Required output`,
       `Choose exactly one existing element from the AOM for this instruction.`,
       `Return its exact uid as targetUid and exact selector as selector.`,
@@ -169,17 +202,39 @@ export class DomAnalystAgent {
 
     const actionsRequiringValue = new Set([
       "fill",
+      "setValue",
+      "fillField",
+      "fillForm",
       "type",
+      "appendText",
       "select",
+      "selectOption",
+      "clickText",
+      "clickRowContaining",
+      "clickCellContaining",
       "press",
+      "pressShortcut",
       "navigate",
       "waitForText",
       "waitForUrl",
       "assertText",
+      "verifyTextVisible",
+      "assertTextNotVisible",
       "assertValue",
       "assertUrl",
+      "assertTitle",
+      "scrollToText",
+      "scrollPage",
+      "scrollContainer",
       "setDate",
       "setTime",
+      "pickDate",
+      "pickTime",
+      "filterColumn",
+      "verifyRowExists",
+      "verifyCellValue",
+      "waitForToast",
+      "verifyToast",
       "uploadFile",
     ]);
 
@@ -192,11 +247,36 @@ export class DomAnalystAgent {
     }
 
     const targetlessActions = new Set([
+      "observePage",
       "navigate",
+      "goBack",
+      "goForward",
+      "reload",
+      "waitForPageReady",
+      "waitForNavigationOrStateChange",
       "press",
+      "pressShortcut",
+      "clickText",
+      "clickRowContaining",
+      "clickCellContaining",
+      "clickOutside",
       "waitForText",
       "waitForUrl",
       "assertUrl",
+      "assertTitle",
+      "verifyTextVisible",
+      "assertTextNotVisible",
+      "scrollToText",
+      "scrollPage",
+      "closeDropdown",
+      "dismissOverlay",
+      "waitForDialog",
+      "confirmDialog",
+      "cancelDialog",
+      "closeDialog",
+      "waitForToast",
+      "verifyToast",
+      "verifyRowExists",
     ]);
 
     if (!targetlessActions.has(output.actionType)) {
@@ -206,5 +286,67 @@ export class DomAnalystAgent {
         );
       }
     }
+
+    this.validateEditableTarget(output, input);
+  }
+
+  private validateEditableTarget(
+    output: AnalystOutput,
+    input: AnalystInput
+  ): void {
+    const editableActions = new Set([
+      "fill",
+      "setValue",
+      "fillField",
+      "type",
+      "appendText",
+      "setDate",
+      "setTime",
+      "pickDate",
+      "pickTime",
+    ]);
+
+    if (!editableActions.has(output.actionType)) {
+      return;
+    }
+
+    const nodes = this.getAomNodes(input.aomTree);
+    const target = nodes.find(
+      (node) =>
+        node.uid === output.targetUid ||
+        (output.selector && node.selector === output.selector)
+    );
+
+    if (!target) {
+      return;
+    }
+
+    const tagName = target.tagName?.toLowerCase();
+    const isEditableTag =
+      tagName === "input" || tagName === "textarea" || tagName === "select";
+
+    if (!isEditableTag) {
+      throw new Error(
+        `DomAnalyst chose non-editable ${tagName ?? target.role} for ${
+          output.actionType
+        }: "${target.name}". Choose an input, textarea, select, or contenteditable element.`
+      );
+    }
+  }
+
+  private getAomNodes(aomTree: AnalystInput["aomTree"]): AomNode[] {
+    const root =
+      typeof aomTree === "object" && aomTree !== null && "nodes" in aomTree
+        ? (aomTree as unknown as AomSnapshot).nodes
+        : (aomTree as AomNode[]);
+
+    return this.flattenNodes(Array.isArray(root) ? root : []);
+  }
+
+  private flattenNodes(nodes: AomNode[]): AomNode[] {
+    return nodes.flatMap((node) => [
+      node,
+      ...this.flattenNodes(node.children ?? []),
+    ]);
   }
 }

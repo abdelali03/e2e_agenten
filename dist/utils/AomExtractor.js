@@ -10,7 +10,7 @@ function countNodes(nodes) {
 async function extractAomSnapshot(page) {
     const url = page.url();
     const title = await page.title();
-    const nodes = await page.evaluate(() => {
+    const pageData = await page.evaluate(() => {
         function cleanText(value) {
             if (value === null || value === undefined)
                 return "";
@@ -84,6 +84,8 @@ async function extractAomSnapshot(page) {
         function getAncestorText(el) {
             const candidates = [
                 el.closest("[role='dialog']"),
+                el.closest("[role='row']"),
+                el.closest("tr"),
                 el.closest("form"),
                 el.closest("fieldset"),
                 el.closest("section"),
@@ -323,7 +325,13 @@ async function extractAomSnapshot(page) {
             "input:not([type='hidden'])",
             "textarea",
             "select",
+            "tr",
+            "td",
+            "th",
             "[role]",
+            "[role='row']",
+            "[role='cell']",
+            "[role='gridcell']",
             "[aria-label]",
             "[aria-labelledby]",
             "[placeholder]",
@@ -343,9 +351,17 @@ async function extractAomSnapshot(page) {
                 if (type === "hidden")
                     return false;
             }
-            return isVisible(el);
+            if (!isVisible(el))
+                return false;
+            if (tagName === "td" || tagName === "th") {
+                return cleanText(el.textContent).length > 0;
+            }
+            if (tagName === "tr" || el.getAttribute("role") === "row") {
+                return cleanText(el.textContent).length > 0;
+            }
+            return true;
         });
-        return elements.map((el, index) => {
+        const nodes = elements.map((el, index) => {
             const htmlEl = el;
             const inputEl = el;
             const tagName = el.tagName.toLowerCase();
@@ -421,7 +437,12 @@ async function extractAomSnapshot(page) {
                 children: [],
             };
         });
+        return {
+            visibleText: cleanText(document.body.innerText).slice(0, 5000),
+            nodes,
+        };
     });
+    const nodes = pageData.nodes;
     const filteredCount = countNodes(nodes);
     logger.debug(`DOM snapshot: ${nodes.length} executable elements -> ${filteredCount} nodes`, {
         url,
@@ -430,7 +451,8 @@ async function extractAomSnapshot(page) {
         url,
         title,
         timestamp: new Date().toISOString(),
-        nodes: nodes,
+        visibleText: pageData.visibleText,
+        nodes,
         rawNodeCount: nodes.length,
         filteredNodeCount: filteredCount,
     };
@@ -441,6 +463,7 @@ function aomToPromptString(snapshot) {
         `Title: ${snapshot.title}`,
         `Timestamp: ${snapshot.timestamp}`,
         `Nodes: ${snapshot.filteredNodeCount}`,
+        `Visible text excerpt: ${snapshot.visibleText.slice(0, 2500)}`,
         "",
     ].join("\n");
     const tree = JSON.stringify(snapshot.nodes, null, 2);

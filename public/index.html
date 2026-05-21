@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Test Agent</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Adaptive E2E Agent</p>
+            <h1>Goal Runner</h1>
+          </div>
+          <div class="status-pill" id="statusPill">Bereit</div>
+        </header>
+
+        <form id="goalForm" class="single-layout">
+          <section class="panel main-panel">
+            <label class="field full">
+              <span>Ziel</span>
+              <textarea
+                id="goal"
+                rows="8"
+                required
+              >Melde dich mit aelamine@conet.de und Passwort 12345678 an und erstelle einen neuen Termin: Name testtermin, Beschreibung terminbeschreibung, Datum 19.05.2026, Start 09:00, Ende 10:00.</textarea>
+            </label>
+
+            <label class="field full">
+              <span>Start URL</span>
+              <input id="url" value="http://localhost:82/login" required />
+            </label>
+
+            <label class="field full">
+              <span>Kontext</span>
+              <textarea id="context" rows="5" placeholder="Optional: Hinweise zur App, Testdaten, bekannte Routen oder Dinge, die der Agent beachten soll.">Nutze die sichtbare UI und aktuelle URL. Erwarte keine Dashboard-Route, wenn die Anwendung nach Login auf '/' landet.</textarea>
+            </label>
+
+            <button class="run-button" id="runButton" type="submit">
+              Test starten
+            </button>
+          </section>
+        </form>
+
+        <section class="results" id="results" aria-live="polite">
+          <div class="empty-state">
+            <strong>Noch kein Lauf gestartet.</strong>
+            <span>Nach dem Start erscheinen Status, Verifikation und ausgeführte Aktionen hier.</span>
+          </div>
+        </section>
+
+        <section class="logs-panel">
+          <div class="logs-head">
+            <div>
+              <h2>Live Logs</h2>
+              <p>Agenten, Entscheidungen, Aktionen und Recovery-Schritte.</p>
+            </div>
+            <div class="active-agent" id="activeAgent">Idle</div>
+          </div>
+          <div class="agent-strip" id="agentStrip"></div>
+          <div class="log-console" id="logConsole" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

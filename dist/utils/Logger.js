@@ -17,6 +17,8 @@ const COLORS = {
 };
 const RESET = "\x1b[0m";
 class Logger {
+    static listeners = new Set();
+    static nextId = 1;
     context;
     minLevel;
     constructor(context) {
@@ -28,6 +30,15 @@ class Logger {
         if (LEVELS[level] < this.minLevel)
             return;
         const timestamp = new Date().toISOString();
+        const event = {
+            id: Logger.nextId++,
+            timestamp,
+            level,
+            context: this.context,
+            message,
+            meta,
+        };
+        Logger.emit(event);
         const color = COLORS[level];
         const prefix = `${color}[${level.toUpperCase()}]${RESET} ${timestamp} [${this.context}]`;
         if (meta !== undefined) {
@@ -48,6 +59,15 @@ class Logger {
     }
     error(message, meta) {
         this.log("error", message, meta);
+    }
+    static subscribe(listener) {
+        Logger.listeners.add(listener);
+        return () => Logger.listeners.delete(listener);
+    }
+    static emit(event) {
+        for (const listener of Logger.listeners) {
+            listener(event);
+        }
     }
 }
 exports.Logger = Logger;

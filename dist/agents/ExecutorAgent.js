@@ -46,11 +46,44 @@ class ExecutorAgent {
     }
     async performAction(decision) {
         switch (decision.actionType) {
+            case "observePage":
+                await this.handleObservePage();
+                break;
             case "navigate":
                 await this.handleNavigate(decision);
                 break;
+            case "goBack":
+                await this.page.goBack({ waitUntil: "domcontentloaded", timeout: ACTION_TIMEOUT });
+                break;
+            case "goForward":
+                await this.page.goForward({ waitUntil: "domcontentloaded", timeout: ACTION_TIMEOUT });
+                break;
+            case "reload":
+                await this.page.reload({ waitUntil: "domcontentloaded", timeout: ACTION_TIMEOUT });
+                break;
+            case "waitForPageReady":
+                await this.handleWaitForPageReady();
+                break;
+            case "waitForNavigationOrStateChange":
+                await this.handleWaitForNavigationOrStateChange();
+                break;
             case "click":
                 await this.handleClick(decision);
+                break;
+            case "clickText":
+                await this.handleClickText(decision);
+                break;
+            case "clickNearest":
+                await this.handleClickNearest(decision);
+                break;
+            case "clickRowContaining":
+                await this.handleClickRowContaining(decision);
+                break;
+            case "clickCellContaining":
+                await this.handleClickCellContaining(decision);
+                break;
+            case "clickOutside":
+                await this.handleClickOutside();
                 break;
             case "doubleClick":
                 await this.handleDoubleClick(decision);
@@ -59,12 +92,21 @@ class ExecutorAgent {
                 await this.handleRightClick(decision);
                 break;
             case "fill":
+            case "setValue":
+            case "fillField":
                 await this.handleFill(decision);
+                break;
+            case "fillForm":
+                await this.handleFillForm(decision);
                 break;
             case "type":
                 await this.handleType(decision);
                 break;
+            case "appendText":
+                await this.handleAppendText(decision);
+                break;
             case "clear":
+            case "clearValue":
                 await this.handleClear(decision);
                 break;
             case "check":
@@ -74,12 +116,35 @@ class ExecutorAgent {
                 await this.handleUncheck(decision);
                 break;
             case "select":
+            case "selectOption":
                 await this.handleSelect(decision);
+                break;
+            case "openDropdown":
+            case "openDatePicker":
+            case "openTimePicker":
+                await this.handleClick(decision);
+                break;
+            case "closeDropdown":
+            case "dismissOverlay":
+                await this.handleDismissOverlay();
+                break;
+            case "toggle":
+                await this.handleToggle(decision);
+                break;
+            case "selectRadio":
+                await this.handleCheck(decision);
                 break;
             case "hover":
                 await this.handleHover(decision);
                 break;
+            case "focus":
+                await this.handleFocus(decision);
+                break;
+            case "blur":
+                await this.page.keyboard.press("Tab");
+                break;
             case "press":
+            case "pressShortcut":
                 await this.handlePress(decision);
                 break;
             case "waitForVisible":
@@ -101,7 +166,12 @@ class ExecutorAgent {
                 await this.handleAssertHidden(decision);
                 break;
             case "assertText":
+            case "verifyTextVisible":
+            case "verifyToast":
                 await this.handleAssertText(decision);
+                break;
+            case "assertTextNotVisible":
+                await this.handleAssertTextNotVisible(decision);
                 break;
             case "assertValue":
                 await this.handleAssertValue(decision);
@@ -109,14 +179,72 @@ class ExecutorAgent {
             case "assertUrl":
                 await this.handleAssertUrl(decision);
                 break;
+            case "assertTitle":
+                await this.handleAssertTitle(decision);
+                break;
+            case "assertEnabled":
+                await this.handleAssertEnabled(decision);
+                break;
+            case "assertDisabled":
+                await this.handleAssertDisabled(decision);
+                break;
+            case "assertChecked":
+                await this.handleAssertChecked(decision);
+                break;
             case "scrollIntoView":
                 await this.handleScrollIntoView(decision);
                 break;
+            case "scrollToText":
+                await this.handleScrollToText(decision);
+                break;
+            case "scrollPage":
+            case "scrollContainer":
+                await this.handleScrollPage(decision);
+                break;
             case "setDate":
+            case "pickDate":
                 await this.handleSetDate(decision);
                 break;
             case "setTime":
+            case "pickTime":
                 await this.handleSetTime(decision);
+                break;
+            case "submitForm":
+                await this.handleSubmitForm(decision);
+                break;
+            case "resetForm":
+                await this.handleResetForm(decision);
+                break;
+            case "addRow":
+                await this.handleClick(decision);
+                break;
+            case "deleteRow":
+                await this.handleClick(decision);
+                break;
+            case "sortColumn":
+                await this.handleClick(decision);
+                break;
+            case "filterColumn":
+                await this.handleFilterColumn(decision);
+                break;
+            case "verifyRowExists":
+                await this.handleVerifyRowExists(decision);
+                break;
+            case "verifyCellValue":
+                await this.handleVerifyCellValue(decision);
+                break;
+            case "waitForDialog":
+                await this.handleWaitForDialog();
+                break;
+            case "confirmDialog":
+                await this.handleConfirmDialog();
+                break;
+            case "cancelDialog":
+            case "closeDialog":
+                await this.handleCloseDialog();
+                break;
+            case "waitForToast":
+                await this.handleWaitForText(decision);
                 break;
             case "uploadFile":
                 await this.handleUploadFile(decision);
@@ -137,9 +265,80 @@ class ExecutorAgent {
             timeout: ACTION_TIMEOUT,
         });
     }
+    async handleObservePage() {
+        await this.handleWaitForPageReady();
+    }
+    async handleWaitForPageReady() {
+        await this.page.waitForLoadState("domcontentloaded", { timeout: ACTION_TIMEOUT });
+        await this.page.waitForLoadState("networkidle", { timeout: ACTION_TIMEOUT }).catch(() => {
+            logger.debug("networkidle was not reached; continuing after domcontentloaded.");
+        });
+    }
+    async handleWaitForNavigationOrStateChange() {
+        const currentUrl = this.page.url();
+        await Promise.race([
+            this.page.waitForURL((url) => url.toString() !== currentUrl, {
+                timeout: ACTION_TIMEOUT,
+            }),
+            this.page.waitForTimeout(1200),
+        ]);
+    }
     async handleClick(decision) {
         const locator = await this.getRequiredLocator(decision);
-        await locator.click({ timeout: ACTION_TIMEOUT });
+        try {
+            await locator.click({ timeout: ACTION_TIMEOUT });
+        }
+        catch (error) {
+            if (!this.isOverlayInterception(error)) {
+                throw error;
+            }
+            logger.warn("Click was blocked by an overlay. Pressing Escape and retrying once.");
+            await this.page.keyboard.press("Escape");
+            await this.page.waitForTimeout(300);
+            await locator.click({ timeout: ACTION_TIMEOUT });
+        }
+    }
+    async handleClickText(decision) {
+        if (!decision.value && !this.getTargetText(decision)) {
+            throw new Error("clickText requires text value or target text");
+        }
+        const text = decision.value || this.getTargetText(decision);
+        await this.clickWithOverlayRetry(this.page.getByText(text, { exact: false }).first());
+    }
+    async handleClickNearest(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        await this.clickWithOverlayRetry(locator);
+    }
+    async handleClickRowContaining(decision) {
+        const text = decision.value || this.getTargetText(decision);
+        if (!text)
+            throw new Error("clickRowContaining requires row text");
+        const row = this.page
+            .locator("tr,[role='row']")
+            .filter({ hasText: text })
+            .first();
+        if (await this.exists(row)) {
+            await this.clickWithOverlayRetry(row);
+            return;
+        }
+        await this.clickWithOverlayRetry(this.page.getByText(text, { exact: false }).first());
+    }
+    async handleClickCellContaining(decision) {
+        const text = decision.value || this.getTargetText(decision);
+        if (!text)
+            throw new Error("clickCellContaining requires cell text");
+        const cell = this.page
+            .locator("td,th,[role='cell'],[role='gridcell']")
+            .filter({ hasText: text })
+            .first();
+        if (await this.exists(cell)) {
+            await this.clickWithOverlayRetry(cell);
+            return;
+        }
+        await this.handleClickRowContaining(decision);
+    }
+    async handleClickOutside() {
+        await this.page.mouse.click(5, 5);
     }
     async handleDoubleClick(decision) {
         const locator = await this.getRequiredLocator(decision);
@@ -154,13 +353,41 @@ class ExecutorAgent {
             throw new Error("fill requires a value");
         }
         const locator = await this.getRequiredLocator(decision);
-        await locator.fill(decision.value, { timeout: ACTION_TIMEOUT });
+        await this.setValueWithStrategies(locator, decision.value);
+    }
+    async handleFillForm(decision) {
+        if (!decision.value) {
+            throw new Error("fillForm requires a JSON object value");
+        }
+        let fields;
+        try {
+            fields = JSON.parse(decision.value);
+        }
+        catch {
+            throw new Error("fillForm value must be JSON, e.g. {\"Email\":\"a@b.de\"}");
+        }
+        for (const [label, value] of Object.entries(fields)) {
+            const locator = this.page
+                .getByLabel(label)
+                .or(this.page.getByPlaceholder(label))
+                .or(this.page.locator(`input[name="${this.escapeCssString(label)}"]`))
+                .first();
+            await this.setValueWithStrategies(locator, value);
+        }
     }
     async handleType(decision) {
         if (!decision.value) {
             throw new Error("type requires a value");
         }
         const locator = await this.getRequiredLocator(decision);
+        await locator.pressSequentially(decision.value, { timeout: ACTION_TIMEOUT });
+    }
+    async handleAppendText(decision) {
+        if (!decision.value) {
+            throw new Error("appendText requires a value");
+        }
+        const locator = await this.getRequiredLocator(decision);
+        await locator.focus({ timeout: ACTION_TIMEOUT });
         await locator.pressSequentially(decision.value, { timeout: ACTION_TIMEOUT });
     }
     async handleClear(decision) {
@@ -196,9 +423,27 @@ class ExecutorAgent {
             return;
         }
     }
+    async handleFilterColumn(decision) {
+        if (!decision.value) {
+            throw new Error("filterColumn requires a filter value");
+        }
+        const locator = await this.getRequiredLocator(decision);
+        await this.clickWithOverlayRetry(locator);
+        await this.page.keyboard.press(process.platform === "darwin" ? "Meta+A" : "Control+A");
+        await this.page.keyboard.type(decision.value);
+        await this.page.keyboard.press("Enter");
+    }
     async handleHover(decision) {
         const locator = await this.getRequiredLocator(decision);
         await locator.hover({ timeout: ACTION_TIMEOUT });
+    }
+    async handleFocus(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        await locator.focus({ timeout: ACTION_TIMEOUT });
+    }
+    async handleToggle(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        await this.clickWithOverlayRetry(locator);
     }
     async handlePress(decision) {
         if (!decision.value) {
@@ -266,6 +511,14 @@ class ExecutorAgent {
             throw new Error(`Expected page text "${decision.value}" to be visible`);
         }
     }
+    async handleAssertTextNotVisible(decision) {
+        if (!decision.value) {
+            throw new Error("assertTextNotVisible requires a value");
+        }
+        if (await this.exists(this.page.getByText(decision.value).first())) {
+            throw new Error(`Expected page text "${decision.value}" to be hidden`);
+        }
+    }
     async handleAssertValue(decision) {
         if (!decision.value) {
             throw new Error("assertValue requires a value");
@@ -285,27 +538,127 @@ class ExecutorAgent {
             throw new Error(`Expected URL to contain "${decision.value}", got "${currentUrl}"`);
         }
     }
+    async handleAssertTitle(decision) {
+        if (!decision.value) {
+            throw new Error("assertTitle requires a value");
+        }
+        const title = await this.page.title();
+        if (!title.includes(decision.value)) {
+            throw new Error(`Expected title to contain "${decision.value}", got "${title}"`);
+        }
+    }
+    async handleAssertEnabled(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        if (!(await locator.isEnabled({ timeout: ACTION_TIMEOUT }))) {
+            throw new Error(`Expected "${this.getTargetText(decision)}" to be enabled`);
+        }
+    }
+    async handleAssertDisabled(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        if (await locator.isEnabled({ timeout: ACTION_TIMEOUT })) {
+            throw new Error(`Expected "${this.getTargetText(decision)}" to be disabled`);
+        }
+    }
+    async handleAssertChecked(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        if (!(await locator.isChecked({ timeout: ACTION_TIMEOUT }))) {
+            throw new Error(`Expected "${this.getTargetText(decision)}" to be checked`);
+        }
+    }
     async handleScrollIntoView(decision) {
         const locator = await this.getRequiredLocator(decision);
         await locator.scrollIntoViewIfNeeded({ timeout: ACTION_TIMEOUT });
+    }
+    async handleScrollToText(decision) {
+        const text = decision.value || this.getTargetText(decision);
+        if (!text)
+            throw new Error("scrollToText requires text");
+        const locator = this.page.getByText(text, { exact: false }).first();
+        await locator.scrollIntoViewIfNeeded({ timeout: ACTION_TIMEOUT });
+    }
+    async handleScrollPage(decision) {
+        const direction = (decision.value || "down").toLowerCase();
+        const delta = direction.includes("up") ? -700 : 700;
+        await this.page.mouse.wheel(0, delta);
+        await this.page.waitForTimeout(250);
     }
     async handleSetDate(decision) {
         if (!decision.value) {
             throw new Error("setDate requires a value");
         }
         const locator = await this.getRequiredLocator(decision);
-        await locator.fill(await this.normalizeDateValue(locator, decision.value), {
-            timeout: ACTION_TIMEOUT,
-        });
+        await this.setValueWithStrategies(locator, await this.normalizeDateValue(locator, decision.value));
     }
     async handleSetTime(decision) {
         if (!decision.value) {
             throw new Error("setTime requires a value");
         }
         const locator = await this.getRequiredLocator(decision);
-        await locator.fill(this.normalizeTimeValue(decision.value), {
+        await this.setValueWithStrategies(locator, this.normalizeTimeValue(decision.value));
+    }
+    async handleSubmitForm(decision) {
+        const locator = await this.getDirectLocator(decision);
+        if (locator) {
+            await locator.evaluate((el) => {
+                const form = el instanceof HTMLFormElement ? el : el.closest("form");
+                if (form) {
+                    form.requestSubmit();
+                    return;
+                }
+                el.click();
+            });
+            return;
+        }
+        await this.page.keyboard.press("Enter");
+    }
+    async handleResetForm(decision) {
+        const locator = await this.getRequiredLocator(decision);
+        await locator.evaluate((el) => {
+            const form = el instanceof HTMLFormElement ? el : el.closest("form");
+            if (!form)
+                throw new Error("No form found for reset");
+            form.reset();
+        });
+    }
+    async handleVerifyRowExists(decision) {
+        const text = decision.value || this.getTargetText(decision);
+        if (!text)
+            throw new Error("verifyRowExists requires row text");
+        const row = this.page.locator("tr,[role='row']").filter({ hasText: text }).first();
+        if (!(await this.exists(row))) {
+            throw new Error(`Expected row containing "${text}" to exist`);
+        }
+    }
+    async handleVerifyCellValue(decision) {
+        if (!decision.value)
+            throw new Error("verifyCellValue requires a value");
+        await this.handleAssertText(decision);
+    }
+    async handleWaitForDialog() {
+        await this.page.locator("[role='dialog'],dialog").first().waitFor({
+            state: "visible",
             timeout: ACTION_TIMEOUT,
         });
+    }
+    async handleConfirmDialog() {
+        const button = this.page
+            .getByRole("button", { name: /ok|yes|ja|confirm|bestätigen|speichern/i })
+            .first();
+        await this.clickWithOverlayRetry(button);
+    }
+    async handleCloseDialog() {
+        const button = this.page
+            .getByRole("button", { name: /close|cancel|abbrechen|schließen|x/i })
+            .first();
+        if (await this.exists(button)) {
+            await this.clickWithOverlayRetry(button);
+            return;
+        }
+        await this.page.keyboard.press("Escape");
+    }
+    async handleDismissOverlay() {
+        await this.page.keyboard.press("Escape");
+        await this.page.waitForTimeout(250);
     }
     async handleUploadFile(decision) {
         if (!decision.value) {
@@ -313,6 +666,101 @@ class ExecutorAgent {
         }
         const locator = await this.getRequiredLocator(decision);
         await locator.setInputFiles(decision.value, { timeout: ACTION_TIMEOUT });
+    }
+    async clickWithOverlayRetry(locator) {
+        try {
+            await locator.click({ timeout: ACTION_TIMEOUT });
+        }
+        catch (error) {
+            if (!this.isOverlayInterception(error)) {
+                throw error;
+            }
+            logger.warn("Click was blocked by an overlay. Pressing Escape and retrying once.");
+            await this.page.keyboard.press("Escape");
+            await this.page.waitForTimeout(300);
+            await locator.click({ timeout: ACTION_TIMEOUT });
+        }
+    }
+    async setValueWithStrategies(locator, value) {
+        const strategies = [
+            async () => {
+                logger.debug("setValue strategy: direct fill");
+                await locator.fill(value, { timeout: ACTION_TIMEOUT });
+            },
+            async () => {
+                logger.debug("setValue strategy: click, select all, type, tab");
+                await this.clickWithOverlayRetry(locator);
+                await this.selectAll();
+                await this.page.keyboard.type(value);
+                await this.page.keyboard.press("Tab");
+            },
+            async () => {
+                logger.debug("setValue strategy: focus inner input");
+                const inner = locator.locator("input,textarea,[contenteditable='true']").first();
+                await inner.fill(value, { timeout: ACTION_TIMEOUT });
+            },
+            async () => {
+                logger.debug("setValue strategy: keyboard commit");
+                await this.clickWithOverlayRetry(locator);
+                await this.selectAll();
+                await this.page.keyboard.type(value);
+                await this.page.keyboard.press("Enter");
+            },
+        ];
+        let lastError;
+        for (const strategy of strategies) {
+            try {
+                await strategy();
+                await this.page.waitForTimeout(250);
+                if (await this.valueLooksApplied(locator, value)) {
+                    return;
+                }
+                lastError = new Error(`Value "${value}" was not visible/applied after strategy.`);
+            }
+            catch (error) {
+                lastError = error;
+            }
+        }
+        throw lastError instanceof Error
+            ? lastError
+            : new Error(`Could not set value "${value}"`);
+    }
+    async valueLooksApplied(locator, value) {
+        const normalizedExpected = this.normalizeComparableValue(value);
+        try {
+            const inputValue = await locator.inputValue({ timeout: 1_000 });
+            if (this.normalizeComparableValue(inputValue).includes(normalizedExpected)) {
+                return true;
+            }
+        }
+        catch {
+            // Not every target exposes inputValue.
+        }
+        try {
+            const innerInput = locator.locator("input,textarea").first();
+            if (await this.exists(innerInput)) {
+                const inputValue = await innerInput.inputValue({ timeout: 1_000 });
+                if (this.normalizeComparableValue(inputValue).includes(normalizedExpected)) {
+                    return true;
+                }
+            }
+        }
+        catch {
+            // Fall through to visible text.
+        }
+        try {
+            const text = await locator.innerText({ timeout: 1_000 });
+            return this.normalizeComparableValue(text).includes(normalizedExpected);
+        }
+        catch {
+            return true;
+        }
+    }
+    async selectAll() {
+        await this.page.keyboard.press(process.platform === "darwin" ? "Meta+A" : "Control+A");
+    }
+    normalizeComparableValue(value) {
+        return value.replace(/\s+/g, "").trim().toLowerCase();
     }
     // ─────────────────────────────────────────────
     // Locator helpers
@@ -366,6 +814,9 @@ class ExecutorAgent {
     escapeAttribute(value) {
         return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
     }
+    escapeCssString(value) {
+        return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    }
     async waitUntil(predicate, errorMessage) {
         const startedAt = Date.now();
         while (Date.now() - startedAt < ACTION_TIMEOUT) {
@@ -395,6 +846,14 @@ class ExecutorAgent {
         }
         const [, hour, minute = "00"] = time;
         return `${hour.padStart(2, "0")}:${minute}`;
+    }
+    isOverlayInterception(error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return (message.includes("intercepts pointer events") &&
+            (message.includes("MuiBackdrop") ||
+                message.includes("MuiPopover") ||
+                message.includes("MuiModal") ||
+                message.includes("backdrop")));
     }
 }
 exports.ExecutorAgent = ExecutorAgent;
