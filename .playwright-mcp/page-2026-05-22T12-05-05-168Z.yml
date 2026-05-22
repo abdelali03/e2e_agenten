@@ -1,0 +1,75 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "Logo" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e7]
+        - generic [ref=e11]:
+          - link "Need help?" [ref=e12] [cursor=pointer]:
+            - /url: /faqs
+          - button "Settings button" [ref=e13] [cursor=pointer]:
+            - img [ref=e15]
+    - main [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - heading "Hi, Welcome back" [level=3] [ref=e21]
+          - paragraph [ref=e22]: More effectively with optimized workflows.
+        - img "Dashboard illustration" [ref=e23]
+        - list [ref=e24]:
+          - listitem [ref=e25]:
+            - link "Jwt":
+              - /url: /auth/jwt/sign-in
+              - img "Jwt"
+          - listitem [ref=e26]:
+            - link "Firebase":
+              - /url: /auth/firebase/sign-in
+              - img "Firebase"
+          - listitem [ref=e27]:
+            - link "Amplify" [ref=e28] [cursor=pointer]:
+              - /url: /auth/amplify/sign-in
+              - img "Amplify" [ref=e29]
+          - listitem [ref=e30]:
+            - link "Auth0":
+              - /url: /auth/auth0/sign-in
+              - img "Auth0"
+          - listitem [ref=e31]:
+            - link "Supabase":
+              - /url: /auth/supabase/sign-in
+              - img "Supabase"
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - heading "Sign in to your account" [level=5] [ref=e35]
+          - paragraph [ref=e36]:
+            - text: Don’t have an account?
+            - link "Get started" [ref=e37] [cursor=pointer]:
+              - /url: /auth/amplify/sign-up
+        - alert [ref=e38]:
+          - img [ref=e40]
+          - generic [ref=e42]:
+            - text: Use
+            - strong [ref=e43]: demo@minimals.cc
+            - text: with password
+            - strong [ref=e44]: "@2Minimal"
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]: Email address
+            - generic [ref=e49]:
+              - textbox "Email address" [ref=e50]: demo@minimals.cc
+              - group:
+                - generic: Email address
+          - generic [ref=e51]:
+            - link "Forgot password?" [ref=e52] [cursor=pointer]:
+              - /url: /auth/amplify/reset-password
+            - generic [ref=e53]:
+              - generic [ref=e54]: Password
+              - generic [ref=e55]:
+                - textbox "Password" [ref=e56]:
+                  - /placeholder: 6+ characters
+                  - text: "@2Minimal"
+                - button [ref=e58] [cursor=pointer]:
+                  - img [ref=e59]
+                - group:
+                  - generic: Password
+          - button "Sign in" [ref=e61] [cursor=pointer]
+  - region "Notifications alt+T"

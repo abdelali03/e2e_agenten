@@ -8,6 +8,8 @@ const McpCriticAgent_1 = require("../agents/McpCriticAgent");
 const McpVerifierAgent_1 = require("../agents/McpVerifierAgent");
 const PlaywrightMcpClient_1 = require("../../../utils/PlaywrightMcpClient");
 const Logger_1 = require("../../../utils/Logger");
+const VisionTool_1 = require("../../../utils/VisionTool");
+const EnhancedMcpSnapshotTool_1 = require("../../../utils/EnhancedMcpSnapshotTool");
 const McpMultiAgentGraph_1 = require("./McpMultiAgentGraph");
 const logger = new Logger_1.Logger("McpMultiAgentOrchestrator");
 class McpMultiAgentOrchestrator {
@@ -32,6 +34,8 @@ class McpMultiAgentOrchestrator {
             analyst: new McpDomAnalystAgent_1.McpDomAnalystAgent(),
             critic: new McpCriticAgent_1.McpCriticAgent(),
             verifier: new McpVerifierAgent_1.McpVerifierAgent(),
+            visionTool: new VisionTool_1.VisionTool(),
+            enhancedSnapshotTool: new EnhancedMcpSnapshotTool_1.EnhancedMcpSnapshotTool(),
         });
         const initialState = {
             goal: input,
@@ -43,6 +47,7 @@ class McpMultiAgentOrchestrator {
             retryCount: 0,
             consecutiveSnapshots: 0,
             maxToolCalls: this.config.maxToolCalls,
+            workflowMemory: undefined,
         };
         try {
             const finalState = (await graph.invoke(initialState, {

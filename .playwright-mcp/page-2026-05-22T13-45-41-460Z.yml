@@ -1,0 +1,628 @@
+- generic [ref=e1]:
+  - generic [ref=e9]:
+    - generic [ref=e10]:
+      - button [ref=e11] [cursor=pointer]:
+        - img [ref=e12]
+      - link "Logo" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e16]
+      - region "scrollable content" [ref=e24]:
+        - generic [ref=e25]:
+          - navigation [ref=e26]:
+            - list [ref=e27]:
+              - listitem [ref=e28]:
+                - generic [ref=e29] [cursor=pointer]:
+                  - img [ref=e30]
+                  - text: Overview
+                - list [ref=e35]:
+                  - listitem [ref=e36]:
+                    - link "App" [active] [ref=e37] [cursor=pointer]:
+                      - /url: /dashboard
+                      - generic [ref=e41]: App
+                  - listitem [ref=e42]:
+                    - link "Ecommerce" [ref=e43] [cursor=pointer]:
+                      - /url: /dashboard/ecommerce
+                      - generic [ref=e47]: Ecommerce
+                  - listitem [ref=e48]:
+                    - link "Analytics" [ref=e49] [cursor=pointer]:
+                      - /url: /dashboard/analytics
+                      - generic [ref=e53]: Analytics
+                  - listitem [ref=e54]:
+                    - link "Banking" [ref=e55] [cursor=pointer]:
+                      - /url: /dashboard/banking
+                      - generic [ref=e59]: Banking
+                  - listitem [ref=e60]:
+                    - link "Booking" [ref=e61] [cursor=pointer]:
+                      - /url: /dashboard/booking
+                      - generic [ref=e65]: Booking
+                  - listitem [ref=e66]:
+                    - link "File" [ref=e67] [cursor=pointer]:
+                      - /url: /dashboard/file
+                      - generic [ref=e71]: File
+                  - listitem [ref=e72]:
+                    - link "Course" [ref=e73] [cursor=pointer]:
+                      - /url: /dashboard/course
+                      - generic [ref=e77]: Course
+              - listitem [ref=e78]:
+                - generic [ref=e79] [cursor=pointer]:
+                  - img [ref=e80]
+                  - text: Management
+                - list [ref=e85]:
+                  - listitem [ref=e86]:
+                    - button "User" [ref=e87] [cursor=pointer]:
+                      - generic [ref=e91]: User
+                      - img [ref=e92]
+                  - listitem [ref=e94]:
+                    - button "Product" [ref=e95] [cursor=pointer]:
+                      - generic [ref=e99]: Product
+                      - img [ref=e100]
+                  - listitem [ref=e102]:
+                    - button "Order" [ref=e103] [cursor=pointer]:
+                      - generic [ref=e107]: Order
+                      - img [ref=e108]
+                  - listitem [ref=e110]:
+                    - button "Invoice" [ref=e111] [cursor=pointer]:
+                      - generic [ref=e115]: Invoice
+                      - img [ref=e116]
+                  - listitem [ref=e118]:
+                    - button "Blog" [ref=e119] [cursor=pointer]:
+                      - generic [ref=e123]: Blog
+                      - img [ref=e124]
+                  - listitem [ref=e126]:
+                    - button "Job" [ref=e127] [cursor=pointer]:
+                      - generic [ref=e131]: Job
+                      - img [ref=e132]
+                  - listitem [ref=e134]:
+                    - button "Tour" [ref=e135] [cursor=pointer]:
+                      - generic [ref=e139]: Tour
+                      - img [ref=e140]
+                  - listitem [ref=e142]:
+                    - link "File manager" [ref=e143] [cursor=pointer]:
+                      - /url: /dashboard/file-manager
+                      - generic [ref=e147]: File manager
+                  - listitem [ref=e148]:
+                    - link "Mail" [ref=e149] [cursor=pointer]:
+                      - /url: /dashboard/mail
+                      - generic [ref=e153]: Mail
+                      - generic [ref=e155]: "+32"
+                  - listitem [ref=e156]:
+                    - link "Chat" [ref=e157] [cursor=pointer]:
+                      - /url: /dashboard/chat
+                      - generic [ref=e161]: Chat
+                  - listitem [ref=e162]:
+                    - link "Calendar" [ref=e163] [cursor=pointer]:
+                      - /url: /dashboard/calendar
+                      - generic [ref=e167]: Calendar
+                  - listitem [ref=e168]:
+                    - link "Kanban" [ref=e169] [cursor=pointer]:
+                      - /url: /dashboard/kanban
+                      - generic [ref=e173]: Kanban
+              - listitem [ref=e174]:
+                - generic [ref=e175] [cursor=pointer]:
+                  - img [ref=e176]
+                  - text: Misc
+                - list [ref=e181]:
+                  - listitem [ref=e182]:
+                    - link "Permission" [ref=e183] [cursor=pointer]:
+                      - /url: /dashboard/permission
+                      - generic [ref=e186]:
+                        - generic [ref=e187]: Permission
+                        - generic "Only admin can see this item." [ref=e188]
+                  - listitem [ref=e189]:
+                    - button "Level" [ref=e190] [cursor=pointer]:
+                      - generic [ref=e194]: Level
+                      - img [ref=e195]
+                  - listitem [ref=e197]:
+                    - link "Disabled":
+                      - /url: /dashboard#disabled
+                      - generic:
+                        - generic: Disabled
+                  - listitem [ref=e198]:
+                    - link "Label" [ref=e199] [cursor=pointer]:
+                      - /url: /dashboard#label
+                      - generic [ref=e203]: Label
+                      - generic [ref=e205]:
+                        - img [ref=e207]
+                        - text: NEW
+                  - listitem [ref=e210]:
+                    - link "Caption" [ref=e211] [cursor=pointer]:
+                      - /url: /dashboard#caption
+                      - generic [ref=e214]:
+                        - generic [ref=e215]: Caption
+                        - generic "Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien." [ref=e216]
+                  - listitem [ref=e217]:
+                    - link "Params" [ref=e218] [cursor=pointer]:
+                      - /url: /dashboard/params?id=e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1
+                      - generic [ref=e222]: Params
+                  - listitem [ref=e223]:
+                    - link "Subpaths" [ref=e224] [cursor=pointer]:
+                      - /url: /dashboard/subpaths
+                      - generic [ref=e228]: Subpaths
+                  - listitem [ref=e229]:
+                    - link "External link" [ref=e230] [cursor=pointer]:
+                      - /url: https://www.google.com/
+                      - generic [ref=e234]: External link
+                      - img [ref=e236]
+                  - listitem [ref=e239]:
+                    - link "Blank" [ref=e240] [cursor=pointer]:
+                      - /url: /dashboard/blank
+                      - generic [ref=e244]: Blank
+          - generic [ref=e246]:
+            - generic [ref=e247]:
+              - img "Jaydon Frankie" [ref=e249]
+              - generic [ref=e250]: Free
+            - generic [ref=e251]:
+              - heading "Jaydon Frankie" [level=6] [ref=e252]
+              - paragraph [ref=e253]: demo@minimals.cc
+            - link "Upgrade to Pro" [ref=e254] [cursor=pointer]:
+              - /url: https://mui.com/store/items/minimal-dashboard/
+    - generic [ref=e255]:
+      - banner [ref=e256]:
+        - generic [ref=e257]:
+          - button "Team 1 Team 1 Free" [ref=e258] [cursor=pointer]:
+            - img "Team 1" [ref=e259]
+            - generic [ref=e260]: Team 1
+            - generic [ref=e261]: Free
+            - img [ref=e262]
+          - generic [ref=e264]:
+            - generic [ref=e265] [cursor=pointer]:
+              - img [ref=e267]
+              - generic [ref=e269]: ⌘K
+            - button "Languages button" [ref=e270] [cursor=pointer]:
+              - img "GB" [ref=e272]
+            - button "Notifications button" [ref=e273] [cursor=pointer]:
+              - generic [ref=e274]:
+                - img [ref=e275]
+                - generic [ref=e278]: "4"
+            - button "Contacts button" [ref=e279] [cursor=pointer]:
+              - img [ref=e280]
+            - button "Settings button" [ref=e285] [cursor=pointer]:
+              - img [ref=e287]
+            - button "Account button" [ref=e290] [cursor=pointer]:
+              - generic [ref=e291]:
+                - img [ref=e293]
+                - img [ref=e297]
+                - img "Jaydon Frankie" [ref=e301]
+      - main [ref=e302]:
+        - generic [ref=e304]:
+          - generic [ref=e306]:
+            - generic [ref=e307]:
+              - heading "Welcome back 👋 Jaydon Frankie" [level=4] [ref=e308]
+              - paragraph [ref=e309]: If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything.
+              - button "Go now" [ref=e310] [cursor=pointer]
+            - img [ref=e312]
+          - generic [ref=e336]:
+            - list [ref=e337]:
+              - listitem [ref=e338]:
+                - button "dot-0" [ref=e339] [cursor=pointer]
+              - listitem [ref=e340]:
+                - button "dot-1" [ref=e341] [cursor=pointer]
+              - listitem [ref=e342]:
+                - button "dot-2" [ref=e343] [cursor=pointer]
+            - generic [ref=e344]:
+              - button "Prev button" [ref=e345] [cursor=pointer]:
+                - img [ref=e346]
+              - button "Next button" [ref=e348] [cursor=pointer]:
+                - img [ref=e349]
+            - list [ref=e352]:
+              - listitem [ref=e353]:
+                - generic [ref=e354]:
+                  - generic [ref=e355]:
+                    - generic [ref=e356]: Featured App
+                    - generic [ref=e357]: "The Rise of Remote Work: Benefits, Challenges, and Future Trends"
+                    - paragraph [ref=e358]: The aroma of freshly brewed coffee filled the air, awakening my senses.
+                  - 'img "The Rise of Remote Work: Benefits, Challenges, and Future Trends" [ref=e361]'
+              - listitem [ref=e362]:
+                - generic [ref=e363]:
+                  - generic [ref=e364]:
+                    - generic [ref=e365]: Featured App
+                    - generic [ref=e366]: "Understanding Blockchain Technology: Beyond Cryptocurrency"
+                    - paragraph [ref=e367]: The children giggled with joy as they ran through the sprinklers on a hot summer day.
+                  - 'img "Understanding Blockchain Technology: Beyond Cryptocurrency" [ref=e370]'
+              - listitem [ref=e371]:
+                - generic [ref=e372]:
+                  - generic [ref=e373]:
+                    - generic [ref=e374]: Featured App
+                    - generic [ref=e375]: "Mental Health in the Digital Age: Navigating Social Media and Well-being"
+                    - paragraph [ref=e376]: He carefully crafted a beautiful sculpture out of clay, his hands skillfully shaping the intricate details.
+                  - 'img "Mental Health in the Digital Age: Navigating Social Media and Well-being" [ref=e1029]'
+          - generic [ref=e381]:
+            - generic [ref=e382]:
+              - generic [ref=e383]: Total active users
+              - generic [ref=e384]: 18,765
+              - generic [ref=e385]:
+                - img [ref=e386]
+                - generic [ref=e389]: +2.6%
+                - generic [ref=e390]: last 7 days
+            - generic [ref=e1032]:
+              - 'application "bar chart with 1 data series: series-1" [ref=e1033]'
+              - status [ref=e1047]
+              - text: ●
+          - generic [ref=e410]:
+            - generic [ref=e411]:
+              - generic [ref=e412]: Total installed
+              - generic [ref=e413]: 4,876
+              - generic [ref=e414]:
+                - img [ref=e415]
+                - generic [ref=e418]: +0.2%
+                - generic [ref=e419]: last 7 days
+            - generic [ref=e1050]:
+              - 'application "bar chart with 1 data series: series-1" [ref=e1051]'
+              - status [ref=e1065]
+              - text: ●
+          - generic [ref=e439]:
+            - generic [ref=e440]:
+              - generic [ref=e441]: Total downloads
+              - generic [ref=e442]: "678"
+              - generic [ref=e443]:
+                - img [ref=e444]
+                - generic [ref=e447]: "-0.1%"
+                - generic [ref=e448]: last 7 days
+            - generic [ref=e1068]:
+              - 'application "bar chart with 1 data series: series-1" [ref=e1069]'
+              - status [ref=e1083]
+              - text: ●
+          - generic [ref=e468]:
+            - generic [ref=e470]:
+              - generic [ref=e471]: Current download
+              - generic [ref=e472]: Downloaded by operating system
+            - generic [ref=e1084]:
+              - 'application "donut chart with 4 data series: Mac, Window, iOS, Android" [ref=e1085]':
+                - generic [ref=e1100]:
+                  - generic: Total
+                  - generic: 188,245
+              - status [ref=e1101]
+              - text: ● ● ● ●
+            - separator [ref=e493]
+            - list [ref=e494]:
+              - listitem [ref=e495]:
+                - generic [ref=e498]: Mac
+              - listitem [ref=e499]:
+                - generic [ref=e502]: Window
+              - listitem [ref=e503]:
+                - generic [ref=e506]: iOS
+              - listitem [ref=e507]:
+                - generic [ref=e510]: Android
+          - generic [ref=e512]:
+            - generic [ref=e513]:
+              - generic [ref=e514]:
+                - generic [ref=e515]: Area installed
+                - generic [ref=e516]: (+43%) than last year
+              - button "2023" [ref=e518] [cursor=pointer]:
+                - text: "2023"
+                - img [ref=e519]
+            - list [ref=e521]:
+              - listitem [ref=e522]:
+                - generic [ref=e525]: Asia
+                - generic [ref=e526]: 1.23k
+              - listitem [ref=e527]:
+                - generic [ref=e530]: Europe
+                - generic [ref=e531]: 6.79k
+              - listitem [ref=e532]:
+                - generic [ref=e535]: Americas
+                - generic [ref=e536]: 1.01k
+            - generic [ref=e1103]:
+              - 'application "bar chart with 3 data series: Asia, Europe, Americas" [ref=e1104]':
+                - generic [ref=e1151]:
+                  - generic "Jan" [ref=e1152]
+                  - generic "Feb" [ref=e1153]
+                  - generic "Mar" [ref=e1154]
+                  - generic "Apr" [ref=e1155]
+                  - generic "May" [ref=e1156]
+                  - generic "Jun" [ref=e1157]
+                  - generic "Jul" [ref=e1158]
+                  - generic "Aug" [ref=e1159]
+                  - generic "Sep" [ref=e1160]
+                  - generic "Oct" [ref=e1161]
+                  - generic "Nov" [ref=e1162]
+                  - generic "Dec" [ref=e1163]
+                - generic [ref=e1165]:
+                  - generic "80" [ref=e1166]
+                  - generic "60" [ref=e1167]
+                  - generic "40" [ref=e1168]
+                  - generic "20" [ref=e1169]
+                  - generic "0" [ref=e1170]
+              - status [ref=e1171]
+              - text: ● ● ●
+          - generic [ref=e609]:
+            - generic [ref=e612]: New Invoices
+            - region "scrollable content" [ref=e617]:
+              - table [ref=e619]:
+                - rowgroup [ref=e620]:
+                  - row "Invoice ID Category Price Status" [ref=e621]:
+                    - columnheader "Invoice ID" [ref=e622]
+                    - columnheader "Category" [ref=e623]
+                    - columnheader "Price" [ref=e624]
+                    - columnheader "Status" [ref=e625]
+                    - columnheader [ref=e626]
+                - rowgroup [ref=e627]:
+                  - row "INV-1990 Android $83.74 Paid" [ref=e628]:
+                    - cell "INV-1990" [ref=e629]
+                    - cell "Android" [ref=e630]
+                    - cell "$83.74" [ref=e631]
+                    - cell "Paid" [ref=e632]:
+                      - generic [ref=e633]: Paid
+                    - cell [ref=e634]:
+                      - button [ref=e635] [cursor=pointer]:
+                        - img [ref=e636]
+                  - row "INV-1991 Mac $97.14 Out of date" [ref=e640]:
+                    - cell "INV-1991" [ref=e641]
+                    - cell "Mac" [ref=e642]
+                    - cell "$97.14" [ref=e643]
+                    - cell "Out of date" [ref=e644]:
+                      - generic [ref=e645]: Out of date
+                    - cell [ref=e646]:
+                      - button [ref=e647] [cursor=pointer]:
+                        - img [ref=e648]
+                  - row "INV-1992 Windows $68.71 Progress" [ref=e652]:
+                    - cell "INV-1992" [ref=e653]
+                    - cell "Windows" [ref=e654]
+                    - cell "$68.71" [ref=e655]
+                    - cell "Progress" [ref=e656]:
+                      - generic [ref=e657]: Progress
+                    - cell [ref=e658]:
+                      - button [ref=e659] [cursor=pointer]:
+                        - img [ref=e660]
+                  - row "INV-1993 Android $85.21 Paid" [ref=e664]:
+                    - cell "INV-1993" [ref=e665]
+                    - cell "Android" [ref=e666]
+                    - cell "$85.21" [ref=e667]
+                    - cell "Paid" [ref=e668]:
+                      - generic [ref=e669]: Paid
+                    - cell [ref=e670]:
+                      - button [ref=e671] [cursor=pointer]:
+                        - img [ref=e672]
+                  - row "INV-1994 Mac $52.17 Paid" [ref=e676]:
+                    - cell "INV-1994" [ref=e677]
+                    - cell "Mac" [ref=e678]
+                    - cell "$52.17" [ref=e679]
+                    - cell "Paid" [ref=e680]:
+                      - generic [ref=e681]: Paid
+                    - cell [ref=e682]:
+                      - button [ref=e683] [cursor=pointer]:
+                        - img [ref=e684]
+            - separator [ref=e688]
+            - button "View all" [ref=e690] [cursor=pointer]:
+              - text: View all
+              - img [ref=e692]
+          - generic [ref=e695]:
+            - generic [ref=e698]: Related applications
+            - tablist [ref=e701]:
+              - tab "Top 7 days" [selected] [ref=e702] [cursor=pointer]
+              - tab "Top 30 days" [ref=e703] [cursor=pointer]
+              - tab "All times" [ref=e704] [cursor=pointer]
+            - region "scrollable content" [ref=e710]:
+              - generic [ref=e712]:
+                - generic [ref=e713]:
+                  - img [ref=e715]
+                  - generic [ref=e716]:
+                    - generic [ref=e717]:
+                      - heading "Microsoft office 365" [level=6] [ref=e718]
+                      - generic [ref=e719]: Free
+                    - generic [ref=e720]:
+                      - generic [ref=e721]:
+                        - img [ref=e722]
+                        - text: 9.91k
+                      - generic [ref=e726]:
+                        - img [ref=e727]
+                        - text: 9.68 Mb
+                      - generic [ref=e731]:
+                        - img "4 Stars":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                            - generic:
+                              - generic:
+                                - img
+                        - text: 9.91k
+                - generic [ref=e732]:
+                  - img [ref=e734]
+                  - generic [ref=e735]:
+                    - generic [ref=e736]:
+                      - heading "Opera" [level=6] [ref=e737]
+                      - generic [ref=e738]: Free
+                    - generic [ref=e739]:
+                      - generic [ref=e740]:
+                        - img [ref=e741]
+                        - text: 1.95k
+                      - generic [ref=e745]:
+                        - img [ref=e746]
+                        - text: 1.9 Mb
+                      - generic [ref=e750]:
+                        - img "3.5 Stars":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                            - generic:
+                              - generic:
+                                - img
+                        - text: 1.95k
+                - generic [ref=e751]:
+                  - img [ref=e753]
+                  - generic [ref=e754]:
+                    - generic [ref=e755]:
+                      - heading "Adobe acrobat reader DC" [level=6] [ref=e756]
+                      - generic [ref=e757]: $68.71
+                    - generic [ref=e758]:
+                      - generic [ref=e759]:
+                        - img [ref=e760]
+                        - text: 9.12k
+                      - generic [ref=e764]:
+                        - img [ref=e765]
+                        - text: 8.91 Mb
+                      - generic [ref=e769]:
+                        - img "4.5 Stars":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                            - generic:
+                              - generic:
+                                - img
+                        - text: 9.12k
+                - generic [ref=e770]:
+                  - img [ref=e772]
+                  - generic [ref=e773]:
+                    - generic [ref=e774]:
+                      - heading "Joplin" [level=6] [ref=e775]
+                      - generic [ref=e776]: Free
+                    - generic [ref=e777]:
+                      - generic [ref=e778]:
+                        - img [ref=e779]
+                        - text: 6.98k
+                      - generic [ref=e783]:
+                        - img [ref=e784]
+                        - text: 6.82 Mb
+                      - generic [ref=e788]:
+                        - img "3.5 Stars":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                            - generic:
+                              - generic:
+                                - img
+                        - text: 6.98k
+                - generic [ref=e789]:
+                  - img [ref=e791]
+                  - generic [ref=e792]:
+                    - generic [ref=e793]:
+                      - heading "Topaz photo AI" [level=6] [ref=e794]
+                      - generic [ref=e795]: $52.17
+                    - generic [ref=e796]:
+                      - generic [ref=e797]:
+                        - img [ref=e798]
+                        - text: 8.49k
+                      - generic [ref=e802]:
+                        - img [ref=e803]
+                        - text: 8.29 Mb
+                      - generic [ref=e807]:
+                        - img "0.5 Stars":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                            - generic:
+                              - generic:
+                                - img
+                        - text: 8.49k
+          - generic [ref=e809]:
+            - generic [ref=e812]: Top installed countries
+            - region "scrollable content" [ref=e817]:
+              - generic [ref=e819]:
+                - generic [ref=e820]:
+                  - generic [ref=e821]:
+                    - img "de" [ref=e823]
+                    - generic [ref=e824]: Germany
+                  - generic [ref=e825]:
+                    - img [ref=e826]
+                    - text: 9.91k
+                  - generic [ref=e828]:
+                    - img [ref=e829]
+                    - text: 1.95k
+                  - generic [ref=e833]:
+                    - img [ref=e834]
+                    - text: 9.12k
+                - generic [ref=e838]:
+                  - generic [ref=e839]:
+                    - img "gb" [ref=e841]
+                    - generic [ref=e842]: England
+                  - generic [ref=e843]:
+                    - img [ref=e844]
+                    - text: 1.95k
+                  - generic [ref=e846]:
+                    - img [ref=e847]
+                    - text: 9.12k
+                  - generic [ref=e851]:
+                    - img [ref=e852]
+                    - text: 6.98k
+                - generic [ref=e856]:
+                  - generic [ref=e857]:
+                    - img "fr" [ref=e859]
+                    - generic [ref=e860]: France
+                  - generic [ref=e861]:
+                    - img [ref=e862]
+                    - text: 9.12k
+                  - generic [ref=e864]:
+                    - img [ref=e865]
+                    - text: 6.98k
+                  - generic [ref=e869]:
+                    - img [ref=e870]
+                    - text: 8.49k
+                - generic [ref=e874]:
+                  - generic [ref=e875]:
+                    - img "kr" [ref=e877]
+                    - generic [ref=e878]: Korean
+                  - generic [ref=e879]:
+                    - img [ref=e880]
+                    - text: 6.98k
+                  - generic [ref=e882]:
+                    - img [ref=e883]
+                    - text: 8.49k
+                  - generic [ref=e887]:
+                    - img [ref=e888]
+                    - text: 2.03k
+                - generic [ref=e892]:
+                  - generic [ref=e893]:
+                    - img "us" [ref=e895]
+                    - generic [ref=e896]: USA
+                  - generic [ref=e897]:
+                    - img [ref=e898]
+                    - text: 8.49k
+                  - generic [ref=e900]:
+                    - img [ref=e901]
+                    - text: 2.03k
+                  - generic [ref=e905]:
+                    - img [ref=e906]
+                    - text: 3.36k
+          - generic [ref=e911]:
+            - generic [ref=e914]: Top authors
+            - generic [ref=e915]:
+              - generic [ref=e916]:
+                - img "Jayvion Simon" [ref=e918]
+                - generic [ref=e919]:
+                  - generic [ref=e920]: Jayvion Simon
+                  - generic [ref=e921]:
+                    - img [ref=e922]
+                    - text: 9.91k
+                - img [ref=e925]
+              - generic [ref=e928]:
+                - img "Deja Brady" [ref=e930]
+                - generic [ref=e931]:
+                  - generic [ref=e932]: Deja Brady
+                  - generic [ref=e933]:
+                    - img [ref=e934]
+                    - text: 9.12k
+                - img [ref=e937]
+              - generic [ref=e940]:
+                - img "Lucian Obrien" [ref=e942]
+                - generic [ref=e943]:
+                  - generic [ref=e944]: Lucian Obrien
+                  - generic [ref=e945]:
+                    - img [ref=e946]
+                    - text: 1.95k
+                - img [ref=e949]
+          - generic [ref=e953]:
+            - generic [ref=e954]:
+              - generic [ref=e1252]:
+                - 'application "radialBar chart with 1 data series: series-1" [ref=e1253]':
+                  - generic [ref=e1265]:
+                    - generic: 48%
+                - status [ref=e1266]
+              - generic [ref=e974]:
+                - generic [ref=e975]: 38,566
+                - generic [ref=e976]: Conversion
+              - img [ref=e977]
+            - generic [ref=e980]:
+              - generic [ref=e1269]:
+                - 'application "radialBar chart with 1 data series: series-1" [ref=e1270]':
+                  - generic [ref=e1282]:
+                    - generic: 75%
+                - status [ref=e1283]
+              - generic [ref=e1000]:
+                - generic [ref=e1001]: 55,566
+                - generic [ref=e1002]: Applications
+              - img [ref=e1003]
+  - region "Notifications alt+T"

@@ -1,0 +1,6 @@
+- generic [active] [ref=e1]:
+  - region "Notifications alt+T"
+  - generic [ref=e6]:
+    - link "Logo":
+      - /url: /
+      - img

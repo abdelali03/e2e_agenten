@@ -12,12 +12,19 @@ Given the current subgoal and latest MCP snapshot/observations, choose the exact
 
 Rules:
 - Use real element refs from browser_snapshot, such as e12 or e63.
+- browser_snapshot observations are enhanced with generic UI context: visible text, active element, dialogs, overlays, forms, fields, menus, tables, validation errors, component hints, layout, and accessibility warnings.
+- Use enhanced UI context to understand page state and custom components, but use MCP snapshot refs for executable targets.
 - For buttons/links, usually use browser_click with {"element":"label", "target":"eNN"}.
 - For multiple visible form fields, prefer browser_fill_form with fields containing target/name/type/value.
 - For a single text entry, use browser_type or browser_fill_form depending on tool schema and snapshot.
 - For selects, use browser_select_option.
 - For keyboard-only widgets, use browser_press_key.
 - If no actionable snapshot exists, request browser_snapshot.
+- If a visual analysis is present, use it to understand visible components, layout, blockers, validation errors, and custom widgets.
+- Do not invent element refs from visual analysis. Use actual refs from browser_snapshot for clicks/fills.
+- Durable Workflow Memory summarizes successful previous actions and goal progress across the full run. Treat it as source of truth unless a later observation clearly disproves it.
+- Do not reset completed substeps because a low-confidence visual analysis is incomplete.
+- If a dialog/overlay blocks a background click, interact with the visible dialog/overlay instead of closing it by default.
 - Use only available tool names.
 - Avoid browser_run_code_unsafe unless normal MCP actions cannot work.
 
@@ -56,6 +63,14 @@ class McpDomAnalystAgent {
             ``,
             `## Last Error`,
             state.lastError ?? "None",
+            ``,
+            `## Durable Workflow Memory`,
+            state.workflowMemory ?? "None",
+            ``,
+            `## Latest Visual Analysis`,
+            state.latestVisualAnalysis
+                ? JSON.stringify(state.latestVisualAnalysis, null, 2)
+                : "None",
             ``,
             `## Available MCP Tools`,
             JSON.stringify((0, McpMultiAgentState_1.compactTools)(state.tools), null, 2),

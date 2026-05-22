@@ -1,0 +1,11 @@
+[     248ms] [LOG] WS-DEBUG: Kein Token gefunden. Warte auf Login... @ http://localhost:82/assets/index-BcapL9Q1.js:472
+[  115374ms] [LOG] {user: Object, token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZWxhbWluZSIsInJvb…zMwfQ.Czxib9lxZtHCuZRDpQoicU3S6y1dOrczTRVPDlA3_TA} @ http://localhost:82/assets/index-BcapL9Q1.js:240
+[  115374ms] [LOG] Login erfolgreich! {user: Object, token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZWxhbWluZSIsInJvb…zMwfQ.Czxib9lxZtHCuZRDpQoicU3S6y1dOrczTRVPDlA3_TA} @ http://localhost:82/assets/index-BcapL9Q1.js:240
+[  116684ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[  116758ms] [LOG] Hole aktuelle Daten vom Server... @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[  116773ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[  116879ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[  116896ms] [LOG] Vertragsnummer für 2026-05-22 erfolgreich aufgerufen: Test @ http://localhost:82/assets/index-BcapL9Q1.js:334
+[  116935ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[  117284ms] [LOG] syncitems: [] @ http://localhost:82/assets/index-BcapL9Q1.js:464
+[  179884ms] [WARNING] The specified value "19.05.2026" does not conform to the required format, "yyyy-MM-dd". @ :7143

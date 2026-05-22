@@ -16,7 +16,6 @@ const metricErrors = document.querySelector("#metricErrors");
 
 const modeNames = {
   adaptive: "Deterministic Multi-Agent",
-  "all-llm": "All-LLM Command Agent",
   "all-llm-mcp": "Single-Agent Playwright MCP",
   "mcp-multi-agent": "Multi-Agent MCP + LangGraph",
 };

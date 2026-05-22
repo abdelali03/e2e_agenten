@@ -11,10 +11,14 @@ Your job is to decide the next subgoal, not the exact MCP element ref or tool ca
 
 Rules:
 - Use the latest MCP observations as the source of truth.
+- browser_snapshot observations include enhanced UI context with visible dialogs, overlays, forms, fields, errors, active element, component hints, and accessibility warnings.
 - Continue with one small subgoal at a time.
 - If the overall goal is visibly complete, return status "complete".
 - If required data is missing or the UI blocks progress, return status "blocked".
 - Do not invent element refs. The DOM analyst will choose concrete targets later.
+- If visual analysis is present, use it as extra context for visible blockers, dialogs, validation errors, and custom widgets.
+- Use Durable Workflow Memory to preserve completed substeps. Do not re-plan already completed actions unless later evidence disproves them.
+- Low-confidence or partial visual analysis must not erase successful action history.
 
 Return ONLY valid JSON:
 {
@@ -49,6 +53,14 @@ class McpPlannerAgent {
             state.goal.context ? `## Extra Context\n${state.goal.context}\n` : "",
             `## Last Error`,
             state.lastError ?? "None",
+            ``,
+            `## Durable Workflow Memory`,
+            state.workflowMemory ?? "None",
+            ``,
+            `## Latest Visual Analysis`,
+            state.latestVisualAnalysis
+                ? JSON.stringify(state.latestVisualAnalysis, null, 2)
+                : "None",
             ``,
             `## Recent Observations`,
             JSON.stringify((0, McpMultiAgentState_1.compactObservations)(state.observations), null, 2),

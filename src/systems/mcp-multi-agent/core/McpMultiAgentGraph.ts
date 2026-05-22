@@ -6,10 +6,13 @@ import { McpCriticAgent } from "../agents/McpCriticAgent";
 import { McpVerifierAgent } from "../agents/McpVerifierAgent";
 import { PlaywrightMcpClient } from "../../../utils/PlaywrightMcpClient";
 import { Logger } from "../../../utils/Logger";
+import { VisionTool } from "../../../utils/VisionTool";
+import { EnhancedMcpSnapshotTool } from "../../../utils/EnhancedMcpSnapshotTool";
 import type { GoalInput } from "../../../core/types";
 import type { McpToolInfo } from "../../../utils/PlaywrightMcpClient";
 import {
   appendObservation,
+  buildWorkflowMemory,
   type McpCriticDecision,
   type McpMultiAgentState,
   type McpObservationDecision,
@@ -33,6 +36,8 @@ const StateAnnotation = Annotation.Root({
   proposedToolCall: Annotation<McpToolCallProposal | undefined>,
   criticDecision: Annotation<McpCriticDecision | undefined>,
   verification: Annotation<McpVerificationDecision | undefined>,
+  latestVisualAnalysis: Annotation<McpMultiAgentState["latestVisualAnalysis"]>,
+  workflowMemory: Annotation<string | undefined>,
   lastError: Annotation<string | undefined>,
   finalSummary: Annotation<string | undefined>,
   iteration: Annotation<number>,
@@ -52,6 +57,8 @@ export interface McpMultiAgentGraphDeps {
   analyst: McpDomAnalystAgent;
   critic: McpCriticAgent;
   verifier: McpVerifierAgent;
+  visionTool: VisionTool;
+  enhancedSnapshotTool: EnhancedMcpSnapshotTool;
 }
 
 export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
@@ -79,14 +86,21 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
   const navigateStart = async (state: GraphState): Promise<GraphUpdate> => {
     const toolName = "browser_navigate";
     const args = { url: state.goal.url };
-    const result = await callMcpTool(state, deps.mcp, "init", "Navigator", toolName, args);
+    const result = await callMcpTool(
+      state,
+      deps,
+      "init",
+      "Navigator",
+      toolName,
+      args
+    );
 
-    return {
+    return withWorkflowMemory(state, {
       observations: result.observations,
       toolCallCount: state.toolCallCount + 1,
       consecutiveSnapshots: 0,
       lastError: result.lastError,
-    };
+    });
   };
 
   const observeForPlanning = async (state: GraphState): Promise<GraphUpdate> => {
@@ -117,7 +131,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
       };
     }
 
-    return {
+    return withWorkflowMemory(state, {
       plan: decision,
       currentSubgoal: decision.subgoal,
       expectedOutcome: decision.expectedOutcome,
@@ -129,14 +143,14 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
         resultText: decision.subgoal ?? "",
         reasoning: decision.reasoning,
       }),
-    };
+    });
   };
 
   const analyze = async (state: GraphState): Promise<GraphUpdate> => {
     try {
       const proposal = await deps.analyst.analyze(state);
 
-      return {
+      return withWorkflowMemory(state, {
         proposedToolCall: proposal,
         observations: appendObservation(state, {
           phase: "analyze",
@@ -147,10 +161,10 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
           resultText: proposal.elementDescription ?? proposal.toolName,
           reasoning: proposal.reasoning,
         }),
-      };
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      return {
+      return withWorkflowMemory(state, {
         lastError: message,
         observations: appendObservation(state, {
           phase: "analyze",
@@ -159,7 +173,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
           resultText: "",
           errorMessage: message,
         }),
-      };
+      });
     }
   };
 
@@ -171,7 +185,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
     const proposal = state.proposedToolCall;
     if (!proposal) {
       const error = "No proposed MCP tool call to execute.";
-      return {
+      return withWorkflowMemory(state, {
         lastError: error,
         observations: appendObservation(state, {
           phase: "execute",
@@ -180,12 +194,12 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
           resultText: "",
           errorMessage: error,
         }),
-      };
+      });
     }
 
     const result = await callMcpTool(
       state,
-      deps.mcp,
+      deps,
       "execute",
       "McpToolExecutor",
       proposal.toolName,
@@ -193,7 +207,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
       proposal.reasoning
     );
 
-    return {
+    return withWorkflowMemory(state, {
       observations: result.observations,
       toolCallCount: state.toolCallCount + 1,
       retryCount: result.lastError ? state.retryCount + 1 : 0,
@@ -202,7 +216,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
           ? state.consecutiveSnapshots + 1
           : 0,
       lastError: result.lastError,
-    };
+    });
   };
 
   const observeAfterAction = async (state: GraphState): Promise<GraphUpdate> => {
@@ -229,7 +243,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
       };
     }
 
-    return {
+    return withWorkflowMemory(state, {
       verification: decision,
       observations: appendObservation(state, {
         phase: "verify",
@@ -242,13 +256,13 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
         }),
         reasoning: decision.reasoning,
       }),
-    };
+    });
   };
 
   const critique = async (state: GraphState): Promise<GraphUpdate> => {
     const decision = await deps.critic.critique(state);
 
-    return {
+    return withWorkflowMemory(state, {
       criticDecision: decision,
       currentSubgoal: decision.revisedSubgoal ?? state.currentSubgoal,
       lastError: decision.route === "blocked" ? decision.reasoning : state.lastError,
@@ -262,7 +276,62 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
         resultText: decision.route,
         reasoning: decision.reasoning,
       }),
-    };
+    });
+  };
+
+  const analyzeVision = async (state: GraphState): Promise<GraphUpdate> => {
+    const analysis = await deps.visionTool.analyzeCurrentPage(deps.mcp, {
+      goal: state.goal.goal,
+      currentSubgoal: state.currentSubgoal,
+      expectedOutcome: state.expectedOutcome,
+      lastError: state.lastError,
+      recentFailures: getRecentFailureMessages(state),
+      recentObservations: state.observations
+        .slice(-4)
+        .map((entry) =>
+          [
+            `[${entry.phase}] ${entry.agentName}`,
+            entry.toolName ? `tool=${entry.toolName}` : "",
+            entry.errorMessage ? `error=${entry.errorMessage}` : "",
+            entry.resultText ? `result=${entry.resultText.slice(0, 500)}` : "",
+          ]
+            .filter(Boolean)
+            .join(" ")
+        ),
+    });
+
+    if (!analysis) {
+      const message =
+        "Vision analysis was requested after repeated failures, but no visual analysis could be produced.";
+
+      return withWorkflowMemory(state, {
+        lastError: message,
+        observations: appendObservation(state, {
+          phase: "vision",
+          agentName: "VisionTool",
+          toolName: "browser_take_screenshot",
+          arguments: {},
+          success: false,
+          resultText: "",
+          errorMessage: message,
+        }),
+      });
+    }
+
+    return withWorkflowMemory(state, {
+      latestVisualAnalysis: analysis,
+      lastError: state.lastError,
+      observations: appendObservation(state, {
+        phase: "vision",
+        agentName: "VisionTool",
+        toolName: "browser_take_screenshot",
+        arguments: {},
+        success: true,
+        resultText: JSON.stringify(analysis),
+        reasoning:
+          "Screenshot vision was used after repeated failures to understand visible components and blockers.",
+      }),
+    });
   };
 
   const graph = new StateGraph(StateAnnotation)
@@ -275,6 +344,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
     .addNode("observeAfterActionNode", observeAfterAction)
     .addNode("verifierNode", verify)
     .addNode("criticNode", critique)
+    .addNode("visionNode", analyzeVision)
     .addEdge(START, "connectMcpNode")
     .addEdge("connectMcpNode", "navigateStartNode")
     .addEdge("navigateStartNode", "observeForPlanningNode")
@@ -284,7 +354,8 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
     .addConditionalEdges("executeToolNode", routeAfterExecute)
     .addEdge("observeAfterActionNode", "verifierNode")
     .addConditionalEdges("verifierNode", routeAfterVerify)
-    .addConditionalEdges("criticNode", routeAfterCritic);
+    .addConditionalEdges("criticNode", routeAfterCritic)
+    .addEdge("visionNode", "analystNode");
 
   return graph.compile();
 }
@@ -301,15 +372,15 @@ async function observe(
   const decision = await deps.observer.decide(state);
   const result = await callMcpTool(
     state,
-    deps.mcp,
+    deps,
     "observe",
     "McpObserverAgent",
     decision.toolName,
-    decision.arguments,
+    normalizeObservationArgs(decision.toolName, decision.arguments, state),
     decision.reasoning
   );
 
-  return {
+  return withWorkflowMemory(state, {
     observationDecision: decision,
     observations: result.observations,
     toolCallCount: state.toolCallCount + 1,
@@ -319,12 +390,12 @@ async function observe(
         : 0,
     lastError: result.lastError,
     retryCount: result.lastError ? state.retryCount + 1 : state.retryCount,
-  };
+  });
 }
 
 async function callMcpTool(
   state: GraphState,
-  mcp: PlaywrightMcpClient,
+  deps: Pick<McpMultiAgentGraphDeps, "mcp" | "enhancedSnapshotTool">,
   phase: McpObservationEntry["phase"],
   agentName: string,
   toolName: string,
@@ -333,7 +404,12 @@ async function callMcpTool(
 ): Promise<{ observations: McpObservationEntry[]; lastError?: string }> {
   try {
     logger.info(`Calling MCP tool: ${toolName}`, args);
-    const result = await mcp.callTool(toolName, args);
+    const normalizedArgs =
+      toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args;
+    const result =
+      toolName === "browser_snapshot"
+        ? await deps.enhancedSnapshotTool.capture(deps.mcp, normalizedArgs)
+        : await deps.mcp.callTool(toolName, normalizedArgs);
     const errorMessage = result.isError ? result.text : undefined;
 
     return {
@@ -341,7 +417,7 @@ async function callMcpTool(
         phase,
         agentName,
         toolName,
-        arguments: args,
+        arguments: normalizedArgs,
         success: !result.isError,
         resultText: result.text,
         errorMessage,
@@ -357,7 +433,7 @@ async function callMcpTool(
         phase,
         agentName,
         toolName,
-        arguments: args,
+        arguments: toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args,
         success: false,
         resultText: "",
         errorMessage,
@@ -409,12 +485,20 @@ function routeAfterExecute(state: GraphState): string {
     return "criticNode";
   }
 
+  if (state.consecutiveSnapshots >= 2) {
+    return "criticNode";
+  }
+
   return "observeAfterActionNode";
 }
 
 function routeAfterVerify(state: GraphState): string {
   if (state.status === "passed" || state.status === "blocked" || state.status === "failed") {
     return END;
+  }
+
+  if (state.consecutiveSnapshots >= 2) {
+    return "criticNode";
   }
 
   return "plannerNode";
@@ -430,6 +514,8 @@ function routeAfterCritic(state: GraphState): string {
       return "analystNode";
     case "observe":
       return "observeForPlanningNode";
+    case "vision":
+      return "visionNode";
     case "verify":
       return "observeAfterActionNode";
     case "plan":
@@ -439,4 +525,65 @@ function routeAfterCritic(state: GraphState): string {
     default:
       return "observeForPlanningNode";
   }
+}
+
+function getRecentFailureMessages(state: GraphState): string[] {
+  return state.observations
+    .filter((entry) => !entry.success)
+    .slice(-4)
+    .map((entry) =>
+      [
+        entry.toolName ? `${entry.toolName}:` : entry.agentName,
+        entry.errorMessage || entry.resultText || "failed without details",
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .slice(0, 1000)
+    );
+}
+
+function withWorkflowMemory(
+  state: GraphState,
+  update: GraphUpdate
+): GraphUpdate {
+  const nextState = {
+    ...state,
+    ...update,
+  } as McpMultiAgentState;
+
+  return {
+    ...update,
+    workflowMemory: buildWorkflowMemory(nextState),
+  };
+}
+
+function normalizeObservationArgs(
+  toolName: string,
+  args: Record<string, unknown>,
+  state: GraphState
+): Record<string, unknown> {
+  return toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args;
+}
+
+function normalizeSnapshotArgs(
+  args: Record<string, unknown> = {},
+  state: GraphState
+): Record<string, unknown> {
+  const target = typeof args.target === "string" ? args.target : "";
+  const requestedDepth = typeof args.depth === "number" ? args.depth : undefined;
+  const targetLooksLikeComplexSurface =
+    /dialog|modal|popover|popper|menu|listbox|grid|table|datepicker|date|time|main/i.test(
+      target
+    );
+  const recoveryContext =
+    Boolean(state.lastError) ||
+    Boolean(state.latestVisualAnalysis) ||
+    state.consecutiveSnapshots > 0;
+  const minimumDepth = targetLooksLikeComplexSurface || recoveryContext ? 12 : 8;
+
+  return {
+    ...args,
+    boxes: true,
+    depth: Math.max(requestedDepth ?? minimumDepth, minimumDepth),
+  };
 }

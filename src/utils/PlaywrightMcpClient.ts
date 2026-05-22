@@ -15,6 +15,12 @@ export interface McpToolCallResult {
   text: string;
   raw: unknown;
   isError?: boolean;
+  images: McpImageResult[];
+}
+
+export interface McpImageResult {
+  data: string;
+  mimeType: string;
 }
 
 export class PlaywrightMcpClient {
@@ -110,11 +116,17 @@ export class PlaywrightMcpClient {
     return {
       text: this.resultToText(result),
       raw: result,
+      images: this.extractImages(result),
       isError:
         "isError" in result && typeof result.isError === "boolean"
           ? result.isError
           : undefined,
     };
+  }
+
+  public async takeScreenshot(): Promise<McpImageResult | undefined> {
+    const result = await this.callTool("browser_take_screenshot", {});
+    return result.images[0];
   }
 
   public async close(): Promise<void> {
@@ -176,5 +188,31 @@ export class PlaywrightMcpClient {
     }
 
     return JSON.stringify(result, null, 2).slice(0, 30_000);
+  }
+
+  private extractImages(result: unknown): McpImageResult[] {
+    const maybeResult = result as {
+      content?: Array<
+        | { type: "text"; text: string }
+        | { type: "image"; data: string; mimeType: string }
+        | { type: string; [key: string]: unknown }
+      >;
+    };
+
+    if (!Array.isArray(maybeResult.content)) {
+      return [];
+    }
+
+    return maybeResult.content
+      .filter(
+        (part): part is { type: "image"; data: string; mimeType: string } =>
+          part.type === "image" &&
+          typeof part.data === "string" &&
+          typeof part.mimeType === "string"
+      )
+      .map((part) => ({
+        data: part.data,
+        mimeType: part.mimeType,
+      }));
   }
 }

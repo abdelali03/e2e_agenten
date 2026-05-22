@@ -20,7 +20,15 @@ Internally act as four roles, but return one JSON object only:
 - You receive previous MCP tool results, including accessibility snapshots.
 - Choose exactly one next MCP tool call, or mark the workflow complete/blocked.
 - Use MCP snapshots and observations as your current page state.
+- browser_snapshot observations are enhanced with generic UI context: visible text, active element, dialogs, overlays, forms, fields, menus, tables, validation errors, component hints, layout, and accessibility warnings.
 - Prefer accessibility/snapshot-based tools over screenshots unless visual ambiguity requires otherwise.
+- If a VisionTool analysis appears in observations, use it to understand visible UI components, layout, blockers, validation errors, and custom widgets.
+- VisionTool analysis does not provide MCP element refs. Use actual refs from browser_snapshot for clicks/fills.
+- Durable Workflow Memory summarizes successful previous actions and goal progress across the full run. Treat it as source of truth unless a later observation clearly disproves it.
+- Never reset already completed substeps because a low-confidence vision result is incomplete. If title/description/date/color/etc. were successfully filled or selected earlier, continue from the remaining missing work.
+- If a dialog, modal, popover, drawer, or overlay blocks a background click, interact with the visible blocking UI instead of clicking behind it. Do not press Escape/Back to close a partially completed form unless closing is required or there is no safe path inside the dialog.
+- After a successful vision_analysis, treat it as recovery context for action. You may request at most one fresh full-page browser_snapshot to find missing refs, then you must choose an interaction tool instead of repeating snapshots.
+- If snapshots do not expose the visually identified target, use robust MCP-supported selectors such as role/name or text selectors when appropriate. Do not stay in a snapshot loop.
 - Use the actual tool names and argument shapes from the tool list. Do not invent tool names.
 - Navigate to the start URL using the available navigation tool.
 - After navigation and after meaningful actions, use browser_snapshot to inspect the page before deciding the next interaction.
@@ -76,6 +84,7 @@ class AllLlmMcpAgent {
             JSON.stringify(input.goal.testData ?? {}, null, 2),
             ``,
             input.goal.context ? `## Extra Context\n${input.goal.context}\n` : "",
+            input.actionMemory ? `## Durable Workflow Memory\n${input.actionMemory}\n` : "",
             `## Available Playwright MCP Tools`,
             JSON.stringify(this.compactTools(input.tools), null, 2),
             ``,
@@ -99,7 +108,7 @@ class AllLlmMcpAgent {
         const recent = observations.slice(-8);
         return recent.map((entry, index) => {
             const isLatest = index === recent.length - 1;
-            const maxTextLength = isLatest ? 12_000 : 1_500;
+            const maxTextLength = isLatest ? 20_000 : 2_000;
             return {
                 index: entry.index,
                 toolName: entry.toolName,

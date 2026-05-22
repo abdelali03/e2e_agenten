@@ -5,6 +5,8 @@ import { McpCriticAgent } from "../agents/McpCriticAgent";
 import { McpVerifierAgent } from "../agents/McpVerifierAgent";
 import { PlaywrightMcpClient } from "../../../utils/PlaywrightMcpClient";
 import { Logger } from "../../../utils/Logger";
+import { VisionTool } from "../../../utils/VisionTool";
+import { EnhancedMcpSnapshotTool } from "../../../utils/EnhancedMcpSnapshotTool";
 import type { GoalInput } from "../../../core/types";
 import { buildMcpMultiAgentGraph } from "./McpMultiAgentGraph";
 import type { McpMultiAgentState } from "./McpMultiAgentState";
@@ -57,6 +59,8 @@ export class McpMultiAgentOrchestrator {
       analyst: new McpDomAnalystAgent(),
       critic: new McpCriticAgent(),
       verifier: new McpVerifierAgent(),
+      visionTool: new VisionTool(),
+      enhancedSnapshotTool: new EnhancedMcpSnapshotTool(),
     });
 
     const initialState: Partial<McpMultiAgentState> = {
@@ -69,6 +73,7 @@ export class McpMultiAgentOrchestrator {
       retryCount: 0,
       consecutiveSnapshots: 0,
       maxToolCalls: this.config.maxToolCalls,
+      workflowMemory: undefined,
     };
 
     try {

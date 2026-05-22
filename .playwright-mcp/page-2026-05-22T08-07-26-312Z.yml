@@ -1,0 +1,353 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button [ref=e5] [cursor=pointer]:
+        - img [ref=e6]
+      - link "Logo" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+      - region "scrollable content" [ref=e18]:
+        - generic [ref=e19]:
+          - navigation [ref=e20]:
+            - list [ref=e21]:
+              - listitem [ref=e22]:
+                - generic [ref=e23] [cursor=pointer]:
+                  - img [ref=e24]
+                  - text: Overview
+                - list [ref=e29]:
+                  - listitem [ref=e30]:
+                    - link "App" [ref=e31] [cursor=pointer]:
+                      - /url: /dashboard
+                      - generic [ref=e35]: App
+                  - listitem [ref=e36]:
+                    - link "Ecommerce" [ref=e37] [cursor=pointer]:
+                      - /url: /dashboard/ecommerce
+                      - generic [ref=e41]: Ecommerce
+                  - listitem [ref=e42]:
+                    - link "Analytics" [ref=e43] [cursor=pointer]:
+                      - /url: /dashboard/analytics
+                      - generic [ref=e47]: Analytics
+                  - listitem [ref=e48]:
+                    - link "Banking" [ref=e49] [cursor=pointer]:
+                      - /url: /dashboard/banking
+                      - generic [ref=e53]: Banking
+                  - listitem [ref=e54]:
+                    - link "Booking" [ref=e55] [cursor=pointer]:
+                      - /url: /dashboard/booking
+                      - generic [ref=e59]: Booking
+                  - listitem [ref=e60]:
+                    - link "File" [ref=e61] [cursor=pointer]:
+                      - /url: /dashboard/file
+                      - generic [ref=e65]: File
+                  - listitem [ref=e66]:
+                    - link "Course" [ref=e67] [cursor=pointer]:
+                      - /url: /dashboard/course
+                      - generic [ref=e71]: Course
+              - listitem [ref=e72]:
+                - generic [ref=e73] [cursor=pointer]:
+                  - img [ref=e74]
+                  - text: Management
+                - list [ref=e79]:
+                  - listitem [ref=e80]:
+                    - button "User" [ref=e81] [cursor=pointer]:
+                      - generic [ref=e85]: User
+                      - img [ref=e86]
+                  - listitem [ref=e88]:
+                    - button "Product" [ref=e89] [cursor=pointer]:
+                      - generic [ref=e93]: Product
+                      - img [ref=e94]
+                  - listitem [ref=e96]:
+                    - button "Order" [ref=e97] [cursor=pointer]:
+                      - generic [ref=e101]: Order
+                      - img [ref=e102]
+                  - listitem [ref=e104]:
+                    - button "Invoice" [ref=e105] [cursor=pointer]:
+                      - generic [ref=e109]: Invoice
+                      - img [ref=e110]
+                  - listitem [ref=e112]:
+                    - button "Blog" [ref=e113] [cursor=pointer]:
+                      - generic [ref=e117]: Blog
+                      - img [ref=e118]
+                  - listitem [ref=e120]:
+                    - button "Job" [ref=e121] [cursor=pointer]:
+                      - generic [ref=e125]: Job
+                      - img [ref=e126]
+                  - listitem [ref=e128]:
+                    - button "Tour" [ref=e129] [cursor=pointer]:
+                      - generic [ref=e133]: Tour
+                      - img [ref=e134]
+                  - listitem [ref=e136]:
+                    - link "File manager" [ref=e137] [cursor=pointer]:
+                      - /url: /dashboard/file-manager
+                      - generic [ref=e141]: File manager
+                  - listitem [ref=e142]:
+                    - link "Mail" [ref=e143] [cursor=pointer]:
+                      - /url: /dashboard/mail
+                      - generic [ref=e147]: Mail
+                      - generic [ref=e149]: "+32"
+                  - listitem [ref=e150]:
+                    - link "Chat" [ref=e151] [cursor=pointer]:
+                      - /url: /dashboard/chat
+                      - generic [ref=e155]: Chat
+                  - listitem [ref=e156]:
+                    - link "Calendar" [ref=e157] [cursor=pointer]:
+                      - /url: /dashboard/calendar
+                      - generic [ref=e161]: Calendar
+                  - listitem [ref=e162]:
+                    - link "Kanban" [ref=e163] [cursor=pointer]:
+                      - /url: /dashboard/kanban
+                      - generic [ref=e167]: Kanban
+              - listitem [ref=e168]:
+                - generic [ref=e169] [cursor=pointer]:
+                  - img [ref=e170]
+                  - text: Misc
+                - list [ref=e175]:
+                  - listitem [ref=e176]:
+                    - link "Permission" [ref=e177] [cursor=pointer]:
+                      - /url: /dashboard/permission
+                      - generic [ref=e180]:
+                        - generic [ref=e181]: Permission
+                        - generic "Only admin can see this item." [ref=e182]
+                  - listitem [ref=e183]:
+                    - button "Level" [ref=e184] [cursor=pointer]:
+                      - generic [ref=e188]: Level
+                      - img [ref=e189]
+                  - listitem [ref=e191]:
+                    - link "Disabled":
+                      - /url: /dashboard/kanban#disabled
+                      - generic:
+                        - generic: Disabled
+                  - listitem [ref=e192]:
+                    - link "Label" [ref=e193] [cursor=pointer]:
+                      - /url: /dashboard/kanban#label
+                      - generic [ref=e197]: Label
+                      - generic [ref=e199]:
+                        - img [ref=e201]
+                        - text: NEW
+                  - listitem [ref=e204]:
+                    - link "Caption" [ref=e205] [cursor=pointer]:
+                      - /url: /dashboard/kanban#caption
+                      - generic [ref=e208]:
+                        - generic [ref=e209]: Caption
+                        - generic "Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien." [ref=e210]
+                  - listitem [ref=e211]:
+                    - link "Params" [ref=e212] [cursor=pointer]:
+                      - /url: /dashboard/params?id=e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1
+                      - generic [ref=e216]: Params
+                  - listitem [ref=e217]:
+                    - link "Subpaths" [ref=e218] [cursor=pointer]:
+                      - /url: /dashboard/subpaths
+                      - generic [ref=e222]: Subpaths
+                  - listitem [ref=e223]:
+                    - link "External link" [ref=e224] [cursor=pointer]:
+                      - /url: https://www.google.com/
+                      - generic [ref=e228]: External link
+                      - img [ref=e230]
+                  - listitem [ref=e233]:
+                    - link "Blank" [ref=e234] [cursor=pointer]:
+                      - /url: /dashboard/blank
+                      - generic [ref=e238]: Blank
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - img "Jaydon Frankie" [ref=e243]
+              - generic [ref=e244]: Free
+            - generic [ref=e245]:
+              - heading "Jaydon Frankie" [level=6] [ref=e246]
+              - paragraph [ref=e247]: demo@minimals.cc
+            - link "Upgrade to Pro" [ref=e248] [cursor=pointer]:
+              - /url: https://mui.com/store/items/minimal-dashboard/
+    - generic [ref=e249]:
+      - banner [ref=e250]:
+        - generic [ref=e251]:
+          - button "Team 1 Team 1 Free" [ref=e252] [cursor=pointer]:
+            - img "Team 1" [ref=e253]
+            - generic [ref=e254]: Team 1
+            - generic [ref=e255]: Free
+            - img [ref=e256]
+          - generic [ref=e258]:
+            - generic [ref=e259] [cursor=pointer]:
+              - img [ref=e261]
+              - generic [ref=e263]: ⌘K
+            - button "Languages button" [ref=e264] [cursor=pointer]:
+              - img "GB" [ref=e266]
+            - button "Notifications button" [ref=e267] [cursor=pointer]:
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e272]: "4"
+            - button "Contacts button" [ref=e273] [cursor=pointer]:
+              - img [ref=e274]
+            - button "Settings button" [ref=e279] [cursor=pointer]:
+              - img [ref=e281]
+            - button "Account button" [ref=e284] [cursor=pointer]:
+              - generic [ref=e285]:
+                - img [ref=e287]
+                - img [ref=e291]
+                - img "Jaydon Frankie" [ref=e295]
+      - main [ref=e296]:
+        - generic [ref=e1023]:
+          - generic [ref=e1024]:
+            - heading "Kanban" [level=4] [ref=e1025]
+            - generic [ref=e1026] [cursor=pointer]:
+              - switch "Fixed column" [ref=e1029]
+              - generic [ref=e1032]: Fixed column
+          - list [ref=e1034]:
+            - listitem [ref=e1035]:
+              - generic [ref=e1036]:
+                - generic [ref=e1037]:
+                  - generic [ref=e1039]: "2"
+                  - textbox "Column name" [ref=e1041]: To do
+                  - button [ref=e1042] [cursor=pointer]:
+                    - img [ref=e1043]
+                  - button [ref=e1045] [cursor=pointer]:
+                    - img [ref=e1046]
+                  - button:
+                    - img
+                - list [ref=e1049]:
+                  - listitem [ref=e1056]:
+                    - generic [ref=e1057]:
+                      - img [ref=e1058]
+                      - generic [ref=e1061]: Analyze Customer Feedback
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "2"
+                        - generic:
+                          - generic:
+                            - img "Lucian Obrien"
+                          - generic:
+                            - img "Jayvion Simon"
+                  - listitem [ref=e1062]:
+                    - generic [ref=e1063]:
+                      - img [ref=e1064]
+                      - generic [ref=e1067]: Update Website Content
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "3"
+                        - generic:
+                          - generic:
+                            - img "Deja Brady"
+                          - generic:
+                            - img "Lucian Obrien"
+                          - generic:
+                            - img "Jayvion Simon"
+            - listitem [ref=e1068]:
+              - generic [ref=e1069]:
+                - generic [ref=e1070]:
+                  - generic [ref=e1072]: "3"
+                  - textbox "Column name" [ref=e1074]: In progress
+                  - button [ref=e1075] [cursor=pointer]:
+                    - img [ref=e1076]
+                  - button [ref=e1078] [cursor=pointer]:
+                    - img [ref=e1079]
+                  - button:
+                    - img
+                - list [ref=e1082]:
+                  - listitem [ref=e1083]:
+                    - generic [ref=e1084]:
+                      - img [ref=e1085]
+                      - generic [ref=e1088]: Conduct Market Research
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "4"
+                        - generic:
+                          - generic:
+                            - img "Harrison Stein"
+                          - generic:
+                            - img "Deja Brady"
+                          - generic:
+                            - img "Lucian Obrien"
+                          - generic:
+                            - img "Jayvion Simon"
+                  - listitem [ref=e1151]:
+                    - generic:
+                      - img "https://api-prod-minimal-v700.pages.dev/assets/images/cover/cover-12.webp"
+                    - generic [ref=e1152]:
+                      - img [ref=e1153]
+                      - generic [ref=e1156]: Design New Marketing Campaign
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "1"
+                          - generic:
+                            - img
+                            - generic: "4"
+                        - generic:
+                          - generic:
+                            - img "Jayvion Simon"
+                  - listitem [ref=e1089]:
+                    - generic:
+                      - img "https://api-prod-minimal-v700.pages.dev/assets/images/cover/cover-5.webp"
+                    - generic [ref=e1090]:
+                      - img [ref=e1091]
+                      - generic [ref=e1094]: Develop Software Application
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "5"
+                          - generic:
+                            - img
+                            - generic: "5"
+                        - generic:
+                          - generic:
+                            - generic: "+2"
+                          - generic:
+                            - img "Deja Brady"
+                          - generic:
+                            - img "Lucian Obrien"
+                          - generic:
+                            - img "Jayvion Simon"
+            - listitem [ref=e1095]:
+              - generic [ref=e1096]:
+                - generic [ref=e1097]:
+                  - generic [ref=e1099]: "0"
+                  - textbox "Column name" [ref=e1101]: Ready to test
+                  - button [ref=e1102] [cursor=pointer]:
+                    - img [ref=e1103]
+                  - button [ref=e1105] [cursor=pointer]:
+                    - img [ref=e1106]
+                  - button:
+                    - img
+                - list [ref=e1109]
+            - listitem [ref=e1110]:
+              - generic [ref=e1111]:
+                - generic [ref=e1112]:
+                  - generic [ref=e1114]: "1"
+                  - textbox "Column name" [ref=e1116]: Done
+                  - button [ref=e1117] [cursor=pointer]:
+                    - img [ref=e1118]
+                  - button [ref=e1120] [cursor=pointer]:
+                    - img [ref=e1121]
+                  - button:
+                    - img
+                - list [ref=e1124]:
+                  - listitem [ref=e1125]:
+                    - generic [ref=e1126]:
+                      - img [ref=e1127]
+                      - generic [ref=e1130]: Organize Team Meeting
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "6"
+                        - generic:
+                          - generic:
+                            - generic: "+3"
+                          - generic:
+                            - img "Deja Brady"
+                          - generic:
+                            - img "Lucian Obrien"
+                          - generic:
+                            - img "Jayvion Simon"
+            - listitem [ref=e1131]:
+              - button "Add column" [ref=e1132] [cursor=pointer]:
+                - img [ref=e1134]
+                - text: Add column
+            - listitem [ref=e1138]
+  - region "Notifications alt+T"

@@ -15,7 +15,11 @@ Decide whether the original user goal is actually complete using current MCP obs
 
 Rules:
 - Be strict. Do not mark complete only because a tool succeeded.
+- browser_snapshot observations include enhanced UI context with visible text, dialogs, overlays, forms, errors, active element, layout, and accessibility warnings.
 - Prefer visible evidence in snapshots: success toast, created record, final page state, target text/value.
+- If visual analysis is present, use it as supporting evidence for visible UI state, blockers, errors, and completion signals.
+- Use Durable Workflow Memory as supporting evidence for completed actions, but require visible or recent evidence before marking the whole goal complete.
+- Low-confidence visual analysis must not erase successful action history.
 - If evidence is weak, route "continue".
 - If the app blocks progress or required data is missing, route "blocked".
 
@@ -66,6 +70,14 @@ export class McpVerifierAgent {
       ``,
       `## Expected Outcome`,
       state.expectedOutcome ?? "None",
+      ``,
+      `## Durable Workflow Memory`,
+      state.workflowMemory ?? "None",
+      ``,
+      `## Latest Visual Analysis`,
+      state.latestVisualAnalysis
+        ? JSON.stringify(state.latestVisualAnalysis, null, 2)
+        : "None",
       ``,
       `## Recent Observations`,
       JSON.stringify(compactObservations(state.observations, 14_000, 2_000), null, 2),

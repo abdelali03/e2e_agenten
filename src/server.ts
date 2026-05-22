@@ -5,7 +5,6 @@ import { createServer, IncomingMessage, ServerResponse } from "http";
 import { readFile } from "fs/promises";
 import { extname, join } from "path";
 import { AdaptiveOrchestrator } from "./systems/deterministic-playwright/core/AdaptiveOrchestrator";
-import { AllLlmOrchestrator } from "./systems/llm-command/core/AllLlmOrchestrator";
 import { AllLlmMcpOrchestrator } from "./systems/mcp-single-agent/core/AllLlmMcpOrchestrator";
 import { McpMultiAgentOrchestrator } from "./systems/mcp-multi-agent/core/McpMultiAgentOrchestrator";
 import { BrowserManager } from "./systems/deterministic-playwright/core/BrowserManager";
@@ -18,7 +17,6 @@ const PUBLIC_DIR = join(process.cwd(), "public");
 
 type AgentMode =
   | "adaptive"
-  | "all-llm"
   | "all-llm-mcp"
   | "mcp-multi-agent";
 
@@ -110,12 +108,6 @@ async function handleRun(req: IncomingMessage, res: ServerResponse): Promise<voi
         ? await new AllLlmMcpOrchestrator({
             maxToolCalls: 50,
           }).run(input, `ui-all-llm-mcp-${Date.now()}`)
-        : mode === "all-llm"
-        ? await new AllLlmOrchestrator({
-            maxActions: 40,
-            stepDelayMs: 1000,
-            verifyEveryActions: 4,
-          }).run(input, `ui-all-llm-${Date.now()}`)
         : await new AdaptiveOrchestrator({
             maxActions: 30,
             maxRetriesPerAction: 3,
@@ -205,7 +197,6 @@ function normalizeAgentMode(mode: string | undefined): AgentMode {
 
   if (
     normalized === "adaptive" ||
-    normalized === "all-llm" ||
     normalized === "all-llm-mcp" ||
     normalized === "mcp-multi-agent"
   ) {
@@ -213,7 +204,7 @@ function normalizeAgentMode(mode: string | undefined): AgentMode {
   }
 
   throw new Error(
-    `Unknown agent mode "${mode}". Use adaptive, all-llm, all-llm-mcp, or mcp-multi-agent.`
+    `Unknown agent mode "${mode}". Use adaptive, all-llm-mcp, or mcp-multi-agent.`
   );
 }
 

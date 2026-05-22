@@ -1,0 +1,439 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button [ref=e5] [cursor=pointer]:
+        - img [ref=e6]
+      - link [ref=e440] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+      - region [ref=e441]:
+        - generic [ref=e19]:
+          - navigation [ref=e20]:
+            - list [ref=e21]:
+              - listitem [ref=e22]:
+                - generic [ref=e23] [cursor=pointer]:
+                  - img [ref=e24]
+                  - text: Overview
+                - list [ref=e29]:
+                  - listitem [ref=e30]:
+                    - link [ref=e442] [cursor=pointer]:
+                      - /url: /dashboard
+                      - generic [ref=e35]: App
+                  - listitem [ref=e36]:
+                    - link [ref=e443] [cursor=pointer]:
+                      - /url: /dashboard/ecommerce
+                      - generic [ref=e41]: Ecommerce
+                  - listitem [ref=e42]:
+                    - link [ref=e444] [cursor=pointer]:
+                      - /url: /dashboard/analytics
+                      - generic [ref=e47]: Analytics
+                  - listitem [ref=e48]:
+                    - link [ref=e445] [cursor=pointer]:
+                      - /url: /dashboard/banking
+                      - generic [ref=e53]: Banking
+                  - listitem [ref=e54]:
+                    - link [ref=e446] [cursor=pointer]:
+                      - /url: /dashboard/booking
+                      - generic [ref=e59]: Booking
+                  - listitem [ref=e60]:
+                    - link [ref=e447] [cursor=pointer]:
+                      - /url: /dashboard/file
+                      - generic [ref=e65]: File
+                  - listitem [ref=e66]:
+                    - link [ref=e448] [cursor=pointer]:
+                      - /url: /dashboard/course
+                      - generic [ref=e71]: Course
+              - listitem [ref=e72]:
+                - generic [ref=e73] [cursor=pointer]:
+                  - img [ref=e74]
+                  - text: Management
+                - list [ref=e79]:
+                  - listitem [ref=e80]:
+                    - button [ref=e449] [cursor=pointer]:
+                      - generic [ref=e85]: User
+                      - img [ref=e86]
+                  - listitem [ref=e88]:
+                    - button [ref=e450] [cursor=pointer]:
+                      - generic [ref=e93]: Product
+                      - img [ref=e94]
+                  - listitem [ref=e96]:
+                    - button [ref=e451] [cursor=pointer]:
+                      - generic [ref=e101]: Order
+                      - img [ref=e102]
+                  - listitem [ref=e104]:
+                    - button [ref=e452] [cursor=pointer]:
+                      - generic [ref=e109]: Invoice
+                      - img [ref=e110]
+                  - listitem [ref=e112]:
+                    - button [ref=e453] [cursor=pointer]:
+                      - generic [ref=e117]: Blog
+                      - img [ref=e118]
+                  - listitem [ref=e120]:
+                    - button [ref=e454] [cursor=pointer]:
+                      - generic [ref=e125]: Job
+                      - img [ref=e126]
+                  - listitem [ref=e128]:
+                    - button [ref=e455] [cursor=pointer]:
+                      - generic [ref=e133]: Tour
+                      - img [ref=e134]
+                  - listitem [ref=e136]:
+                    - link [ref=e456] [cursor=pointer]:
+                      - /url: /dashboard/file-manager
+                      - generic [ref=e141]: File manager
+                  - listitem [ref=e142]:
+                    - link [ref=e457] [cursor=pointer]:
+                      - /url: /dashboard/mail
+                      - generic [ref=e147]: Mail
+                      - generic [ref=e149]: "+32"
+                  - listitem [ref=e150]:
+                    - link [ref=e458] [cursor=pointer]:
+                      - /url: /dashboard/chat
+                      - generic [ref=e155]: Chat
+                  - listitem [ref=e156]:
+                    - link [ref=e459] [cursor=pointer]:
+                      - /url: /dashboard/calendar
+                      - generic [ref=e161]: Calendar
+                  - listitem [ref=e162]:
+                    - link [ref=e460] [cursor=pointer]:
+                      - /url: /dashboard/kanban
+                      - generic [ref=e167]: Kanban
+              - listitem [ref=e168]:
+                - generic [ref=e169] [cursor=pointer]:
+                  - img [ref=e170]
+                  - text: Misc
+                - list [ref=e175]:
+                  - listitem [ref=e176]:
+                    - link [ref=e461] [cursor=pointer]:
+                      - /url: /dashboard/permission
+                      - generic [ref=e180]:
+                        - generic [ref=e181]: Permission
+                        - generic [ref=e462]: Only admin can see this item.
+                  - listitem [ref=e183]:
+                    - button [ref=e463] [cursor=pointer]:
+                      - generic [ref=e188]: Level
+                      - img [ref=e189]
+                  - listitem [ref=e191]:
+                    - link:
+                      - /url: /dashboard/kanban#disabled
+                      - generic:
+                        - generic: Disabled
+                  - listitem [ref=e192]:
+                    - link [ref=e464] [cursor=pointer]:
+                      - /url: /dashboard/kanban#label
+                      - generic [ref=e197]: Label
+                      - generic [ref=e199]:
+                        - img [ref=e201]
+                        - text: NEW
+                  - listitem [ref=e204]:
+                    - link [ref=e465] [cursor=pointer]:
+                      - /url: /dashboard/kanban#caption
+                      - generic [ref=e208]:
+                        - generic [ref=e209]: Caption
+                        - generic [ref=e466]: Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien.
+                  - listitem [ref=e211]:
+                    - link [ref=e467] [cursor=pointer]:
+                      - /url: /dashboard/params?id=e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1
+                      - generic [ref=e216]: Params
+                  - listitem [ref=e217]:
+                    - link [ref=e468] [cursor=pointer]:
+                      - /url: /dashboard/subpaths
+                      - generic [ref=e222]: Subpaths
+                  - listitem [ref=e223]:
+                    - link [ref=e469] [cursor=pointer]:
+                      - /url: https://www.google.com/
+                      - generic [ref=e228]: External link
+                      - img [ref=e230]
+                  - listitem [ref=e233]:
+                    - link [ref=e470] [cursor=pointer]:
+                      - /url: /dashboard/blank
+                      - generic [ref=e238]: Blank
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - img [ref=e471]
+              - generic [ref=e244]: Free
+            - generic [ref=e245]:
+              - heading [level=6] [ref=e472]: Jaydon Frankie
+              - paragraph [ref=e247]: demo@minimals.cc
+            - link [ref=e473] [cursor=pointer]:
+              - /url: https://mui.com/store/items/minimal-dashboard/
+              - text: Upgrade to Pro
+    - generic [ref=e249]:
+      - banner [ref=e250]:
+        - generic [ref=e251]:
+          - button [ref=e474] [cursor=pointer]:
+            - img [ref=e475]
+            - generic [ref=e254]: Team 1
+            - generic [ref=e255]: Free
+            - img [ref=e256]
+          - generic [ref=e258]:
+            - generic [ref=e259] [cursor=pointer]:
+              - img [ref=e261]
+              - generic [ref=e263]: ⌘K
+            - button [ref=e476] [cursor=pointer]:
+              - img [ref=e477]
+            - button [ref=e478] [cursor=pointer]:
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e272]: "4"
+            - button [ref=e479] [cursor=pointer]:
+              - img [ref=e274]
+            - button [ref=e480] [cursor=pointer]:
+              - img [ref=e281]
+            - button [ref=e481] [cursor=pointer]:
+              - generic [ref=e285]:
+                - img [ref=e287]
+                - img [ref=e291]
+                - img [ref=e482]
+      - main [ref=e296]:
+        - generic [ref=e324]:
+          - generic [ref=e325]:
+            - heading [level=4] [ref=e483]: Kanban
+            - generic [ref=e327] [cursor=pointer]:
+              - switch [ref=e484]
+              - generic [ref=e333]: Fixed column
+          - list [ref=e335]:
+            - listitem [ref=e336]:
+              - generic [ref=e337]:
+                - generic [ref=e338]:
+                  - generic [ref=e340]: "3"
+                  - textbox [ref=e485]:
+                    - /placeholder: Column name
+                    - text: To do
+                  - button [ref=e343] [cursor=pointer]:
+                    - img [ref=e344]
+                  - button [ref=e346] [cursor=pointer]:
+                    - img [ref=e347]
+                  - button:
+                    - img
+                - list [ref=e350]:
+                  - listitem [ref=e351]:
+                    - generic:
+                      - img
+                    - generic [ref=e352]:
+                      - img [ref=e353]
+                      - generic [ref=e356]: Design New Marketing Campaign
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "1"
+                          - generic:
+                            - img
+                            - generic: "4"
+                        - generic:
+                          - generic:
+                            - img
+                  - listitem [ref=e357]:
+                    - generic [ref=e358]:
+                      - img [ref=e359]
+                      - generic [ref=e362]: Analyze Customer Feedback
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "2"
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                  - listitem [ref=e363]:
+                    - generic [ref=e364]:
+                      - img [ref=e365]
+                      - generic [ref=e368]: Update Website Content
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "3"
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+            - listitem [ref=e369]:
+              - generic [ref=e370]:
+                - generic [ref=e371]:
+                  - generic [ref=e373]: "2"
+                  - textbox [ref=e488]:
+                    - /placeholder: Column name
+                    - text: In progress
+                  - button [ref=e376] [cursor=pointer]:
+                    - img [ref=e377]
+                  - button [ref=e379] [cursor=pointer]:
+                    - img [ref=e380]
+                  - button:
+                    - img
+                - list [ref=e383]:
+                  - listitem [ref=e384]:
+                    - generic [ref=e385]:
+                      - img [ref=e386]
+                      - generic [ref=e389]: Conduct Market Research
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "4"
+                        - generic:
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                  - listitem [ref=e390]:
+                    - generic:
+                      - img
+                    - generic [ref=e391]:
+                      - img [ref=e392]
+                      - generic [ref=e395]: Develop Software Application
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "5"
+                          - generic:
+                            - img
+                            - generic: "5"
+                        - generic:
+                          - generic:
+                            - generic: "+2"
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+            - listitem [ref=e396]:
+              - generic [ref=e397]:
+                - generic [ref=e398]:
+                  - generic [ref=e400]: "0"
+                  - textbox [ref=e489]:
+                    - /placeholder: Column name
+                    - text: Ready to test
+                  - button [ref=e403] [cursor=pointer]:
+                    - img [ref=e404]
+                  - button [ref=e406] [cursor=pointer]:
+                    - img [ref=e407]
+                  - button:
+                    - img
+                - list [ref=e410]
+            - listitem [ref=e411]:
+              - generic [ref=e412]:
+                - generic [ref=e413]:
+                  - generic [ref=e415]: "1"
+                  - textbox [ref=e490]:
+                    - /placeholder: Column name
+                    - text: Done
+                  - button [ref=e418] [cursor=pointer]:
+                    - img [ref=e419]
+                  - button [ref=e421] [cursor=pointer]:
+                    - img [ref=e422]
+                  - button:
+                    - img
+                - list [ref=e425]:
+                  - listitem [ref=e426]:
+                    - generic [ref=e427]:
+                      - img [ref=e428]
+                      - generic [ref=e431]: Organize Team Meeting
+                      - generic:
+                        - generic:
+                          - generic:
+                            - img
+                            - generic: "6"
+                        - generic:
+                          - generic:
+                            - generic: "+3"
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+                          - generic:
+                            - img
+            - listitem [ref=e432]:
+              - button [ref=e491] [cursor=pointer]:
+                - img [ref=e435]
+                - text: Add column
+            - listitem [ref=e439]
+  - dialog [active] [ref=e494]:
+    - generic [ref=e495]:
+      - button "To do" [ref=e496] [cursor=pointer]:
+        - text: To do
+        - img [ref=e498]
+      - generic [ref=e500]:
+        - button "Like" [ref=e501] [cursor=pointer]:
+          - img [ref=e502]
+        - button "Delete task" [ref=e505] [cursor=pointer]:
+          - img [ref=e506]
+        - button [ref=e509] [cursor=pointer]:
+          - img [ref=e510]
+    - tablist [ref=e516]:
+      - tab "Overview" [selected] [ref=e517] [cursor=pointer]
+      - tab "Subtasks" [ref=e518] [cursor=pointer]
+      - tab "Comments (1)" [ref=e519] [cursor=pointer]
+    - region "scrollable content" [ref=e525]:
+      - generic [ref=e527]:
+        - textbox "Task name" [ref=e529]: Design New Marketing Campaign
+        - generic [ref=e530]:
+          - generic [ref=e531]: Reporter
+          - img "Angelique Morse" [ref=e533]
+        - generic [ref=e534]:
+          - generic [ref=e535]: Assignee
+          - generic [ref=e536]:
+            - img "Jayvion Simon" [ref=e538]
+            - button "Add assignee" [ref=e539] [cursor=pointer]:
+              - img [ref=e540]
+        - generic [ref=e544]:
+          - generic [ref=e545]: Labels
+          - generic [ref=e548]: Technology
+        - generic [ref=e549]:
+          - generic [ref=e550]: Due date
+          - button "24 - 25 May 2026" [ref=e551] [cursor=pointer]
+        - generic [ref=e552]:
+          - generic [ref=e553]: Priority
+          - generic [ref=e554]:
+            - button "low" [ref=e555] [cursor=pointer]:
+              - img [ref=e556]
+              - text: low
+            - button "medium" [ref=e559] [cursor=pointer]:
+              - img [ref=e560]
+              - text: medium
+            - button "high" [ref=e563] [cursor=pointer]:
+              - img [ref=e564]
+              - text: high
+        - generic [ref=e567]:
+          - generic [ref=e568]: Description
+          - generic [ref=e570]:
+            - textbox [ref=e571]: Atque eaque ducimus minima distinctio velit. Laborum et veniam officiis. Delectus ex saepe hic id laboriosam officia. Odit nostrum qui illum saepe debitis ullam. Laudantium beatae modi fugit ut. Dolores consequatur beatae nihil voluptates rem maiores.
+            - group
+        - generic [ref=e572]:
+          - generic [ref=e573]: Attachments
+          - list [ref=e574]:
+            - listitem [ref=e575]:
+              - generic "cover-12.webp" [ref=e576]:
+                - img "cover-12.webp" [ref=e577]
+                - button [ref=e578] [cursor=pointer]:
+                  - img [ref=e579]
+            - listitem [ref=e583]:
+              - generic "cover-13.webp" [ref=e584]:
+                - img "cover-13.webp" [ref=e585]
+                - button [ref=e586] [cursor=pointer]:
+                  - img [ref=e587]
+            - listitem [ref=e591]:
+              - generic "cover-14.webp" [ref=e592]:
+                - img "cover-14.webp" [ref=e593]
+                - button [ref=e594] [cursor=pointer]:
+                  - img [ref=e595]
+            - listitem [ref=e599]:
+              - generic "cover-15.webp" [ref=e600]:
+                - img "cover-15.webp" [ref=e601]
+                - button [ref=e602] [cursor=pointer]:
+                  - img [ref=e603]
+            - listitem [ref=e607]:
+              - generic [ref=e608] [cursor=pointer]:
+                - button "Choose File" [ref=e609]
+                - img [ref=e610]

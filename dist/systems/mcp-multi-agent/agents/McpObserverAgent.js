@@ -13,6 +13,8 @@ Rules:
 - Prefer browser_snapshot for normal UI perception.
 - Use browser_take_screenshot only when accessibility snapshot is ambiguous.
 - Use browser_console_messages or browser_network_requests only when errors suggest it.
+- Never choose action tools such as browser_click, browser_type, browser_fill_form, browser_press_key, browser_select_option, browser_hover, or browser_drag.
+- If the next step is obvious from the latest snapshot, still return browser_snapshot only when this node is explicitly asked to observe; actions are selected by the DOM Analyst, not by the Observer.
 - Use only available tool names.
 - Do not repeat browser_snapshot forever if the latest snapshot is already available and actionable.
 
@@ -72,11 +74,18 @@ class McpObserverAgent {
     normalize(raw, state) {
         const fallback = this.defaultSnapshot("Fallback to browser_snapshot.");
         const toolName = raw.toolName?.trim() || fallback.toolName;
-        if (!(0, McpMultiAgentState_1.toolExists)(state.tools, toolName)) {
+        const allowedObservationTools = new Set([
+            "browser_snapshot",
+            "browser_take_screenshot",
+            "browser_console_messages",
+            "browser_network_requests",
+            "browser_network_request",
+        ]);
+        if (!(0, McpMultiAgentState_1.toolExists)(state.tools, toolName) || !allowedObservationTools.has(toolName)) {
             return fallback;
         }
         return {
-            shouldObserve: raw.shouldObserve !== false,
+            shouldObserve: true,
             toolName,
             arguments: raw.arguments && typeof raw.arguments === "object" ? raw.arguments : {},
             reasoning: raw.reasoning?.trim() ||

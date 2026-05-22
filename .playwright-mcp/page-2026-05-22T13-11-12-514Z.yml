@@ -1,0 +1,543 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button [ref=e5] [cursor=pointer]:
+        - img [ref=e6]
+      - link [ref=e1789] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+      - region [ref=e1790]:
+        - generic [ref=e19]:
+          - navigation [ref=e20]:
+            - list [ref=e21]:
+              - listitem [ref=e22]:
+                - generic [ref=e23] [cursor=pointer]:
+                  - img [ref=e24]
+                  - text: Overview
+                - list [ref=e29]:
+                  - listitem [ref=e30]:
+                    - link [ref=e1791] [cursor=pointer]:
+                      - /url: /dashboard
+                      - generic [ref=e35]: App
+                  - listitem [ref=e36]:
+                    - link [ref=e1792] [cursor=pointer]:
+                      - /url: /dashboard/ecommerce
+                      - generic [ref=e41]: Ecommerce
+                  - listitem [ref=e42]:
+                    - link [ref=e1793] [cursor=pointer]:
+                      - /url: /dashboard/analytics
+                      - generic [ref=e47]: Analytics
+                  - listitem [ref=e48]:
+                    - link [ref=e1794] [cursor=pointer]:
+                      - /url: /dashboard/banking
+                      - generic [ref=e53]: Banking
+                  - listitem [ref=e54]:
+                    - link [ref=e1795] [cursor=pointer]:
+                      - /url: /dashboard/booking
+                      - generic [ref=e59]: Booking
+                  - listitem [ref=e60]:
+                    - link [ref=e1796] [cursor=pointer]:
+                      - /url: /dashboard/file
+                      - generic [ref=e65]: File
+                  - listitem [ref=e66]:
+                    - link [ref=e1797] [cursor=pointer]:
+                      - /url: /dashboard/course
+                      - generic [ref=e71]: Course
+              - listitem [ref=e72]:
+                - generic [ref=e73] [cursor=pointer]:
+                  - img [ref=e74]
+                  - text: Management
+                - list [ref=e79]:
+                  - listitem [ref=e80]:
+                    - button [ref=e1798] [cursor=pointer]:
+                      - generic [ref=e85]: User
+                      - img [ref=e86]
+                  - listitem [ref=e88]:
+                    - button [ref=e1799] [cursor=pointer]:
+                      - generic [ref=e93]: Product
+                      - img [ref=e94]
+                  - listitem [ref=e96]:
+                    - button [ref=e1800] [cursor=pointer]:
+                      - generic [ref=e101]: Order
+                      - img [ref=e102]
+                  - listitem [ref=e104]:
+                    - button [ref=e1801] [cursor=pointer]:
+                      - generic [ref=e109]: Invoice
+                      - img [ref=e110]
+                  - listitem [ref=e112]:
+                    - button [ref=e1802] [cursor=pointer]:
+                      - generic [ref=e117]: Blog
+                      - img [ref=e118]
+                  - listitem [ref=e120]:
+                    - button [ref=e1803] [cursor=pointer]:
+                      - generic [ref=e125]: Job
+                      - img [ref=e126]
+                  - listitem [ref=e128]:
+                    - button [ref=e1804] [cursor=pointer]:
+                      - generic [ref=e133]: Tour
+                      - img [ref=e134]
+                  - listitem [ref=e136]:
+                    - link [ref=e1805] [cursor=pointer]:
+                      - /url: /dashboard/file-manager
+                      - generic [ref=e141]: File manager
+                  - listitem [ref=e142]:
+                    - link [ref=e1806] [cursor=pointer]:
+                      - /url: /dashboard/mail
+                      - generic [ref=e147]: Mail
+                      - generic [ref=e149]: "+32"
+                  - listitem [ref=e150]:
+                    - link [ref=e1807] [cursor=pointer]:
+                      - /url: /dashboard/chat
+                      - generic [ref=e155]: Chat
+                  - listitem [ref=e156]:
+                    - link [ref=e1808] [cursor=pointer]:
+                      - /url: /dashboard/calendar
+                      - generic [ref=e161]: Calendar
+                  - listitem [ref=e162]:
+                    - link [ref=e1809] [cursor=pointer]:
+                      - /url: /dashboard/kanban
+                      - generic [ref=e167]: Kanban
+              - listitem [ref=e168]:
+                - generic [ref=e169] [cursor=pointer]:
+                  - img [ref=e170]
+                  - text: Misc
+                - list [ref=e175]:
+                  - listitem [ref=e176]:
+                    - link [ref=e1810] [cursor=pointer]:
+                      - /url: /dashboard/permission
+                      - generic [ref=e180]:
+                        - generic [ref=e181]: Permission
+                        - generic [ref=e1811]: Only admin can see this item.
+                  - listitem [ref=e183]:
+                    - button [ref=e1812] [cursor=pointer]:
+                      - generic [ref=e188]: Level
+                      - img [ref=e189]
+                  - listitem [ref=e191]:
+                    - link:
+                      - /url: /dashboard/calendar#disabled
+                      - generic:
+                        - generic: Disabled
+                  - listitem [ref=e192]:
+                    - link [ref=e1813] [cursor=pointer]:
+                      - /url: /dashboard/calendar#label
+                      - generic [ref=e197]: Label
+                      - generic [ref=e199]:
+                        - img [ref=e201]
+                        - text: NEW
+                  - listitem [ref=e204]:
+                    - link [ref=e1814] [cursor=pointer]:
+                      - /url: /dashboard/calendar#caption
+                      - generic [ref=e208]:
+                        - generic [ref=e209]: Caption
+                        - generic [ref=e1815]: Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien.
+                  - listitem [ref=e211]:
+                    - link [ref=e1816] [cursor=pointer]:
+                      - /url: /dashboard/params?id=e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1
+                      - generic [ref=e216]: Params
+                  - listitem [ref=e217]:
+                    - link [ref=e1817] [cursor=pointer]:
+                      - /url: /dashboard/subpaths
+                      - generic [ref=e222]: Subpaths
+                  - listitem [ref=e223]:
+                    - link [ref=e1818] [cursor=pointer]:
+                      - /url: https://www.google.com/
+                      - generic [ref=e228]: External link
+                      - img [ref=e230]
+                  - listitem [ref=e233]:
+                    - link [ref=e1819] [cursor=pointer]:
+                      - /url: /dashboard/blank
+                      - generic [ref=e238]: Blank
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - img [ref=e1820]
+              - generic [ref=e244]: Free
+            - generic [ref=e245]:
+              - heading [level=6] [ref=e1821]: Jaydon Frankie
+              - paragraph [ref=e247]: demo@minimals.cc
+            - link [ref=e1822] [cursor=pointer]:
+              - /url: https://mui.com/store/items/minimal-dashboard/
+              - text: Upgrade to Pro
+    - generic [ref=e249]:
+      - banner [ref=e250]:
+        - generic [ref=e251]:
+          - button [ref=e1823] [cursor=pointer]:
+            - img [ref=e1824]
+            - generic [ref=e254]: Team 1
+            - generic [ref=e255]: Free
+            - img [ref=e256]
+          - generic [ref=e258]:
+            - generic [ref=e259] [cursor=pointer]:
+              - img [ref=e261]
+              - generic [ref=e263]: ⌘K
+            - button [ref=e1825] [cursor=pointer]:
+              - img [ref=e1826]
+            - button [ref=e1827] [cursor=pointer]:
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e272]: "4"
+            - button [ref=e1828] [cursor=pointer]:
+              - img [ref=e274]
+            - button [ref=e1829] [cursor=pointer]:
+              - img [ref=e281]
+            - button [ref=e1830] [cursor=pointer]:
+              - generic [ref=e285]:
+                - img [ref=e287]
+                - img [ref=e291]
+                - img [ref=e1831]
+      - main [ref=e296]:
+        - generic [ref=e1025]:
+          - generic [ref=e1026]:
+            - heading [level=4] [ref=e1832]: Calendar
+            - button [ref=e1833] [cursor=pointer]:
+              - img [ref=e1030]
+              - text: Add event
+          - generic [ref=e1035]:
+            - generic [ref=e1036]:
+              - group [ref=e1837]:
+                - button [pressed] [ref=e1838] [cursor=pointer]:
+                  - img [ref=e1039]
+                - button [ref=e1842] [cursor=pointer]:
+                  - img [ref=e1044]
+                - button [ref=e1846] [cursor=pointer]:
+                  - img [ref=e1049]
+                - button [ref=e1850] [cursor=pointer]:
+                  - img [ref=e1054]
+              - generic [ref=e1056]:
+                - button [ref=e1057] [cursor=pointer]:
+                  - img [ref=e1058]
+                - generic [ref=e1060]: May 2026
+                - button [ref=e1061] [cursor=pointer]:
+                  - img [ref=e1062]
+              - generic [ref=e1064]:
+                - button [ref=e1854] [cursor=pointer]: Today
+                - button [ref=e1066] [cursor=pointer]:
+                  - img [ref=e1068]
+            - grid [ref=e1073]:
+              - rowgroup [ref=e1074]:
+                - row [ref=e1856]:
+                  - columnheader [ref=e1857]:
+                    - generic [ref=e1858]: Mon
+                  - columnheader [ref=e1859]:
+                    - generic [ref=e1860]: Tue
+                  - columnheader [ref=e1861]:
+                    - generic [ref=e1862]: Wed
+                  - columnheader [ref=e1863]:
+                    - generic [ref=e1864]: Thu
+                  - columnheader [ref=e1865]:
+                    - generic [ref=e1866]: Fri
+                  - columnheader [ref=e1867]:
+                    - generic [ref=e1868]: Sat
+                  - columnheader [ref=e1869]:
+                    - generic [ref=e1870]: Sun
+              - rowgroup [ref=e1100]:
+                - generic [ref=e1103]:
+                  - row [ref=e1871]:
+                    - gridcell [ref=e1872]:
+                      - generic [ref=e1873]: "27"
+                    - gridcell [ref=e1874]:
+                      - generic [ref=e1875]: "28"
+                    - gridcell [ref=e1876]:
+                      - generic [ref=e1877]: "29"
+                    - gridcell [ref=e1878]:
+                      - generic [ref=e1879]: "30"
+                    - gridcell [ref=e1880]:
+                      - generic [ref=e1881]: "1"
+                    - gridcell [ref=e1882]:
+                      - generic [ref=e1883]: "2"
+                    - gridcell [ref=e1886]:
+                      - generic [ref=e1887]: "3"
+                  - row [ref=e1888]:
+                    - gridcell [ref=e1889]:
+                      - generic [ref=e1890]: "4"
+                    - gridcell [ref=e1891]:
+                      - generic [ref=e1892]: "5"
+                    - gridcell [ref=e1893]:
+                      - generic [ref=e1894]: "6"
+                    - gridcell [ref=e1895]:
+                      - generic [ref=e1896]: "7"
+                    - gridcell [ref=e1897]:
+                      - generic [ref=e1898]: "8"
+                    - gridcell [ref=e1899]:
+                      - generic [ref=e1900]: "9"
+                    - gridcell [ref=e1903]:
+                      - generic [ref=e1177]:
+                        - generic [ref=e1904]: "10"
+                        - generic [ref=e1184] [cursor=pointer]:
+                          - generic [ref=e1185]: 11:36a
+                          - generic [ref=e1187]: Summer Music Festival
+                  - row [ref=e1905]:
+                    - gridcell [ref=e1906]:
+                      - generic [ref=e1907]: "11"
+                    - gridcell [ref=e1908]:
+                      - generic [ref=e1909]: "12"
+                    - gridcell [ref=e1910]:
+                      - generic [ref=e1911]: "13"
+                    - gridcell [ref=e1912]:
+                      - generic [ref=e1913]: "14"
+                    - gridcell [ref=e1914]:
+                      - generic [ref=e1915]: "15"
+                    - gridcell [ref=e1916]:
+                      - generic [ref=e1215]:
+                        - generic [ref=e1917]: "16"
+                        - generic [ref=e1222] [cursor=pointer]:
+                          - generic [ref=e1223]: 11:36a
+                          - generic [ref=e1225]: Tech Innovators Conference
+                    - gridcell [ref=e1920]:
+                      - generic [ref=e1921]: "17"
+                  - row [ref=e1922]:
+                    - gridcell [ref=e1923]:
+                      - generic [ref=e1924]: "18"
+                    - gridcell [ref=e1925]:
+                      - generic [ref=e1240]:
+                        - generic [ref=e1926]: "19"
+                        - generic [ref=e1249] [cursor=pointer]: Charity Gala Dinner
+                    - gridcell [ref=e1927]:
+                      - generic [ref=e1928]: "20"
+                    - gridcell [ref=e1929]:
+                      - generic [ref=e1930]: "21"
+                    - gridcell [ref=e1931]:
+                      - generic [ref=e1261]:
+                        - generic [ref=e1932]: "22"
+                        - generic [ref=e1268] [cursor=pointer]:
+                          - generic [ref=e1269]: 1:06p
+                          - generic [ref=e1271]: Spring Art Exhibition
+                    - gridcell [ref=e1933]:
+                      - generic [ref=e1934]: "23"
+                    - gridcell [ref=e1937]:
+                      - generic [ref=e1280]:
+                        - generic [ref=e1938]: "24"
+                        - generic [ref=e1283]:
+                          - generic [ref=e1287] [cursor=pointer]:
+                            - generic [ref=e1288]: 4:21p
+                            - generic [ref=e1290]: Corporate Training Workshop
+                          - generic [ref=e1294] [cursor=pointer]:
+                            - generic [ref=e1295]: 6:21p
+                            - generic [ref=e1297]: Community Health Fair
+                          - generic [ref=e1301] [cursor=pointer]:
+                            - generic [ref=e1302]: 8:21p
+                            - generic [ref=e1304]: Startup Pitch Night
+                          - generic [ref=e1939] [cursor=pointer]: +1 more
+                  - row [ref=e1940]:
+                    - gridcell [ref=e1941]:
+                      - generic [ref=e1942]: "25"
+                    - gridcell [ref=e1943]:
+                      - generic [ref=e1944]: "26"
+                    - gridcell [ref=e1945]:
+                      - generic [ref=e1946]: "27"
+                    - gridcell [ref=e1947]:
+                      - generic [ref=e1324]:
+                        - generic [ref=e1948]: "28"
+                        - generic [ref=e1331] [cursor=pointer]:
+                          - generic [ref=e1332]: 3:06p
+                          - generic [ref=e1334]: Book Launch Event
+                    - gridcell [ref=e1949]:
+                      - generic [ref=e1950]: "29"
+                    - gridcell [ref=e1951]:
+                      - generic [ref=e1952]: "30"
+                    - gridcell [ref=e1955]:
+                      - generic [ref=e1956]: "31"
+                  - row [ref=e1957]:
+                    - gridcell [ref=e1958]:
+                      - generic [ref=e1959]: "1"
+                    - gridcell [ref=e1960]:
+                      - generic [ref=e1961]: "2"
+                    - gridcell [ref=e1962]:
+                      - generic [ref=e1963]: "3"
+                    - gridcell [ref=e1964]:
+                      - generic [ref=e1965]: "4"
+                    - gridcell [ref=e1966]:
+                      - generic [ref=e1967]: "5"
+                    - gridcell [ref=e1968]:
+                      - generic [ref=e1969]: "6"
+                    - gridcell [ref=e1972]:
+                      - generic [ref=e1973]: "7"
+  - dialog "Add event" [ref=e1977]:
+    - heading "Add event" [level=2] [ref=e1978]
+    - generic [ref=e1979]:
+      - region "scrollable content" [ref=e1984]:
+        - generic [ref=e1986]:
+          - generic [ref=e1987]:
+            - generic [ref=e2084]: Title
+            - generic [ref=e1988]:
+              - textbox "Title" [ref=e1989]: testtitel
+              - group:
+                - generic: Title
+          - generic [ref=e1990]:
+            - generic [ref=e2093]: Description
+            - generic [ref=e1991]:
+              - textbox "Description" [ref=e1992]: beschrebungbeschrebungbeschrebungbeschrebungbeschrebungbeschrebungbeschrebungbeschrebung
+              - group:
+                - generic: Description
+          - generic [ref=e1994] [cursor=pointer]:
+            - switch "All day" [ref=e1997]
+            - generic [ref=e2000]: All day
+          - generic [ref=e2001]:
+            - generic [ref=e2002]: Start date
+            - group "Start date" [ref=e2003]:
+              - generic [ref=e2004]:
+                - generic [ref=e2005]:
+                  - spinbutton "Month" [ref=e2006]: "05"
+                  - text: /
+                - generic [ref=e2007]:
+                  - spinbutton "Day" [ref=e2008]: "22"
+                  - text: /
+                - spinbutton "Year" [ref=e2010]: "2026"
+                - generic [ref=e2011]:
+                  - spinbutton "Hours" [ref=e2012]: "03"
+                  - text: ":"
+                - spinbutton "Minutes" [ref=e2014]: "06"
+                - spinbutton "Meridiem" [ref=e2016]: PM
+              - button "Choose date, selected date is May 22, 2026" [ref=e2018] [cursor=pointer]:
+                - img [ref=e2019]
+              - group:
+                - generic: Start date
+              - textbox [ref=e2023]: 05/22/2026 03:06 PM
+          - generic [ref=e2024]:
+            - generic [ref=e2025]: End date
+            - group "End date" [ref=e2026]:
+              - generic [ref=e2027]:
+                - generic [ref=e2028]:
+                  - spinbutton "Month" [ref=e2029]: "05"
+                  - text: /
+                - generic [ref=e2030]:
+                  - spinbutton "Day" [ref=e2031]: "22"
+                  - text: /
+                - spinbutton "Year" [ref=e2033]: "2026"
+                - generic [ref=e2034]:
+                  - spinbutton "Hours" [ref=e2035]: "03"
+                  - text: ":"
+                - spinbutton "Minutes" [ref=e2037]: "06"
+                - spinbutton "Meridiem" [ref=e2039]: PM
+              - button "Choose date, selected date is May 22, 2026" [ref=e2041] [cursor=pointer]:
+                - img [ref=e2042]
+              - group:
+                - generic: End date
+              - textbox [ref=e2046]: 05/22/2026 03:06 PM
+          - list [ref=e2047]:
+            - listitem [ref=e2048]:
+              - button "#00A76F" [ref=e2049] [cursor=pointer]
+            - listitem [ref=e2052]:
+              - button "#8E33FF" [ref=e2053] [cursor=pointer]:
+                - img [ref=e2055]
+            - listitem [ref=e2057]:
+              - button "#00B8D9" [ref=e2058] [cursor=pointer]
+            - listitem [ref=e2061]:
+              - button "#003768" [ref=e2062] [cursor=pointer]
+            - listitem [ref=e2065]:
+              - button "#22C55E" [ref=e2066] [cursor=pointer]
+            - listitem [ref=e2069]:
+              - button "#FFAB00" [ref=e2070] [cursor=pointer]
+            - listitem [ref=e2073]:
+              - button "#FF5630" [ref=e2074] [cursor=pointer]
+            - listitem [ref=e2077]:
+              - button "#7A0916" [ref=e2078] [cursor=pointer]
+      - generic [ref=e2081]:
+        - button "Cancel" [ref=e2082] [cursor=pointer]
+        - button "Create" [ref=e2083] [cursor=pointer]
+  - dialog "Start date" [ref=e2110]:
+    - generic [ref=e2112]:
+      - generic [ref=e2113]:
+        - generic [ref=e2114]:
+          - generic [ref=e2115]:
+            - generic [ref=e2116] [cursor=pointer]:
+              - generic [ref=e2118]: May 2026
+              - button "calendar view is open, switch to year view" [ref=e2119]:
+                - img [ref=e2120]
+            - generic [ref=e2122]:
+              - button "Previous month" [ref=e2123] [cursor=pointer]:
+                - img [ref=e2124]
+              - button "Next month" [ref=e2127] [cursor=pointer]:
+                - img [ref=e2128]
+          - grid "May 2026" [ref=e2132]:
+            - row "Sunday Monday Tuesday Wednesday Thursday Friday Saturday" [ref=e2133]:
+              - columnheader "Sunday" [ref=e2134]: S
+              - columnheader "Monday" [ref=e2135]: M
+              - columnheader "Tuesday" [ref=e2136]: T
+              - columnheader "Wednesday" [ref=e2137]: W
+              - columnheader "Thursday" [ref=e2138]: T
+              - columnheader "Friday" [ref=e2139]: F
+              - columnheader "Saturday" [ref=e2140]: S
+            - rowgroup [ref=e2141]:
+              - row "1 2" [ref=e2142]:
+                - gridcell
+                - gridcell
+                - gridcell
+                - gridcell
+                - gridcell
+                - gridcell "1" [ref=e2143] [cursor=pointer]
+                - gridcell "2" [ref=e2144] [cursor=pointer]
+              - row "3 4 5 6 7 8 9" [ref=e2145]:
+                - gridcell "3" [ref=e2146] [cursor=pointer]
+                - gridcell "4" [ref=e2147] [cursor=pointer]
+                - gridcell "5" [ref=e2148] [cursor=pointer]
+                - gridcell "6" [ref=e2149] [cursor=pointer]
+                - gridcell "7" [ref=e2150] [cursor=pointer]
+                - gridcell "8" [ref=e2151] [cursor=pointer]
+                - gridcell "9" [ref=e2152] [cursor=pointer]
+              - row "10 11 12 13 14 15 16" [ref=e2153]:
+                - gridcell "10" [ref=e2154] [cursor=pointer]
+                - gridcell "11" [ref=e2155] [cursor=pointer]
+                - gridcell "12" [ref=e2156] [cursor=pointer]
+                - gridcell "13" [ref=e2157] [cursor=pointer]
+                - gridcell "14" [ref=e2158] [cursor=pointer]
+                - gridcell "15" [ref=e2159] [cursor=pointer]
+                - gridcell "16" [ref=e2160] [cursor=pointer]
+              - row "17 18 19 20 21 22 23" [ref=e2161]:
+                - gridcell "17" [ref=e2162] [cursor=pointer]
+                - gridcell "18" [ref=e2163] [cursor=pointer]
+                - gridcell "19" [ref=e2164] [cursor=pointer]
+                - gridcell "20" [ref=e2165] [cursor=pointer]
+                - gridcell "21" [ref=e2166] [cursor=pointer]: "21"
+                - gridcell "22" [selected] [ref=e2167] [cursor=pointer]: "22"
+                - gridcell "23" [ref=e2168] [cursor=pointer]
+              - row "24 25 26 27 28 29 30" [ref=e2169]:
+                - gridcell "24" [ref=e2170] [cursor=pointer]
+                - gridcell "25" [ref=e2171] [cursor=pointer]
+                - gridcell "26" [ref=e2172] [cursor=pointer]
+                - gridcell "27" [ref=e2173] [cursor=pointer]
+                - gridcell "28" [active] [ref=e2174] [cursor=pointer]: "28"
+                - gridcell "29" [ref=e2175] [cursor=pointer]
+                - gridcell "30" [ref=e2176] [cursor=pointer]
+              - row "31" [ref=e2177]:
+                - gridcell "31" [ref=e2178] [cursor=pointer]
+                - gridcell
+                - gridcell
+                - gridcell
+                - gridcell
+                - gridcell
+                - gridcell
+        - separator [ref=e2179]
+        - group [ref=e2180]:
+          - listbox "Select hours" [ref=e2181]:
+            - option "12 hours" [ref=e2182] [cursor=pointer]: "12"
+            - option "1 hours" [ref=e2183] [cursor=pointer]: "01"
+            - option "2 hours" [ref=e2184] [cursor=pointer]: "02"
+            - option "3 hours" [selected] [ref=e2185] [cursor=pointer]: "03"
+            - option "4 hours" [ref=e2186] [cursor=pointer]: "04"
+            - option "5 hours" [ref=e2187] [cursor=pointer]: "05"
+            - option "6 hours" [ref=e2188] [cursor=pointer]: "06"
+            - option "7 hours" [ref=e2189] [cursor=pointer]: "07"
+            - option "8 hours" [ref=e2190] [cursor=pointer]: "08"
+            - option "9 hours" [ref=e2191] [cursor=pointer]: "09"
+            - option "10 hours" [ref=e2192] [cursor=pointer]: "10"
+            - option "11 hours" [ref=e2193] [cursor=pointer]: "11"
+          - listbox "Select minutes" [ref=e2194]:
+            - option "0 minutes" [ref=e2195] [cursor=pointer]: "00"
+            - option "5 minutes" [ref=e2196] [cursor=pointer]: "05"
+            - option "10 minutes" [ref=e2197] [cursor=pointer]: "10"
+            - option "15 minutes" [ref=e2198] [cursor=pointer]: "15"
+            - option "20 minutes" [ref=e2199] [cursor=pointer]: "20"
+            - option "25 minutes" [ref=e2200] [cursor=pointer]: "25"
+            - option "30 minutes" [ref=e2201] [cursor=pointer]: "30"
+            - option "35 minutes" [ref=e2202] [cursor=pointer]: "35"
+            - option "40 minutes" [ref=e2203] [cursor=pointer]: "40"
+            - option "45 minutes" [ref=e2204] [cursor=pointer]: "45"
+            - option "50 minutes" [ref=e2205] [cursor=pointer]: "50"
+            - option "55 minutes" [ref=e2206] [cursor=pointer]: "55"
+          - listbox "Select meridiem" [ref=e2207]:
+            - option "AM" [ref=e2208] [cursor=pointer]
+            - option "PM" [selected] [ref=e2209] [cursor=pointer]
+        - separator [ref=e2210]
+      - generic [ref=e2211]:
+        - button "Cancel" [ref=e2212] [cursor=pointer]
+        - button "OK" [ref=e2213] [cursor=pointer]

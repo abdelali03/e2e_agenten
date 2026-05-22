@@ -71,7 +71,12 @@ class VisionClient {
                 logger.warn("MiniMax vision CLI returned empty output.");
                 return undefined;
             }
-            return this.extractCliContent(output).slice(0, 5000);
+            const content = this.extractCliContent(output).slice(0, 5000);
+            this.logVisionResult("MiniMax vision CLI returned analysis", {
+                imagePath: filePath,
+                content,
+            });
+            return content;
         }
         catch (error) {
             logger.warn("MiniMax vision CLI failed:", error instanceof Error ? error.message : String(error));
@@ -218,6 +223,20 @@ class VisionClient {
             // Some CLI modes may return plain text.
         }
         return raw;
+    }
+    logVisionResult(message, meta) {
+        const baseMeta = {
+            contentLength: meta.content.length,
+            contentPreview: meta.content.slice(0, process.env.VISION_LOG_RESULT === "true" ? 2500 : 500),
+        };
+        if (process.env.VISION_LOG_RESULT !== "true") {
+            logger.info(`${message} (preview truncated; set VISION_LOG_RESULT=true for more)`, baseMeta);
+            return;
+        }
+        logger.info(message, {
+            imagePath: meta.imagePath,
+            ...baseMeta,
+        });
     }
     parseVisualRecoveryAnalysis(raw) {
         try {

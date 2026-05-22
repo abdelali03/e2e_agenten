@@ -1,0 +1,546 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button [ref=e5] [cursor=pointer]:
+        - img [ref=e6]
+      - link "Logo" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+      - region "scrollable content" [ref=e18]:
+        - generic [ref=e19]:
+          - navigation [ref=e20]:
+            - list [ref=e21]:
+              - listitem [ref=e22]:
+                - generic [ref=e23] [cursor=pointer]:
+                  - img [ref=e24]
+                  - text: Overview
+                - list [ref=e29]:
+                  - listitem [ref=e30]:
+                    - link "App" [ref=e31] [cursor=pointer]:
+                      - /url: /dashboard
+                      - generic [ref=e35]: App
+                  - listitem [ref=e36]:
+                    - link "Ecommerce" [ref=e37] [cursor=pointer]:
+                      - /url: /dashboard/ecommerce
+                      - generic [ref=e41]: Ecommerce
+                  - listitem [ref=e42]:
+                    - link "Analytics" [ref=e43] [cursor=pointer]:
+                      - /url: /dashboard/analytics
+                      - generic [ref=e47]: Analytics
+                  - listitem [ref=e48]:
+                    - link "Banking" [ref=e49] [cursor=pointer]:
+                      - /url: /dashboard/banking
+                      - generic [ref=e53]: Banking
+                  - listitem [ref=e54]:
+                    - link "Booking" [ref=e55] [cursor=pointer]:
+                      - /url: /dashboard/booking
+                      - generic [ref=e59]: Booking
+                  - listitem [ref=e60]:
+                    - link "File" [ref=e61] [cursor=pointer]:
+                      - /url: /dashboard/file
+                      - generic [ref=e65]: File
+                  - listitem [ref=e66]:
+                    - link "Course" [ref=e67] [cursor=pointer]:
+                      - /url: /dashboard/course
+                      - generic [ref=e71]: Course
+              - listitem [ref=e72]:
+                - generic [ref=e73] [cursor=pointer]:
+                  - img [ref=e74]
+                  - text: Management
+                - list [ref=e79]:
+                  - listitem [ref=e80]:
+                    - button "User" [ref=e81] [cursor=pointer]:
+                      - generic [ref=e85]: User
+                      - img [ref=e86]
+                  - listitem [ref=e88]:
+                    - button "Product" [ref=e89] [cursor=pointer]:
+                      - generic [ref=e93]: Product
+                      - img [ref=e94]
+                  - listitem [ref=e96]:
+                    - button "Order" [ref=e97] [cursor=pointer]:
+                      - generic [ref=e101]: Order
+                      - img [ref=e102]
+                  - listitem [ref=e104]:
+                    - button "Invoice" [ref=e105] [cursor=pointer]:
+                      - generic [ref=e109]: Invoice
+                      - img [ref=e110]
+                  - listitem [ref=e112]:
+                    - button "Blog" [ref=e113] [cursor=pointer]:
+                      - generic [ref=e117]: Blog
+                      - img [ref=e118]
+                  - listitem [ref=e120]:
+                    - button "Job" [ref=e121] [cursor=pointer]:
+                      - generic [ref=e125]: Job
+                      - img [ref=e126]
+                  - listitem [ref=e128]:
+                    - button "Tour" [ref=e129] [cursor=pointer]:
+                      - generic [ref=e133]: Tour
+                      - img [ref=e134]
+                  - listitem [ref=e136]:
+                    - link "File manager" [ref=e137] [cursor=pointer]:
+                      - /url: /dashboard/file-manager
+                      - generic [ref=e141]: File manager
+                  - listitem [ref=e142]:
+                    - link "Mail" [ref=e143] [cursor=pointer]:
+                      - /url: /dashboard/mail
+                      - generic [ref=e147]: Mail
+                      - generic [ref=e149]: "+32"
+                  - listitem [ref=e150]:
+                    - link "Chat" [ref=e151] [cursor=pointer]:
+                      - /url: /dashboard/chat
+                      - generic [ref=e155]: Chat
+                  - listitem [ref=e156]:
+                    - link "Calendar" [ref=e157] [cursor=pointer]:
+                      - /url: /dashboard/calendar
+                      - generic [ref=e161]: Calendar
+                  - listitem [ref=e162]:
+                    - link "Kanban" [ref=e163] [cursor=pointer]:
+                      - /url: /dashboard/kanban
+                      - generic [ref=e167]: Kanban
+              - listitem [ref=e168]:
+                - generic [ref=e169] [cursor=pointer]:
+                  - img [ref=e170]
+                  - text: Misc
+                - list [ref=e175]:
+                  - listitem [ref=e176]:
+                    - link "Permission" [ref=e177] [cursor=pointer]:
+                      - /url: /dashboard/permission
+                      - generic [ref=e180]:
+                        - generic [ref=e181]: Permission
+                        - generic "Only admin can see this item." [ref=e182]
+                  - listitem [ref=e183]:
+                    - button "Level" [ref=e184] [cursor=pointer]:
+                      - generic [ref=e188]: Level
+                      - img [ref=e189]
+                  - listitem [ref=e191]:
+                    - link "Disabled":
+                      - /url: /dashboard/chat#disabled
+                      - generic:
+                        - generic: Disabled
+                  - listitem [ref=e192]:
+                    - link "Label" [ref=e193] [cursor=pointer]:
+                      - /url: /dashboard/chat#label
+                      - generic [ref=e197]: Label
+                      - generic [ref=e199]:
+                        - img [ref=e201]
+                        - text: NEW
+                  - listitem [ref=e204]:
+                    - link "Caption" [ref=e205] [cursor=pointer]:
+                      - /url: /dashboard/chat#caption
+                      - generic [ref=e208]:
+                        - generic [ref=e209]: Caption
+                        - generic "Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien." [ref=e210]
+                  - listitem [ref=e211]:
+                    - link "Params" [ref=e212] [cursor=pointer]:
+                      - /url: /dashboard/params?id=e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1
+                      - generic [ref=e216]: Params
+                  - listitem [ref=e217]:
+                    - link "Subpaths" [ref=e218] [cursor=pointer]:
+                      - /url: /dashboard/subpaths
+                      - generic [ref=e222]: Subpaths
+                  - listitem [ref=e223]:
+                    - link "External link" [ref=e224] [cursor=pointer]:
+                      - /url: https://www.google.com/
+                      - generic [ref=e228]: External link
+                      - img [ref=e230]
+                  - listitem [ref=e233]:
+                    - link "Blank" [ref=e234] [cursor=pointer]:
+                      - /url: /dashboard/blank
+                      - generic [ref=e238]: Blank
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - img "Jaydon Frankie" [ref=e243]
+              - generic [ref=e244]: Free
+            - generic [ref=e245]:
+              - heading "Jaydon Frankie" [level=6] [ref=e246]
+              - paragraph [ref=e247]: demo@minimals.cc
+            - link "Upgrade to Pro" [ref=e248] [cursor=pointer]:
+              - /url: https://mui.com/store/items/minimal-dashboard/
+    - generic [ref=e249]:
+      - banner [ref=e250]:
+        - generic [ref=e251]:
+          - button "Team 1 Team 1 Free" [ref=e252] [cursor=pointer]:
+            - img "Team 1" [ref=e253]
+            - generic [ref=e254]: Team 1
+            - generic [ref=e255]: Free
+            - img [ref=e256]
+          - generic [ref=e258]:
+            - generic [ref=e259] [cursor=pointer]:
+              - img [ref=e261]
+              - generic [ref=e263]: ⌘K
+            - button "Languages button" [ref=e264] [cursor=pointer]:
+              - img "GB" [ref=e266]
+            - button "Notifications button" [ref=e267] [cursor=pointer]:
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e272]: "4"
+            - button "Contacts button" [ref=e273] [cursor=pointer]:
+              - img [ref=e274]
+            - button "Settings button" [ref=e279] [cursor=pointer]:
+              - img [ref=e281]
+            - button "Account button" [ref=e284] [cursor=pointer]:
+              - generic [ref=e285]:
+                - img [ref=e287]
+                - img [ref=e291]
+                - img "Jaydon Frankie" [ref=e295]
+      - main [ref=e296]:
+        - generic [ref=e1023]:
+          - heading "Chat" [level=4] [ref=e1024]
+          - generic [ref=e1025]:
+            - generic [ref=e1027]:
+              - generic [ref=e1028]:
+                - img "Jaydon Frankie" [ref=e1031] [cursor=pointer]
+                - button [ref=e1033] [cursor=pointer]:
+                  - img [ref=e1034]
+                - button [ref=e1036] [cursor=pointer]:
+                  - img [ref=e1037]
+              - generic [ref=e1043]:
+                - img [ref=e1045]
+                - textbox "Search contacts..." [ref=e1047]
+                - group
+              - region "scrollable content" [ref=e1052]:
+                - navigation [ref=e1054]:
+                  - list [ref=e1055]:
+                    - listitem [ref=e1056]:
+                      - 'button "Lucian Obrien 0 Lucian Obrien You: The waves crashed against the shore, creating a soothing symphony of sound. a few seconds" [active] [ref=e1269] [cursor=pointer]':
+                        - generic [ref=e1058]:
+                          - img "Lucian Obrien" [ref=e1061]
+                          - generic: "0"
+                        - generic [ref=e1063]:
+                          - generic [ref=e1064]: Lucian Obrien
+                          - paragraph [ref=e1065]: "You: The waves crashed against the shore, creating a soothing symphony of sound."
+                        - generic [ref=e1067]: a few seconds
+                    - listitem [ref=e1068]:
+                      - 'button "Deja Brady 0 Deja Brady You: The scent of blooming flowers wafted through the garden, creating a fragrant paradise. an hour" [ref=e1270] [cursor=pointer]':
+                        - generic [ref=e1070]:
+                          - img "Deja Brady" [ref=e1073]
+                          - generic: "0"
+                        - generic [ref=e1075]:
+                          - generic [ref=e1076]: Deja Brady
+                          - paragraph [ref=e1077]: "You: The scent of blooming flowers wafted through the garden, creating a fragrant paradise."
+                        - generic [ref=e1079]: an hour
+                    - listitem [ref=e1080]:
+                      - button "Harrison Stein 0 Harrison Stein Sent a photo 2 hours" [ref=e1271] [cursor=pointer]:
+                        - generic [ref=e1082]:
+                          - img "Harrison Stein" [ref=e1085]
+                          - generic: "0"
+                        - generic [ref=e1087]:
+                          - generic [ref=e1088]: Harrison Stein
+                          - paragraph [ref=e1089]: Sent a photo
+                        - generic [ref=e1091]: 2 hours
+                    - listitem [ref=e1092]:
+                      - button "Reece Chung 0 Reece Chung She gazed up at the night sky, marveling at the twinkling stars that dotted the darkness. 5 minutes" [ref=e1272] [cursor=pointer]:
+                        - generic [ref=e1094]:
+                          - img "Reece Chung" [ref=e1097]
+                          - generic: "0"
+                        - generic [ref=e1099]:
+                          - generic [ref=e1100]: Reece Chung
+                          - paragraph [ref=e1101]: She gazed up at the night sky, marveling at the twinkling stars that dotted the darkness.
+                        - generic [ref=e1103]: 5 minutes
+                    - listitem [ref=e1105]:
+                      - button "Lainey Davidson 0 Lainey Davidson The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight. a minute" [ref=e1273] [cursor=pointer]:
+                        - generic [ref=e1107]:
+                          - img "Lainey Davidson" [ref=e1110]
+                          - generic: "0"
+                        - generic [ref=e1112]:
+                          - generic [ref=e1113]: Lainey Davidson
+                          - paragraph [ref=e1114]: The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.
+                        - generic [ref=e1116]: a minute
+                    - listitem [ref=e1117]:
+                      - button "Cristopher Cardenas 0 Cristopher Cardenas The waves crashed against the shore, creating a soothing symphony of sound. an hour" [ref=e1274] [cursor=pointer]:
+                        - generic [ref=e1119]:
+                          - img "Cristopher Cardenas" [ref=e1122]
+                          - generic: "0"
+                        - generic [ref=e1124]:
+                          - generic [ref=e1125]: Cristopher Cardenas
+                          - paragraph [ref=e1126]: The waves crashed against the shore, creating a soothing symphony of sound.
+                        - generic [ref=e1128]: an hour
+                    - listitem [ref=e1129]:
+                      - button "Melanie Noble Cristopher Cardenas 0 Cristopher Cardenas, Melanie Noble, Chase Day, Shawn Manning, Soren Durham The delicate butterfly gracefully fluttered from flower to flower, sipping nectar with its slender proboscis. a minute" [ref=e1275] [cursor=pointer]:
+                        - generic [ref=e1131]:
+                          - generic [ref=e1133]:
+                            - img "Melanie Noble" [ref=e1135]
+                            - img "Cristopher Cardenas" [ref=e1137]
+                          - generic: "0"
+                        - generic [ref=e1139]:
+                          - generic [ref=e1140]: Cristopher Cardenas, Melanie Noble, Chase Day, Shawn Manning, Soren Durham
+                          - paragraph [ref=e1141]: The delicate butterfly gracefully fluttered from flower to flower, sipping nectar with its slender proboscis.
+                        - generic [ref=e1143]: a minute
+                    - listitem [ref=e1145]:
+                      - button "Melanie Noble 0 Melanie Noble The scent of blooming flowers wafted through the garden, creating a fragrant paradise. 3 days" [ref=e1276] [cursor=pointer]:
+                        - generic [ref=e1147]:
+                          - img "Melanie Noble" [ref=e1150]
+                          - generic: "0"
+                        - generic [ref=e1152]:
+                          - generic [ref=e1153]: Melanie Noble
+                          - paragraph [ref=e1154]: The scent of blooming flowers wafted through the garden, creating a fragrant paradise.
+                        - generic [ref=e1156]: 3 days
+                    - listitem [ref=e1157]:
+                      - button "Chase Day 0 Chase Day She gazed up at the night sky, marveling at the twinkling stars that dotted the darkness. 8 hours" [ref=e1277] [cursor=pointer]:
+                        - generic [ref=e1159]:
+                          - img "Chase Day" [ref=e1162]
+                          - generic: "0"
+                        - generic [ref=e1164]:
+                          - generic [ref=e1165]: Chase Day
+                          - paragraph [ref=e1166]: She gazed up at the night sky, marveling at the twinkling stars that dotted the darkness.
+                        - generic [ref=e1168]: 8 hours
+                    - listitem [ref=e1169]:
+                      - button "Shawn Manning 0 Shawn Manning The professor delivered a captivating lecture, engaging the students with thought-provoking ideas. 3 hours" [ref=e1278] [cursor=pointer]:
+                        - generic [ref=e1171]:
+                          - img "Shawn Manning" [ref=e1174]
+                          - generic: "0"
+                        - generic [ref=e1176]:
+                          - generic [ref=e1177]: Shawn Manning
+                          - paragraph [ref=e1178]: The professor delivered a captivating lecture, engaging the students with thought-provoking ideas.
+                        - generic [ref=e1180]: 3 hours
+                    - listitem [ref=e1181]:
+                      - button "Deja Brady Lucian Obrien 0 Lucian Obrien, Deja Brady, Harrison Stein, Reece Chung The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight. 10 minutes" [ref=e1279] [cursor=pointer]:
+                        - generic [ref=e1183]:
+                          - generic [ref=e1185]:
+                            - img "Deja Brady" [ref=e1187]
+                            - img "Lucian Obrien" [ref=e1189]
+                          - generic: "0"
+                        - generic [ref=e1191]:
+                          - generic [ref=e1192]: Lucian Obrien, Deja Brady, Harrison Stein, Reece Chung
+                          - paragraph [ref=e1193]: The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.
+                        - generic [ref=e1195]: 10 minutes
+                    - listitem [ref=e1196]:
+                      - button "Soren Durham 0 Soren Durham The hiker trekked through the dense forest, guided by the soft glow of sunlight filtering through the trees. 10 days" [ref=e1280] [cursor=pointer]:
+                        - generic [ref=e1198]:
+                          - img "Soren Durham" [ref=e1201]
+                          - generic: "0"
+                        - generic [ref=e1203]:
+                          - generic [ref=e1204]: Soren Durham
+                          - paragraph [ref=e1205]: The hiker trekked through the dense forest, guided by the soft glow of sunlight filtering through the trees.
+                        - generic [ref=e1207]: 10 days
+            - generic [ref=e1208]:
+              - generic [ref=e1209]:
+                - generic [ref=e1281]:
+                  - img "Lucian Obrien" [ref=e1284]
+                  - generic [ref=e1286]:
+                    - generic [ref=e1287]: Lucian Obrien
+                    - paragraph [ref=e1288]: online
+                - generic [ref=e1289]:
+                  - button [ref=e1290] [cursor=pointer]:
+                    - img [ref=e1291]
+                  - button [ref=e1293] [cursor=pointer]:
+                    - img [ref=e1294]
+                  - button [ref=e1296] [cursor=pointer]:
+                    - img [ref=e1297]
+                  - button [ref=e1300] [cursor=pointer]:
+                    - img [ref=e1301]
+              - generic [ref=e1217]:
+                - generic [ref=e1218]:
+                  - region "scrollable content" [ref=e1309]:
+                    - generic [ref=e1310]:
+                      - generic [ref=e1311]:
+                        - img "Lucian" [ref=e1313]
+                        - generic [ref=e1314]:
+                          - generic [ref=e1315]: Lucian, 5 hours
+                          - generic [ref=e1316]:
+                            - generic [ref=e1317]: She eagerly opened the gift, her eyes sparkling with excitement.
+                            - generic [ref=e1318]:
+                              - button [ref=e1319] [cursor=pointer]:
+                                - img [ref=e1320]
+                              - button [ref=e1322] [cursor=pointer]:
+                                - img [ref=e1323]
+                              - button [ref=e1325] [cursor=pointer]:
+                                - img [ref=e1326]
+                      - generic [ref=e1330]:
+                        - generic [ref=e1331]: 4 hours
+                        - generic [ref=e1332]:
+                          - generic [ref=e1333]: The old oak tree stood tall and majestic, its branches swaying gently in the breeze.
+                          - generic [ref=e1334]:
+                            - button [ref=e1335] [cursor=pointer]:
+                              - img [ref=e1336]
+                            - button [ref=e1338] [cursor=pointer]:
+                              - img [ref=e1339]
+                            - button [ref=e1341] [cursor=pointer]:
+                              - img [ref=e1342]
+                      - generic [ref=e1345]:
+                        - img "Lucian" [ref=e1347]
+                        - generic [ref=e1348]:
+                          - generic [ref=e1349]: Lucian, 3 hours
+                          - generic [ref=e1350]:
+                            - generic [ref=e1351]: The aroma of freshly brewed coffee filled the air, awakening my senses.
+                            - generic [ref=e1352]:
+                              - button [ref=e1353] [cursor=pointer]:
+                                - img [ref=e1354]
+                              - button [ref=e1356] [cursor=pointer]:
+                                - img [ref=e1357]
+                              - button [ref=e1359] [cursor=pointer]:
+                                - img [ref=e1360]
+                      - generic [ref=e1364]:
+                        - generic [ref=e1365]: 2 hours
+                        - generic [ref=e1366]:
+                          - generic [ref=e1367]: The children giggled with joy as they ran through the sprinklers on a hot summer day.
+                          - generic [ref=e1368]:
+                            - button [ref=e1369] [cursor=pointer]:
+                              - img [ref=e1370]
+                            - button [ref=e1372] [cursor=pointer]:
+                              - img [ref=e1373]
+                            - button [ref=e1375] [cursor=pointer]:
+                              - img [ref=e1376]
+                      - generic [ref=e1379]:
+                        - img "Lucian" [ref=e1381]
+                        - generic [ref=e1382]:
+                          - generic [ref=e1383]: Lucian, an hour
+                          - generic [ref=e1384]:
+                            - generic [ref=e1385]: He carefully crafted a beautiful sculpture out of clay, his hands skillfully shaping the intricate details.
+                            - generic [ref=e1386]:
+                              - button [ref=e1387] [cursor=pointer]:
+                                - img [ref=e1388]
+                              - button [ref=e1390] [cursor=pointer]:
+                                - img [ref=e1391]
+                              - button [ref=e1393] [cursor=pointer]:
+                                - img [ref=e1394]
+                      - generic [ref=e1397]:
+                        - img "Lucian" [ref=e1399]
+                        - generic [ref=e1400]:
+                          - generic [ref=e1401]: Lucian, 15 minutes
+                          - generic [ref=e1402]:
+                            - img "Attachment" [ref=e1404] [cursor=pointer]
+                            - generic [ref=e1405]:
+                              - button [ref=e1406] [cursor=pointer]:
+                                - img [ref=e1407]
+                              - button [ref=e1409] [cursor=pointer]:
+                                - img [ref=e1410]
+                              - button [ref=e1412] [cursor=pointer]:
+                                - img [ref=e1413]
+                      - generic [ref=e1417]:
+                        - generic [ref=e1418]: a minute
+                        - generic [ref=e1419]:
+                          - generic [ref=e1420]: The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.
+                          - generic [ref=e1421]:
+                            - button [ref=e1422] [cursor=pointer]:
+                              - img [ref=e1423]
+                            - button [ref=e1425] [cursor=pointer]:
+                              - img [ref=e1426]
+                            - button [ref=e1428] [cursor=pointer]:
+                              - img [ref=e1429]
+                      - generic [ref=e1433]:
+                        - generic [ref=e1434]: a few seconds
+                        - generic [ref=e1435]:
+                          - generic [ref=e1436]: The waves crashed against the shore, creating a soothing symphony of sound.
+                          - generic [ref=e1437]:
+                            - button [ref=e1438] [cursor=pointer]:
+                              - img [ref=e1439]
+                            - button [ref=e1441] [cursor=pointer]:
+                              - img [ref=e1442]
+                            - button [ref=e1444] [cursor=pointer]:
+                              - img [ref=e1445]
+                  - generic [ref=e1223]:
+                    - button [ref=e1224] [cursor=pointer]:
+                      - img [ref=e1225]
+                    - textbox "Type a message" [ref=e1227]
+                    - generic [ref=e1228]:
+                      - button [ref=e1229] [cursor=pointer]:
+                        - img [ref=e1230]
+                      - button [ref=e1233] [cursor=pointer]:
+                        - img [ref=e1234]
+                      - button [ref=e1236] [cursor=pointer]:
+                        - img [ref=e1237]
+                - region "scrollable content" [ref=e1460]:
+                  - generic [ref=e1462]:
+                    - generic [ref=e1463]:
+                      - img "Lucian Obrien" [ref=e1465]
+                      - heading "Lucian Obrien" [level=6] [ref=e1466]
+                      - paragraph [ref=e1467]: CTO
+                    - button "Information" [ref=e1468] [cursor=pointer]:
+                      - text: Information
+                      - img [ref=e1469]
+                    - generic [ref=e1474]:
+                      - generic [ref=e1475]:
+                        - img [ref=e1476]
+                        - text: 1147 Rohan Drive Suite 819 - Burlington, VT / 82021
+                      - generic [ref=e1480]:
+                        - img [ref=e1481]
+                        - text: +1 416-555-0198
+                      - generic [ref=e1483]:
+                        - img [ref=e1484]
+                        - text: ashlynn.ohara62@gmail.com
+                    - button "Attachments (10)" [ref=e1486] [cursor=pointer]:
+                      - text: Attachments (10)
+                      - img [ref=e1487]
+                    - generic [ref=e1492]:
+                      - generic [ref=e1493]:
+                        - generic [ref=e1494]:
+                          - img "cover-3.webp" [ref=e1495]
+                          - button [ref=e1496] [cursor=pointer]:
+                            - img [ref=e1497]
+                        - generic [ref=e1500]:
+                          - generic [ref=e1501]: cover-2.jpg
+                          - paragraph [ref=e1502]: 22 May 2026 10:23 am
+                      - generic [ref=e1503]:
+                        - generic [ref=e1504]:
+                          - img "design_suriname_2015.mp3" [ref=e1505]
+                          - button [ref=e1506] [cursor=pointer]:
+                            - img [ref=e1507]
+                        - generic [ref=e1510]:
+                          - generic [ref=e1511]: design-suriname-2015.mp3
+                          - paragraph [ref=e1512]: 21 May 2026 9:23 am
+                      - generic [ref=e1513]:
+                        - generic [ref=e1514]:
+                          - img "expertise_2015_conakry_sao-tome-and-principe_gender.mp4" [ref=e1515]
+                          - button [ref=e1516] [cursor=pointer]:
+                            - img [ref=e1517]
+                        - generic [ref=e1520]:
+                          - generic [ref=e1521]: expertise-2015-conakry-sao-tome-and-principe-gender.mp4
+                          - paragraph [ref=e1522]: 20 May 2026 8:23 am
+                      - generic [ref=e1523]:
+                        - generic [ref=e1524]:
+                          - img "money-popup-crack.pdf" [ref=e1525]
+                          - button [ref=e1526] [cursor=pointer]:
+                            - img [ref=e1527]
+                        - generic [ref=e1530]:
+                          - generic [ref=e1531]: money-popup-crack.pdf
+                          - paragraph [ref=e1532]: 19 May 2026 7:23 am
+                      - generic [ref=e1533]:
+                        - generic [ref=e1534]:
+                          - img "cover-4.webp" [ref=e1535]
+                          - button [ref=e1536] [cursor=pointer]:
+                            - img [ref=e1537]
+                        - generic [ref=e1540]:
+                          - generic [ref=e1541]: cover-4.jpg
+                          - paragraph [ref=e1542]: 18 May 2026 6:23 am
+                      - generic [ref=e1543]:
+                        - generic [ref=e1544]:
+                          - img "cover-6.webp" [ref=e1545]
+                          - button [ref=e1546] [cursor=pointer]:
+                            - img [ref=e1547]
+                        - generic [ref=e1550]:
+                          - generic [ref=e1551]: cover-6.jpg
+                          - paragraph [ref=e1552]: 17 May 2026 5:23 am
+                      - generic [ref=e1553]:
+                        - generic [ref=e1554]:
+                          - img "large_news.txt" [ref=e1555]
+                          - button [ref=e1556] [cursor=pointer]:
+                            - img [ref=e1557]
+                        - generic [ref=e1560]:
+                          - generic [ref=e1561]: large-news.txt
+                          - paragraph [ref=e1562]: 16 May 2026 4:23 am
+                      - generic [ref=e1563]:
+                        - generic [ref=e1564]:
+                          - img "nauru-6015-small-fighter-left-gender.psd" [ref=e1565]
+                          - button [ref=e1566] [cursor=pointer]:
+                            - img [ref=e1567]
+                        - generic [ref=e1570]:
+                          - generic [ref=e1571]: nauru-6015-small-fighter-left-gender.psd
+                          - paragraph [ref=e1572]: 15 May 2026 3:23 am
+                      - generic [ref=e1573]:
+                        - generic [ref=e1574]:
+                          - img "tv-xs.doc" [ref=e1575]
+                          - button [ref=e1576] [cursor=pointer]:
+                            - img [ref=e1577]
+                        - generic [ref=e1580]:
+                          - generic [ref=e1581]: tv-xs.doc
+                          - paragraph [ref=e1582]: 14 May 2026 2:23 am
+                      - generic [ref=e1583]:
+                        - generic [ref=e1584]:
+                          - img "gustavia-entertainment-productivity.docx" [ref=e1585]
+                          - button [ref=e1586] [cursor=pointer]:
+                            - img [ref=e1587]
+                        - generic [ref=e1590]:
+                          - generic [ref=e1591]: gustavia-entertainment-productivity.docx
+                          - paragraph [ref=e1592]: 13 May 2026 1:23 am
+  - region "Notifications alt+T"

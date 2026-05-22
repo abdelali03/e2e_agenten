@@ -1,5 +1,6 @@
 import type { GoalInput } from "../../../core/types";
 import type { McpToolInfo } from "../../../utils/PlaywrightMcpClient";
+import type { VisionToolResult } from "../../../utils/VisionTool";
 
 export type McpMultiAgentStatus = "running" | "passed" | "failed" | "blocked";
 
@@ -19,7 +20,8 @@ export interface McpObservationEntry {
     | "analyze"
     | "execute"
     | "critic"
-    | "verify";
+    | "verify"
+    | "vision";
   agentName: string;
   toolName?: string;
   arguments?: Record<string, unknown>;
@@ -44,7 +46,7 @@ export interface McpObservationDecision {
 }
 
 export interface McpCriticDecision {
-  route: "retryAnalyze" | "observe" | "plan" | "verify" | "blocked";
+  route: "retryAnalyze" | "observe" | "vision" | "plan" | "verify" | "blocked";
   revisedSubgoal?: string;
   reasoning: string;
 }
@@ -70,6 +72,8 @@ export interface McpMultiAgentState {
   proposedToolCall?: McpToolCallProposal;
   criticDecision?: McpCriticDecision;
   verification?: McpVerificationDecision;
+  latestVisualAnalysis?: VisionToolResult;
+  workflowMemory?: string;
   lastError?: string;
   finalSummary?: string;
   iteration: number;
@@ -127,4 +131,86 @@ export function appendObservation(
 
 export function toolExists(tools: McpToolInfo[], toolName: string): boolean {
   return tools.some((tool) => tool.name === toolName);
+}
+
+export function buildWorkflowMemory(state: McpMultiAgentState): string {
+  const successfulActions = state.observations
+    .filter(
+      (entry) =>
+        entry.success &&
+        entry.toolName &&
+        !["browser_snapshot", "browser_take_screenshot"].includes(entry.toolName) &&
+        entry.phase !== "plan" &&
+        entry.phase !== "analyze" &&
+        entry.phase !== "critic" &&
+        entry.phase !== "verify" &&
+        entry.phase !== "vision"
+    )
+    .slice(-14)
+    .map((entry) => ({
+      index: entry.index,
+      phase: entry.phase,
+      agentName: entry.agentName,
+      toolName: entry.toolName,
+      arguments: compactArguments(entry.arguments),
+      reasoning: entry.reasoning,
+    }));
+
+  const failedActions = state.observations
+    .filter((entry) => !entry.success)
+    .slice(-6)
+    .map((entry) => ({
+      index: entry.index,
+      phase: entry.phase,
+      agentName: entry.agentName,
+      toolName: entry.toolName,
+      arguments: compactArguments(entry.arguments),
+      errorMessage: entry.errorMessage,
+    }));
+
+  const latestVision = state.latestVisualAnalysis;
+
+  return JSON.stringify(
+    {
+      goal: state.goal.goal,
+      currentSubgoal: state.currentSubgoal,
+      expectedOutcome: state.expectedOutcome,
+      successfulActions,
+      failedActions,
+      latestVisionGoalProgress: latestVision?.goalProgress,
+      latestVisionCompletionEstimate: latestVision?.goalCompletionEstimate,
+      latestVisionConfidence: latestVision?.confidence,
+      latestVisionRecommendedNextAction: latestVision?.recommendedNextAction,
+      retryCount: state.retryCount,
+      consecutiveSnapshots: state.consecutiveSnapshots,
+      lastError: state.lastError,
+      memoryRules: [
+        "Successful previous actions remain completed unless a later observation clearly contradicts them.",
+        "Low-confidence or partial vision analysis must not erase successful action history.",
+        "When a dialog/overlay blocks background clicks, continue inside the dialog/overlay instead of closing it by default.",
+        "If repeated observations happen after visual recovery, choose an interaction tool or route to critic rather than requesting more snapshots.",
+      ],
+    },
+    null,
+    2
+  ).slice(0, 10_000);
+}
+
+function compactArguments(
+  args: Record<string, unknown> | undefined
+): Record<string, unknown> | undefined {
+  if (!args) {
+    return undefined;
+  }
+
+  const compact: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(args)) {
+    compact[key] =
+      typeof value === "string" && value.length > 300
+        ? `${value.slice(0, 300)}...`
+        : value;
+  }
+
+  return compact;
 }

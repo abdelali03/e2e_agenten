@@ -74,10 +74,15 @@ class PlaywrightMcpClient {
         return {
             text: this.resultToText(result),
             raw: result,
+            images: this.extractImages(result),
             isError: "isError" in result && typeof result.isError === "boolean"
                 ? result.isError
                 : undefined,
         };
+    }
+    async takeScreenshot() {
+        const result = await this.callTool("browser_take_screenshot", {});
+        return result.images[0];
     }
     async close() {
         await this.transport?.close().catch((error) => {
@@ -117,6 +122,20 @@ class PlaywrightMcpClient {
             return JSON.stringify(maybeResult.toolResult, null, 2).slice(0, 30_000);
         }
         return JSON.stringify(result, null, 2).slice(0, 30_000);
+    }
+    extractImages(result) {
+        const maybeResult = result;
+        if (!Array.isArray(maybeResult.content)) {
+            return [];
+        }
+        return maybeResult.content
+            .filter((part) => part.type === "image" &&
+            typeof part.data === "string" &&
+            typeof part.mimeType === "string")
+            .map((part) => ({
+            data: part.data,
+            mimeType: part.mimeType,
+        }));
     }
 }
 exports.PlaywrightMcpClient = PlaywrightMcpClient;

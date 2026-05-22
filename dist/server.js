@@ -9,7 +9,6 @@ const http_1 = require("http");
 const promises_1 = require("fs/promises");
 const path_1 = require("path");
 const AdaptiveOrchestrator_1 = require("./systems/deterministic-playwright/core/AdaptiveOrchestrator");
-const AllLlmOrchestrator_1 = require("./systems/llm-command/core/AllLlmOrchestrator");
 const AllLlmMcpOrchestrator_1 = require("./systems/mcp-single-agent/core/AllLlmMcpOrchestrator");
 const McpMultiAgentOrchestrator_1 = require("./systems/mcp-multi-agent/core/McpMultiAgentOrchestrator");
 const BrowserManager_1 = require("./systems/deterministic-playwright/core/BrowserManager");
@@ -87,19 +86,13 @@ async function handleRun(req, res) {
                 ? await new AllLlmMcpOrchestrator_1.AllLlmMcpOrchestrator({
                     maxToolCalls: 50,
                 }).run(input, `ui-all-llm-mcp-${Date.now()}`)
-                : mode === "all-llm"
-                    ? await new AllLlmOrchestrator_1.AllLlmOrchestrator({
-                        maxActions: 40,
-                        stepDelayMs: 1000,
-                        verifyEveryActions: 4,
-                    }).run(input, `ui-all-llm-${Date.now()}`)
-                    : await new AdaptiveOrchestrator_1.AdaptiveOrchestrator({
-                        maxActions: 30,
-                        maxRetriesPerAction: 3,
-                        stepDelayMs: 1000,
-                        screenshotOnFailure: true,
-                        verifyEveryActions: 3,
-                    }).run(input, `ui-${Date.now()}`);
+                : await new AdaptiveOrchestrator_1.AdaptiveOrchestrator({
+                    maxActions: 30,
+                    maxRetriesPerAction: 3,
+                    stepDelayMs: 1000,
+                    screenshotOnFailure: true,
+                    verifyEveryActions: 3,
+                }).run(input, `ui-${Date.now()}`);
         sendJson(res, 200, result);
     }
     finally {
@@ -165,12 +158,11 @@ function normalizeGoalInput(input) {
 function normalizeAgentMode(mode) {
     const normalized = (mode || "adaptive").toLowerCase();
     if (normalized === "adaptive" ||
-        normalized === "all-llm" ||
         normalized === "all-llm-mcp" ||
         normalized === "mcp-multi-agent") {
         return normalized;
     }
-    throw new Error(`Unknown agent mode "${mode}". Use adaptive, all-llm, all-llm-mcp, or mcp-multi-agent.`);
+    throw new Error(`Unknown agent mode "${mode}". Use adaptive, all-llm-mcp, or mcp-multi-agent.`);
 }
 function readJsonBody(req) {
     return new Promise((resolve, reject) => {
