@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildMcpMultiAgentGraph = buildMcpMultiAgentGraph;
 const langgraph_1 = require("@langchain/langgraph");
 const Logger_1 = require("../../../utils/Logger");
+const SelectorGuard_1 = require("../../../utils/SelectorGuard");
 const McpMultiAgentState_1 = require("./McpMultiAgentState");
 const logger = new Logger_1.Logger("McpMultiAgentGraph");
 const StateAnnotation = langgraph_1.Annotation.Root({
@@ -19,6 +20,11 @@ const StateAnnotation = langgraph_1.Annotation.Root({
     verification: (langgraph_1.Annotation),
     latestVisualAnalysis: (langgraph_1.Annotation),
     workflowMemory: (langgraph_1.Annotation),
+    lastFailedPhase: (langgraph_1.Annotation),
+    lastActionError: (langgraph_1.Annotation),
+    lastObservationError: (langgraph_1.Annotation),
+    lastAnalysisError: (langgraph_1.Annotation),
+    lastVerificationError: (langgraph_1.Annotation),
     lastError: (langgraph_1.Annotation),
     finalSummary: (langgraph_1.Annotation),
     iteration: (langgraph_1.Annotation),
@@ -99,6 +105,9 @@ function buildMcpMultiAgentGraph(deps) {
             const proposal = await deps.analyst.analyze(state);
             return withWorkflowMemory(state, {
                 proposedToolCall: proposal,
+                lastError: undefined,
+                lastAnalysisError: undefined,
+                lastFailedPhase: undefined,
                 observations: (0, McpMultiAgentState_1.appendObservation)(state, {
                     phase: "analyze",
                     agentName: "McpDomAnalystAgent",
@@ -114,6 +123,8 @@ function buildMcpMultiAgentGraph(deps) {
             const message = error instanceof Error ? error.message : String(error);
             return withWorkflowMemory(state, {
                 lastError: message,
+                lastAnalysisError: message,
+                lastFailedPhase: "analyze",
                 observations: (0, McpMultiAgentState_1.appendObservation)(state, {
                     phase: "analyze",
                     agentName: "McpDomAnalystAgent",
@@ -142,6 +153,25 @@ function buildMcpMultiAgentGraph(deps) {
                 }),
             });
         }
+        const guard = (0, SelectorGuard_1.validateMcpActionTarget)(proposal.toolName, proposal.arguments);
+        if (!guard.ok) {
+            const error = `SelectorGuard rejected ${proposal.toolName}: ${guard.error}`;
+            return withWorkflowMemory(state, {
+                lastError: error,
+                lastActionError: error,
+                lastFailedPhase: "execute",
+                observations: (0, McpMultiAgentState_1.appendObservation)(state, {
+                    phase: "execute",
+                    agentName: "SelectorGuard",
+                    toolName: proposal.toolName,
+                    arguments: proposal.arguments,
+                    success: false,
+                    resultText: "",
+                    errorMessage: error,
+                    reasoning: "Rejected invalid executable target before calling MCP. Visual hints must be resolved to MCP refs/selectors first.",
+                }),
+            });
+        }
         const result = await callMcpTool(state, deps, "execute", "McpToolExecutor", proposal.toolName, proposal.arguments, proposal.reasoning);
         return withWorkflowMemory(state, {
             observations: result.observations,
@@ -151,6 +181,8 @@ function buildMcpMultiAgentGraph(deps) {
                 ? state.consecutiveSnapshots + 1
                 : 0,
             lastError: result.lastError,
+            lastActionError: result.lastError,
+            lastFailedPhase: result.lastError ? "execute" : undefined,
         });
     };
     const observeAfterAction = async (state) => {
@@ -175,6 +207,7 @@ function buildMcpMultiAgentGraph(deps) {
         }
         return withWorkflowMemory(state, {
             verification: decision,
+            lastVerificationError: undefined,
             observations: (0, McpMultiAgentState_1.appendObservation)(state, {
                 phase: "verify",
                 agentName: "McpVerifierAgent",
@@ -210,6 +243,7 @@ function buildMcpMultiAgentGraph(deps) {
             goal: state.goal.goal,
             currentSubgoal: state.currentSubgoal,
             expectedOutcome: state.expectedOutcome,
+            visualTask: buildVisualTask(state),
             lastError: state.lastError,
             recentFailures: getRecentFailureMessages(state),
             recentObservations: state.observations
@@ -227,6 +261,8 @@ function buildMcpMultiAgentGraph(deps) {
             const message = "Vision analysis was requested after repeated failures, but no visual analysis could be produced.";
             return withWorkflowMemory(state, {
                 lastError: message,
+                lastObservationError: message,
+                lastFailedPhase: "vision",
                 observations: (0, McpMultiAgentState_1.appendObservation)(state, {
                     phase: "vision",
                     agentName: "VisionTool",
@@ -241,6 +277,7 @@ function buildMcpMultiAgentGraph(deps) {
         return withWorkflowMemory(state, {
             latestVisualAnalysis: analysis,
             lastError: state.lastError,
+            lastFailedPhase: undefined,
             observations: (0, McpMultiAgentState_1.appendObservation)(state, {
                 phase: "vision",
                 agentName: "VisionTool",
@@ -266,11 +303,11 @@ function buildMcpMultiAgentGraph(deps) {
         .addEdge(langgraph_1.START, "connectMcpNode")
         .addEdge("connectMcpNode", "navigateStartNode")
         .addEdge("navigateStartNode", "observeForPlanningNode")
-        .addEdge("observeForPlanningNode", "plannerNode")
+        .addConditionalEdges("observeForPlanningNode", routeAfterObserveForPlanning)
         .addConditionalEdges("plannerNode", routeAfterPlan)
         .addConditionalEdges("analystNode", routeAfterAnalyze)
         .addConditionalEdges("executeToolNode", routeAfterExecute)
-        .addEdge("observeAfterActionNode", "verifierNode")
+        .addConditionalEdges("observeAfterActionNode", routeAfterObserveAfterAction)
         .addConditionalEdges("verifierNode", routeAfterVerify)
         .addConditionalEdges("criticNode", routeAfterCritic)
         .addEdge("visionNode", "analystNode");
@@ -282,14 +319,54 @@ async function observe(state, deps, nextPhase) {
     }
     const decision = await deps.observer.decide(state);
     const result = await callMcpTool(state, deps, "observe", "McpObserverAgent", decision.toolName, normalizeObservationArgs(decision.toolName, decision.arguments, state), decision.reasoning);
+    const visualAnalysis = decision.toolName === "browser_take_screenshot" && !result.lastError
+        ? await deps.visionTool.analyzeCurrentPage(deps.mcp, {
+            goal: state.goal.goal,
+            currentSubgoal: state.currentSubgoal,
+            expectedOutcome: state.expectedOutcome,
+            visualTask: buildVisualTask(state),
+            lastError: state.lastError,
+            recentFailures: getRecentFailureMessages(state),
+            recentObservations: state.observations
+                .slice(-4)
+                .map((entry) => [
+                `[${entry.phase}] ${entry.agentName}`,
+                entry.toolName ? `tool=${entry.toolName}` : "",
+                entry.errorMessage ? `error=${entry.errorMessage}` : "",
+                entry.resultText ? `result=${entry.resultText.slice(0, 500)}` : "",
+            ]
+                .filter(Boolean)
+                .join(" ")),
+        })
+        : undefined;
+    const observations = visualAnalysis
+        ? [
+            ...result.observations,
+            {
+                index: result.observations.length + 1,
+                phase: "vision",
+                agentName: "VisionTool",
+                toolName: "browser_take_screenshot",
+                arguments: { trigger: "screenshot_observation_bridge" },
+                success: true,
+                resultText: JSON.stringify(visualAnalysis),
+                reasoning: "Structured vision analysis was attached after browser_take_screenshot so later agents can reason over the image content.",
+            },
+        ]
+        : result.observations;
     return withWorkflowMemory(state, {
         observationDecision: decision,
-        observations: result.observations,
+        observations,
+        latestVisualAnalysis: visualAnalysis ?? state.latestVisualAnalysis,
         toolCallCount: state.toolCallCount + 1,
         consecutiveSnapshots: decision.toolName === "browser_snapshot" && !result.lastError
             ? state.consecutiveSnapshots + 1
-            : 0,
+            : decision.toolName === "browser_take_screenshot" && !result.lastError
+                ? state.consecutiveSnapshots
+                : 0,
         lastError: result.lastError,
+        lastObservationError: result.lastError,
+        lastFailedPhase: result.lastError ? "observe" : undefined,
         retryCount: result.lastError ? state.retryCount + 1 : state.retryCount,
     });
 }
@@ -348,12 +425,27 @@ function routeAfterPlan(state) {
     }
     return "analystNode";
 }
+function routeAfterObserveForPlanning(state) {
+    if (state.status !== "running") {
+        return langgraph_1.END;
+    }
+    if (state.lastFailedPhase === "observe") {
+        return "criticNode";
+    }
+    if (state.consecutiveSnapshots >= 3) {
+        return "criticNode";
+    }
+    return "plannerNode";
+}
 function routeAfterAnalyze(state) {
     if (state.status !== "running") {
         return langgraph_1.END;
     }
-    if (state.lastError) {
+    if (state.lastFailedPhase === "analyze") {
         return "criticNode";
+    }
+    if (state.proposedToolCall?.status === "needsPerception") {
+        return "observeForPlanningNode";
     }
     return "executeToolNode";
 }
@@ -361,13 +453,25 @@ function routeAfterExecute(state) {
     if (state.status !== "running") {
         return langgraph_1.END;
     }
-    if (state.lastError) {
+    if (state.lastFailedPhase === "execute") {
         return "criticNode";
     }
     if (state.consecutiveSnapshots >= 2) {
         return "criticNode";
     }
     return "observeAfterActionNode";
+}
+function routeAfterObserveAfterAction(state) {
+    if (state.status !== "running") {
+        return langgraph_1.END;
+    }
+    if (state.lastFailedPhase === "observe") {
+        return "criticNode";
+    }
+    if (shouldVerifyAfterObservation(state)) {
+        return "verifierNode";
+    }
+    return "plannerNode";
 }
 function routeAfterVerify(state) {
     if (state.status === "passed" || state.status === "blocked" || state.status === "failed") {
@@ -390,7 +494,7 @@ function routeAfterCritic(state) {
         case "vision":
             return "visionNode";
         case "verify":
-            return "observeAfterActionNode";
+            return "verifierNode";
         case "plan":
             return "plannerNode";
         case "blocked":
@@ -398,6 +502,27 @@ function routeAfterCritic(state) {
         default:
             return "observeForPlanningNode";
     }
+}
+function shouldVerifyAfterObservation(state) {
+    const lastExecution = [...state.observations]
+        .reverse()
+        .find((entry) => entry.phase === "execute" && entry.toolName);
+    if (!lastExecution || !lastExecution.success) {
+        return false;
+    }
+    const actionText = [
+        lastExecution.toolName,
+        lastExecution.reasoning,
+        lastExecution.resultText,
+        JSON.stringify(lastExecution.arguments ?? {}),
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+    if (/\b(create|created|save|saved|submit|submitted|finish|finished|confirm|confirmed|complete|completed|done|apply|applied)\b/.test(actionText)) {
+        return true;
+    }
+    return false;
 }
 function getRecentFailureMessages(state) {
     return state.observations
@@ -410,6 +535,25 @@ function getRecentFailureMessages(state) {
         .filter(Boolean)
         .join(" ")
         .slice(0, 1000));
+}
+function buildVisualTask(state) {
+    const goal = state.goal.goal;
+    const subgoal = state.currentSubgoal || "No current subgoal.";
+    const expectedOutcome = state.expectedOutcome || "No expected outcome.";
+    const missing = state.verification?.missing?.slice(0, 5).join("; ");
+    const evidence = state.verification?.evidence?.slice(0, 5).join("; ");
+    return [
+        `Answer the current browser automation question visually.`,
+        `Overall goal: ${goal}`,
+        `Current subgoal: ${subgoal}`,
+        `Expected outcome: ${expectedOutcome}`,
+        evidence ? `Known evidence: ${evidence}` : "",
+        missing ? `Missing proof or next visual target: ${missing}` : "",
+        `If the task is verification, explicitly say whether the requested UI state is visible, not visible, or uncertain, and cite visible text, layout position, and color/state cues.`,
+        `If the task is action planning, identify the relevant visible component and the safest next action in natural language without inventing selectors or coordinates.`,
+    ]
+        .filter(Boolean)
+        .join("\n");
 }
 function withWorkflowMemory(state, update) {
     const nextState = {
@@ -425,7 +569,9 @@ function normalizeObservationArgs(toolName, args, state) {
     return toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args;
 }
 function normalizeSnapshotArgs(args = {}, state) {
-    const target = typeof args.target === "string" ? args.target : "";
+    const requestedTarget = typeof args.target === "string" ? args.target : "";
+    const forcedActiveSurfaceTarget = getActiveSurfaceSnapshotTarget(requestedTarget, state);
+    const target = forcedActiveSurfaceTarget || requestedTarget;
     const requestedDepth = typeof args.depth === "number" ? args.depth : undefined;
     const targetLooksLikeComplexSurface = /dialog|modal|popover|popper|menu|listbox|grid|table|datepicker|date|time|main/i.test(target);
     const recoveryContext = Boolean(state.lastError) ||
@@ -434,7 +580,40 @@ function normalizeSnapshotArgs(args = {}, state) {
     const minimumDepth = targetLooksLikeComplexSurface || recoveryContext ? 12 : 8;
     return {
         ...args,
+        target: target || undefined,
         boxes: true,
-        depth: Math.max(requestedDepth ?? minimumDepth, minimumDepth),
+        depth: Math.max(requestedDepth ?? (forcedActiveSurfaceTarget ? 16 : minimumDepth), forcedActiveSurfaceTarget ? 16 : minimumDepth),
     };
+}
+function getActiveSurfaceSnapshotTarget(requestedTarget, state) {
+    if (requestedTarget.trim()) {
+        return undefined;
+    }
+    const lastSnapshotFailure = [...state.observations]
+        .reverse()
+        .find((entry) => entry.toolName === "browser_snapshot" && !entry.success);
+    const failedSnapshotArgs = lastSnapshotFailure?.arguments ?? {};
+    const failedSnapshotTarget = typeof failedSnapshotArgs.target === "string" ? failedSnapshotArgs.target : "";
+    if (failedSnapshotTarget &&
+        /role=|aria-modal|dialog|menu|listbox|tree|tooltip/i.test(failedSnapshotTarget)) {
+        return undefined;
+    }
+    const evidence = [
+        state.lastError,
+        state.lastActionError,
+        state.lastObservationError,
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+    if (!evidence) {
+        return undefined;
+    }
+    if (/intercepting pointer events|pointer events|backdrop|aria-modal|modal is open|dialog is open|blocked by (a )?(dialog|modal|overlay)/.test(evidence)) {
+        return "[role=\"dialog\"], [aria-modal=\"true\"], dialog";
+    }
+    if (/blocked by (a )?(menu|listbox|popover|dropdown)|popover is open|menu is open|listbox is open/.test(evidence)) {
+        return "[role=\"menu\"], [role=\"listbox\"], [role=\"tree\"], [role=\"tooltip\"], [role=\"dialog\"]";
+    }
+    return undefined;
 }

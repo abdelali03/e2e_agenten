@@ -63,6 +63,10 @@ class VisionTool {
             "Expected outcome:",
             input.expectedOutcome || "Not specified",
             "",
+            "Specific visual task:",
+            input.visualTask ||
+                "Describe the current visible UI and assess what is needed for the browser workflow.",
+            "",
             "Last error:",
             input.lastError || "None",
             "",
@@ -95,6 +99,10 @@ class VisionTool {
                         "",
                         "Expected outcome:",
                         input.expectedOutcome || "Not specified",
+                        "",
+                        "Specific visual task:",
+                        input.visualTask ||
+                            "Describe the current visible UI and assess what is needed for the browser workflow.",
                         "",
                         "Last error:",
                         input.lastError || "None",

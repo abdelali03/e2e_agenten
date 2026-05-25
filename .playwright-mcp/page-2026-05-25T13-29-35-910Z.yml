@@ -1,0 +1,324 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button [ref=e5] [cursor=pointer]:
+        - img [ref=e6]
+      - link "Logo" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+      - region "scrollable content" [ref=e18]:
+        - generic [ref=e19]:
+          - navigation [ref=e20]:
+            - list [ref=e21]:
+              - listitem [ref=e22]:
+                - generic [ref=e23] [cursor=pointer]:
+                  - img [ref=e24]
+                  - text: Overview
+              - listitem [ref=e72]:
+                - generic [ref=e73] [cursor=pointer]:
+                  - img [ref=e74]
+                  - text: Management
+                - list [ref=e79]:
+                  - listitem [ref=e80]:
+                    - button "User" [ref=e81] [cursor=pointer]:
+                      - generic [ref=e85]: User
+                      - img [ref=e86]
+                  - listitem [ref=e88]:
+                    - button "Product" [ref=e89] [cursor=pointer]:
+                      - generic [ref=e93]: Product
+                      - img [ref=e94]
+                  - listitem [ref=e96]:
+                    - button "Order" [ref=e97] [cursor=pointer]:
+                      - generic [ref=e101]: Order
+                      - img [ref=e102]
+                  - listitem [ref=e104]:
+                    - button "Invoice" [ref=e105] [cursor=pointer]:
+                      - generic [ref=e109]: Invoice
+                      - img [ref=e110]
+                  - listitem [ref=e112]:
+                    - button "Blog" [ref=e113] [cursor=pointer]:
+                      - generic [ref=e117]: Blog
+                      - img [ref=e118]
+                  - listitem [ref=e120]:
+                    - button "Job" [ref=e121] [cursor=pointer]:
+                      - generic [ref=e125]: Job
+                      - img [ref=e126]
+                  - listitem [ref=e128]:
+                    - button "Tour" [ref=e129] [cursor=pointer]:
+                      - generic [ref=e133]: Tour
+                      - img [ref=e134]
+                  - listitem [ref=e136]:
+                    - link "File manager" [ref=e137] [cursor=pointer]:
+                      - /url: /dashboard/file-manager
+                      - generic [ref=e141]: File manager
+                  - listitem [ref=e142]:
+                    - link "Mail" [ref=e143] [cursor=pointer]:
+                      - /url: /dashboard/mail
+                      - generic [ref=e147]: Mail
+                      - generic [ref=e149]: "+32"
+                  - listitem [ref=e150]:
+                    - link "Chat" [ref=e151] [cursor=pointer]:
+                      - /url: /dashboard/chat
+                      - generic [ref=e155]: Chat
+                  - listitem [ref=e156]:
+                    - link "Calendar" [active] [ref=e157] [cursor=pointer]:
+                      - /url: /dashboard/calendar
+                      - generic [ref=e161]: Calendar
+                  - listitem [ref=e162]:
+                    - link "Kanban" [ref=e163] [cursor=pointer]:
+                      - /url: /dashboard/kanban
+                      - generic [ref=e167]: Kanban
+              - listitem [ref=e168]:
+                - generic [ref=e169] [cursor=pointer]:
+                  - img [ref=e170]
+                  - text: Misc
+                - list [ref=e175]:
+                  - listitem [ref=e176]:
+                    - link "Permission" [ref=e177] [cursor=pointer]:
+                      - /url: /dashboard/permission
+                      - generic [ref=e180]:
+                        - generic [ref=e181]: Permission
+                        - generic "Only admin can see this item." [ref=e182]
+                  - listitem [ref=e183]:
+                    - button "Level" [ref=e184] [cursor=pointer]:
+                      - generic [ref=e188]: Level
+                      - img [ref=e189]
+                  - listitem [ref=e191]:
+                    - link "Disabled":
+                      - /url: /dashboard/calendar#disabled
+                      - generic:
+                        - generic: Disabled
+                  - listitem [ref=e192]:
+                    - link "Label" [ref=e193] [cursor=pointer]:
+                      - /url: /dashboard/calendar#label
+                      - generic [ref=e197]: Label
+                      - generic [ref=e199]:
+                        - img [ref=e201]
+                        - text: NEW
+                  - listitem [ref=e204]:
+                    - link "Caption" [ref=e205] [cursor=pointer]:
+                      - /url: /dashboard/calendar#caption
+                      - generic [ref=e208]:
+                        - generic [ref=e209]: Caption
+                        - generic "Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien." [ref=e210]
+                  - listitem [ref=e211]:
+                    - link "Params" [ref=e212] [cursor=pointer]:
+                      - /url: /dashboard/params?id=e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1
+                      - generic [ref=e216]: Params
+                  - listitem [ref=e217]:
+                    - link "Subpaths" [ref=e218] [cursor=pointer]:
+                      - /url: /dashboard/subpaths
+                      - generic [ref=e222]: Subpaths
+                  - listitem [ref=e223]:
+                    - link "External link" [ref=e224] [cursor=pointer]:
+                      - /url: https://www.google.com/
+                      - generic [ref=e228]: External link
+                      - img [ref=e230]
+                  - listitem [ref=e233]:
+                    - link "Blank" [ref=e234] [cursor=pointer]:
+                      - /url: /dashboard/blank
+                      - generic [ref=e238]: Blank
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - img "Jaydon Frankie" [ref=e243]
+              - generic [ref=e244]: Free
+            - generic [ref=e245]:
+              - heading "Jaydon Frankie" [level=6] [ref=e246]
+              - paragraph [ref=e247]: demo@minimals.cc
+            - link "Upgrade to Pro" [ref=e248] [cursor=pointer]:
+              - /url: https://mui.com/store/items/minimal-dashboard/
+    - generic [ref=e249]:
+      - banner [ref=e250]:
+        - generic [ref=e251]:
+          - button "Team 1 Team 1 Free" [ref=e252] [cursor=pointer]:
+            - img "Team 1" [ref=e253]
+            - generic [ref=e254]: Team 1
+            - generic [ref=e255]: Free
+            - img [ref=e256]
+          - generic [ref=e258]:
+            - generic [ref=e259] [cursor=pointer]:
+              - img [ref=e261]
+              - generic [ref=e263]: ⌘K
+            - button "Languages button" [ref=e264] [cursor=pointer]:
+              - img "GB" [ref=e266]
+            - button "Notifications button" [ref=e267] [cursor=pointer]:
+              - generic [ref=e268]:
+                - img [ref=e269]
+                - generic [ref=e272]: "4"
+            - button "Contacts button" [ref=e273] [cursor=pointer]:
+              - img [ref=e274]
+            - button "Settings button" [ref=e279] [cursor=pointer]:
+              - img [ref=e281]
+            - button "Account button" [ref=e284] [cursor=pointer]:
+              - generic [ref=e285]:
+                - img [ref=e287]
+                - img [ref=e291]
+                - img "Jaydon Frankie" [ref=e295]
+      - main [ref=e296]:
+        - generic [ref=e1025]:
+          - generic [ref=e1026]:
+            - heading "Calendar" [level=4] [ref=e1027]
+            - button "Add event" [ref=e1028] [cursor=pointer]:
+              - img [ref=e1030]
+              - text: Add event
+          - generic [ref=e1035]:
+            - generic [ref=e1036]:
+              - group "calendar view" [ref=e1037]:
+                - button "Month view" [pressed] [ref=e1038] [cursor=pointer]:
+                  - img [ref=e1039]
+                - button "Week view" [ref=e1043] [cursor=pointer]:
+                  - img [ref=e1044]
+                - button "Day view" [ref=e1048] [cursor=pointer]:
+                  - img [ref=e1049]
+                - button "Agenda view" [ref=e1053] [cursor=pointer]:
+                  - img [ref=e1054]
+              - generic [ref=e1056]:
+                - button [ref=e1057] [cursor=pointer]:
+                  - img [ref=e1058]
+                - generic [ref=e1060]: May 2026
+                - button [ref=e1061] [cursor=pointer]:
+                  - img [ref=e1062]
+              - generic [ref=e1064]:
+                - button "Today" [ref=e1065] [cursor=pointer]
+                - button [ref=e1066] [cursor=pointer]:
+                  - img [ref=e1068]
+            - grid [ref=e1073]:
+              - rowgroup [ref=e1074]:
+                - row "Monday Tuesday Wednesday Thursday Friday Saturday Sunday" [ref=e1078]:
+                  - columnheader "Monday" [ref=e1079]:
+                    - generic "Monday" [ref=e1081]: Mon
+                  - columnheader "Tuesday" [ref=e1082]:
+                    - generic "Tuesday" [ref=e1084]: Tue
+                  - columnheader "Wednesday" [ref=e1085]:
+                    - generic "Wednesday" [ref=e1087]: Wed
+                  - columnheader "Thursday" [ref=e1088]:
+                    - generic "Thursday" [ref=e1090]: Thu
+                  - columnheader "Friday" [ref=e1091]:
+                    - generic "Friday" [ref=e1093]: Fri
+                  - columnheader "Saturday" [ref=e1094]:
+                    - generic "Saturday" [ref=e1096]: Sat
+                  - columnheader "Sunday" [ref=e1097]:
+                    - generic "Sunday" [ref=e1099]: Sun
+              - rowgroup [ref=e1100]:
+                - generic [ref=e1103]:
+                  - row "April 27, 2026 April 28, 2026 April 29, 2026 April 30, 2026 May 1, 2026 May 2, 2026 May 3, 2026" [ref=e1105]:
+                    - gridcell "April 27, 2026" [ref=e1106]:
+                      - generic "April 27, 2026" [ref=e1109]: "27"
+                    - gridcell "April 28, 2026" [ref=e1111]:
+                      - generic "April 28, 2026" [ref=e1114]: "28"
+                    - gridcell "April 29, 2026" [ref=e1116]:
+                      - generic "April 29, 2026" [ref=e1119]: "29"
+                    - gridcell "April 30, 2026" [ref=e1121]:
+                      - generic "April 30, 2026" [ref=e1124]: "30"
+                    - gridcell "May 1, 2026" [ref=e1126]:
+                      - generic "May 1, 2026" [ref=e1129]: "1"
+                    - gridcell "May 2, 2026" [ref=e1131]:
+                      - generic "May 2, 2026" [ref=e1134]: "2"
+                    - gridcell "May 3, 2026" [ref=e1138]:
+                      - generic "May 3, 2026" [ref=e1141]: "3"
+                  - row "May 4, 2026 May 5, 2026 May 6, 2026 May 7, 2026 May 8, 2026 May 9, 2026 May 10, 2026" [ref=e1143]:
+                    - gridcell "May 4, 2026" [ref=e1144]:
+                      - generic "May 4, 2026" [ref=e1147]: "4"
+                    - gridcell "May 5, 2026" [ref=e1149]:
+                      - generic "May 5, 2026" [ref=e1152]: "5"
+                    - gridcell "May 6, 2026" [ref=e1154]:
+                      - generic "May 6, 2026" [ref=e1157]: "6"
+                    - gridcell "May 7, 2026" [ref=e1159]:
+                      - generic "May 7, 2026" [ref=e1162]: "7"
+                    - gridcell "May 8, 2026" [ref=e1164]:
+                      - generic "May 8, 2026" [ref=e1167]: "8"
+                    - gridcell "May 9, 2026" [ref=e1169]:
+                      - generic "May 9, 2026" [ref=e1172]: "9"
+                    - gridcell "May 10, 2026" [ref=e1176]:
+                      - generic "May 10, 2026" [ref=e1179]: "10"
+                  - row "May 11, 2026 May 12, 2026 May 13, 2026 May 14, 2026 May 15, 2026 May 16, 2026 May 17, 2026" [ref=e1181]:
+                    - gridcell "May 11, 2026" [ref=e1182]:
+                      - generic "May 11, 2026" [ref=e1185]: "11"
+                    - gridcell "May 12, 2026" [ref=e1187]:
+                      - generic "May 12, 2026" [ref=e1190]: "12"
+                    - gridcell "May 13, 2026" [ref=e1192]:
+                      - generic [ref=e1193]:
+                        - generic "May 13, 2026" [ref=e1195]: "13"
+                        - generic [ref=e1200] [cursor=pointer]:
+                          - generic [ref=e1201]: 11:59a
+                          - generic [ref=e1203]: Summer Music Festival
+                    - gridcell "May 14, 2026" [ref=e1204]:
+                      - generic "May 14, 2026" [ref=e1207]: "14"
+                    - gridcell "May 15, 2026" [ref=e1209]:
+                      - generic "May 15, 2026" [ref=e1212]: "15"
+                    - gridcell "May 16, 2026" [ref=e1214]:
+                      - generic "May 16, 2026" [ref=e1217]: "16"
+                    - gridcell "May 17, 2026" [ref=e1221]:
+                      - generic "May 17, 2026" [ref=e1224]: "17"
+                  - row "May 18, 2026 May 19, 2026 May 20, 2026 May 21, 2026 May 22, 2026 May 23, 2026 May 24, 2026" [ref=e1226]:
+                    - gridcell "May 18, 2026" [ref=e1227]:
+                      - generic "May 18, 2026" [ref=e1230]: "18"
+                    - gridcell "May 19, 2026" [ref=e1232]:
+                      - generic [ref=e1233]:
+                        - generic "May 19, 2026" [ref=e1235]: "19"
+                        - generic [ref=e1240] [cursor=pointer]:
+                          - generic [ref=e1241]: 11:59a
+                          - generic [ref=e1243]: Tech Innovators Conference
+                    - gridcell "May 20, 2026" [ref=e1244]:
+                      - generic "May 20, 2026" [ref=e1247]: "20"
+                    - gridcell "May 21, 2026" [ref=e1249]:
+                      - generic "May 21, 2026" [ref=e1252]: "21"
+                    - gridcell "May 22, 2026" [ref=e1254]:
+                      - generic [ref=e1255]:
+                        - generic "May 22, 2026" [ref=e1257]: "22"
+                        - generic [ref=e1264] [cursor=pointer]: Charity Gala Dinner
+                    - gridcell "May 23, 2026" [ref=e1265]:
+                      - generic "May 23, 2026" [ref=e1268]: "23"
+                    - gridcell "May 24, 2026" [ref=e1272]:
+                      - generic "May 24, 2026" [ref=e1275]: "24"
+                  - row "May 25, 2026 May 26, 2026 May 27, 2026 May 28, 2026 May 29, 2026 May 30, 2026 May 31, 2026" [ref=e1277]:
+                    - gridcell "May 25, 2026" [ref=e1278]:
+                      - generic [ref=e1279]:
+                        - generic "May 25, 2026" [ref=e1281]: "25"
+                        - generic [ref=e1286] [cursor=pointer]:
+                          - generic [ref=e1287]: 1:29p
+                          - generic [ref=e1289]: Spring Art Exhibition
+                    - gridcell "May 26, 2026" [ref=e1290]:
+                      - generic "May 26, 2026" [ref=e1293]: "26"
+                    - gridcell "May 27, 2026" [ref=e1295]:
+                      - generic [ref=e1296]:
+                        - generic "May 27, 2026" [ref=e1298]: "27"
+                        - generic [ref=e1299]:
+                          - generic [ref=e1303] [cursor=pointer]:
+                            - generic [ref=e1304]: 4:44p
+                            - generic [ref=e1306]: Corporate Training Workshop
+                          - generic [ref=e1310] [cursor=pointer]:
+                            - generic [ref=e1311]: 6:44p
+                            - generic [ref=e1313]: Community Health Fair
+                          - generic [ref=e1317] [cursor=pointer]:
+                            - generic [ref=e1318]: 8:44p
+                            - generic [ref=e1320]: Startup Pitch Night
+                          - generic "Show 1 more event" [ref=e1322] [cursor=pointer]: +1 more
+                    - gridcell "May 28, 2026" [ref=e1323]:
+                      - generic "May 28, 2026" [ref=e1326]: "28"
+                    - gridcell "May 29, 2026" [ref=e1328]:
+                      - generic "May 29, 2026" [ref=e1331]: "29"
+                    - gridcell "May 30, 2026" [ref=e1333]:
+                      - generic "May 30, 2026" [ref=e1336]: "30"
+                    - gridcell "May 31, 2026" [ref=e1340]:
+                      - generic [ref=e1341]:
+                        - generic "May 31, 2026" [ref=e1343]: "31"
+                        - generic [ref=e1348] [cursor=pointer]:
+                          - generic [ref=e1349]: 3:29p
+                          - generic [ref=e1351]: Book Launch Event
+                  - row "June 1, 2026 June 2, 2026 June 3, 2026 June 4, 2026 June 5, 2026 June 6, 2026 June 7, 2026" [ref=e1352]:
+                    - gridcell "June 1, 2026" [ref=e1353]:
+                      - generic "June 1, 2026" [ref=e1356]: "1"
+                    - gridcell "June 2, 2026" [ref=e1358]:
+                      - generic "June 2, 2026" [ref=e1361]: "2"
+                    - gridcell "June 3, 2026" [ref=e1363]:
+                      - generic "June 3, 2026" [ref=e1366]: "3"
+                    - gridcell "June 4, 2026" [ref=e1368]:
+                      - generic "June 4, 2026" [ref=e1371]: "4"
+                    - gridcell "June 5, 2026" [ref=e1373]:
+                      - generic "June 5, 2026" [ref=e1376]: "5"
+                    - gridcell "June 6, 2026" [ref=e1378]:
+                      - generic "June 6, 2026" [ref=e1381]: "6"
+                    - gridcell "June 7, 2026" [ref=e1385]:
+                      - generic "June 7, 2026" [ref=e1388]: "7"
+  - region "Notifications alt+T"

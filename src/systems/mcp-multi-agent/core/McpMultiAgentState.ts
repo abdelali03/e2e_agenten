@@ -5,10 +5,15 @@ import type { VisionToolResult } from "../../../utils/VisionTool";
 export type McpMultiAgentStatus = "running" | "passed" | "failed" | "blocked";
 
 export interface McpToolCallProposal {
+  status?: "callTool" | "needsPerception";
   toolName: string;
   arguments: Record<string, unknown>;
   elementDescription?: string;
   reasoning: string;
+  perceptionRequest?: {
+    scopeHint?: string;
+    reasoning?: string;
+  };
 }
 
 export interface McpObservationEntry {
@@ -74,6 +79,11 @@ export interface McpMultiAgentState {
   verification?: McpVerificationDecision;
   latestVisualAnalysis?: VisionToolResult;
   workflowMemory?: string;
+  lastFailedPhase?: "observe" | "analyze" | "execute" | "verify" | "vision";
+  lastActionError?: string;
+  lastObservationError?: string;
+  lastAnalysisError?: string;
+  lastVerificationError?: string;
   lastError?: string;
   finalSummary?: string;
   iteration: number;

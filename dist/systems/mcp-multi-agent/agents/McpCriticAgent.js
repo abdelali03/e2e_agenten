@@ -44,12 +44,12 @@ class McpCriticAgent {
         return decision;
     }
     getForcedDecision(state) {
-        if (state.consecutiveSnapshots >= 2 &&
+        if (state.consecutiveSnapshots >= 3 &&
             !state.latestVisualAnalysis &&
             !this.recentlyTriedVision(state)) {
             return {
                 route: "vision",
-                reasoning: "The workflow observed repeatedly without progress. Use screenshot vision to understand the visible UI state before retrying.",
+                reasoning: "The workflow observed repeatedly without exposing the needed region. Use screenshot vision to understand the visible UI state before retrying.",
             };
         }
         if (state.consecutiveSnapshots >= 3) {
@@ -92,6 +92,17 @@ class McpCriticAgent {
             ``,
             `## Last Error`,
             state.lastError ?? "None",
+            ``,
+            `## Last Failed Phase`,
+            state.lastFailedPhase ?? "None",
+            ``,
+            `## Phase Errors`,
+            JSON.stringify({
+                action: state.lastActionError,
+                observation: state.lastObservationError,
+                analysis: state.lastAnalysisError,
+                verification: state.lastVerificationError,
+            }, null, 2),
             ``,
             `## Durable Workflow Memory`,
             state.workflowMemory ?? "None",

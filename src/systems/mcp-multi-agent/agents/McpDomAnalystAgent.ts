@@ -24,7 +24,7 @@ Rules:
 - For a single text entry, use browser_type or browser_fill_form depending on tool schema and snapshot.
 - For selects, use browser_select_option.
 - For keyboard-only widgets, use browser_press_key.
-- If no actionable snapshot exists, request browser_snapshot.
+- Do not choose observation tools such as browser_snapshot, browser_take_screenshot, console, or network tools. If more perception is needed, return status "needsPerception".
 - If a visual analysis is present, use it to understand visible components, layout, blockers, validation errors, and custom widgets.
 - Do not invent element refs from visual analysis. Use actual refs from browser_snapshot for clicks/fills.
 - Durable Workflow Memory summarizes successful previous actions and goal progress across the full run. Treat it as source of truth unless a later observation clearly disproves it.
@@ -35,9 +35,11 @@ Rules:
 
 Return ONLY valid JSON:
 {
+  "status": "callTool" | "needsPerception",
   "toolName": "browser_click",
   "arguments": { "element": "Anmelden button", "target": "e19" },
   "elementDescription": "Anmelden button",
+  "perceptionRequest": { "scopeHint": "navigation|main|current surface|form-like area", "reasoning": "only when status is needsPerception" },
   "reasoning": "brief reason grounded in snapshot and subgoal"
 }`;
 
@@ -105,16 +107,37 @@ export class McpDomAnalystAgent {
     raw: Partial<McpToolCallProposal>,
     state: McpMultiAgentState
   ): McpToolCallProposal {
-    const fallbackTool = toolExists(state.tools, "browser_snapshot")
-      ? "browser_snapshot"
-      : state.tools[0]?.name;
-    const toolName = raw.toolName?.trim() || fallbackTool;
+    const observationTools = new Set([
+      "browser_snapshot",
+      "browser_take_screenshot",
+      "browser_console_messages",
+      "browser_network_requests",
+      "browser_network_request",
+    ]);
+    const rawToolName = raw.toolName?.trim();
+
+    if (raw.status === "needsPerception" || (rawToolName && observationTools.has(rawToolName))) {
+      return {
+        status: "needsPerception",
+        toolName: "browser_snapshot",
+        arguments:
+          raw.arguments && typeof raw.arguments === "object" ? raw.arguments : {},
+        elementDescription: raw.elementDescription,
+        perceptionRequest: raw.perceptionRequest,
+        reasoning:
+          raw.reasoning?.trim() ||
+          "DOM analyst needs more perception before selecting an action.",
+      };
+    }
+
+    const toolName = rawToolName || "";
 
     if (!toolName || !toolExists(state.tools, toolName)) {
       throw new Error(`DOM analyst produced unavailable MCP tool: ${toolName}`);
     }
 
     return {
+      status: "callTool",
       toolName,
       arguments:
         raw.arguments && typeof raw.arguments === "object" ? raw.arguments : {},

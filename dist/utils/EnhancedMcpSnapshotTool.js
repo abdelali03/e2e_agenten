@@ -103,10 +103,23 @@ class EnhancedMcpSnapshotTool {
     }
     buildEnhancedText(snapshotText, context, contextError) {
         const sections = [
+            "=== MCP ACCESSIBILITY SNAPSHOT WITH BOXES ===",
+            snapshotText.slice(0, 36_000),
+            "",
             "=== ENHANCED UI CONTEXT ===",
         ];
         if (context) {
-            sections.push(JSON.stringify(context, null, 2));
+            sections.push("", "=== UI ACTIVE SURFACE SUMMARY ===", JSON.stringify(this.buildSurfaceSummary(context), null, 2));
+            logger.info("Enhanced UI context summary", {
+                dialogs: context.dialogs.length,
+                overlays: context.overlays.length,
+                fields: context.fields.length,
+                interactiveElements: context.interactiveElements.length,
+                menusAndPopups: context.menusAndPopups.length,
+                errorsAndAlerts: context.errorsAndAlerts.length,
+                componentHints: context.componentHints.slice(0, 8),
+            });
+            sections.push("", "=== FULL ENHANCED UI CONTEXT ===", JSON.stringify(context, null, 2).slice(0, 18_000));
         }
         else {
             sections.push(JSON.stringify({
@@ -114,8 +127,28 @@ class EnhancedMcpSnapshotTool {
                 error: contextError || "Enhanced UI context unavailable.",
             }, null, 2));
         }
-        sections.push("", "=== MCP ACCESSIBILITY SNAPSHOT WITH BOXES ===", snapshotText, "", "=== USAGE NOTES ===", "- Use MCP refs from the accessibility snapshot for browser_click, browser_fill_form, browser_type, and related actions.", "- Use enhanced UI context to understand visible text, layout, dialogs, overlays, active/focused elements, validation errors, forms, custom widgets, and accessibility gaps.", "- If enhanced context shows visible UI that the MCP snapshot does not expose as refs, do not invent refs. Prefer waiting, keyboard navigation, a fresh snapshot, or another accessible path.");
-        return sections.join("\n").slice(0, 45_000);
+        sections.push("", "=== USAGE NOTES ===", "- Use MCP refs from the accessibility snapshot for browser_click, browser_fill_form, browser_type, and related actions.", "- Use enhanced UI context to understand visible text, layout, dialogs, overlays, active/focused elements, validation errors, forms, custom widgets, and accessibility gaps.", "- If enhanced context shows visible UI that the MCP snapshot does not expose as refs, do not invent refs. Prefer waiting, keyboard navigation, a fresh snapshot, or another accessible path.");
+        return sections.join("\n").slice(0, 60_000);
+    }
+    buildSurfaceSummary(context) {
+        const activeSurfaces = [
+            ...context.dialogs.map((item) => ({ kind: "dialog", ...item })),
+            ...context.overlays.map((item) => ({ kind: "overlay", ...item })),
+            ...context.menusAndPopups.map((item) => ({ kind: "menuOrPopup", ...item })),
+        ].slice(0, 12);
+        return {
+            url: context.url,
+            title: context.title,
+            activeElement: context.activeElement,
+            activeSurfaces,
+            fields: context.fields.slice(0, 18),
+            primaryControls: context.interactiveElements.slice(0, 24),
+            errorsAndAlerts: context.errorsAndAlerts.slice(0, 10),
+            tablesAndLists: context.tablesAndLists.slice(0, 8),
+            componentHints: context.componentHints,
+            accessibilityWarnings: context.accessibilityWarnings,
+            note: "This summary is perception only. Use MCP refs from the accessibility snapshot for execution; if an active surface exists, interact inside it before background controls.",
+        };
     }
     getExtractionCode() {
         return `async (page) => {

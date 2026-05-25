@@ -9,6 +9,7 @@ export interface VisionToolInput {
   goal: string;
   currentSubgoal?: string;
   expectedOutcome?: string;
+  visualTask?: string;
   lastError?: string;
   recentFailures: string[];
   recentObservations?: string[];
@@ -112,6 +113,10 @@ export class VisionTool {
       "Expected outcome:",
       input.expectedOutcome || "Not specified",
       "",
+      "Specific visual task:",
+      input.visualTask ||
+        "Describe the current visible UI and assess what is needed for the browser workflow.",
+      "",
       "Last error:",
       input.lastError || "None",
       "",
@@ -150,6 +155,10 @@ export class VisionTool {
               "",
               "Expected outcome:",
               input.expectedOutcome || "Not specified",
+              "",
+              "Specific visual task:",
+              input.visualTask ||
+                "Describe the current visible UI and assess what is needed for the browser workflow.",
               "",
               "Last error:",
               input.lastError || "None",

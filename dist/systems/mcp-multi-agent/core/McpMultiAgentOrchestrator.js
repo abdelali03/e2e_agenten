@@ -48,6 +48,11 @@ class McpMultiAgentOrchestrator {
             consecutiveSnapshots: 0,
             maxToolCalls: this.config.maxToolCalls,
             workflowMemory: undefined,
+            lastFailedPhase: undefined,
+            lastActionError: undefined,
+            lastObservationError: undefined,
+            lastAnalysisError: undefined,
+            lastVerificationError: undefined,
         };
         try {
             const finalState = (await graph.invoke(initialState, {
