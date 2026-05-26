@@ -19,24 +19,31 @@ class VisionTool {
                 logger.warn("VisionTool could not capture a screenshot image from MCP.");
                 return undefined;
             }
-            const visualDescription = await this.vision.describeScreenshot({
-                screenshotBase64: screenshot.data,
-                prompt: this.buildVisionPrompt(input),
-            });
-            if (!visualDescription?.trim()) {
-                logger.warn("VisionTool received no visual description.");
-                return undefined;
-            }
-            const analysis = await this.structureAnalysis(input, visualDescription);
-            if (analysis) {
-                this.logStructuredAnalysis(analysis);
-            }
-            return analysis;
+            return await this.analyzeScreenshotBase64(screenshot.data, input);
         }
         catch (error) {
             logger.warn("VisionTool failed:", error instanceof Error ? error.message : String(error));
             return undefined;
         }
+    }
+    async analyzeScreenshotBase64(screenshotBase64, input) {
+        if (process.env.MINIMAX_VISION_ENABLED !== "true") {
+            logger.debug("VisionTool skipped. Set MINIMAX_VISION_ENABLED=true to enable it.");
+            return undefined;
+        }
+        const visualDescription = await this.vision.describeScreenshot({
+            screenshotBase64,
+            prompt: this.buildVisionPrompt(input),
+        });
+        if (!visualDescription?.trim()) {
+            logger.warn("VisionTool received no visual description.");
+            return undefined;
+        }
+        const analysis = await this.structureAnalysis(input, visualDescription);
+        if (analysis) {
+            this.logStructuredAnalysis(analysis);
+        }
+        return analysis;
     }
     buildVisionPrompt(input) {
         return [

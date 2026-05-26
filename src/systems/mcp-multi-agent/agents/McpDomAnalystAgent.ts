@@ -18,15 +18,20 @@ Given the current subgoal and latest MCP snapshot/observations, choose the exact
 Rules:
 - Use real element refs from browser_snapshot, such as e12 or e63.
 - browser_snapshot observations are enhanced with generic UI context: visible text, active element, dialogs, overlays, forms, fields, menus, tables, validation errors, component hints, layout, and accessibility warnings.
-- Use enhanced UI context to understand page state and custom components, but use MCP snapshot refs for executable targets.
+- Enhanced snapshots include a GENERIC PAGE MAP. Use it to reason about active surfaces and relevant regions before asking for more perception.
+- Use enhanced UI context to understand page state and custom components. Use MCP snapshot refs first; if a scene graph candidate has no MCP ref but has runtimeSelector, you may use that runtimeSelector as an immediate live-session fallback target.
+- runtimeSelector/data-ai-scene-id is transient observer metadata. Use it only for live automation recovery, never as a stable generated-test locator.
 - For buttons/links, usually use browser_click with {"element":"label", "target":"eNN"}.
 - For multiple visible form fields, prefer browser_fill_form with fields containing target/name/type/value.
 - For a single text entry, use browser_type or browser_fill_form depending on tool schema and snapshot.
+- For dates/times, prefer directly editable textbox/spinbutton/date input fields when visible. Open calendar pickers only when no direct editable field/ref/runtimeSelector is available.
 - For selects, use browser_select_option.
 - For keyboard-only widgets, use browser_press_key.
 - Do not choose observation tools such as browser_snapshot, browser_take_screenshot, console, or network tools. If more perception is needed, return status "needsPerception".
+- Do not solve missing context by repeatedly asking for deeper snapshots. If recent observations already tried to expose the same region, either act from the latest real MCP refs or request a different modality/scope in perceptionRequest.
+- Never infer MCP refs by arithmetic or sequence patterns. Use only refs explicitly visible in the latest MCP accessibility snapshot.
 - If a visual analysis is present, use it to understand visible components, layout, blockers, validation errors, and custom widgets.
-- Do not invent element refs from visual analysis. Use actual refs from browser_snapshot for clicks/fills.
+- Do not invent element refs from visual analysis. Use actual refs from browser_snapshot or runtimeSelector candidates from the enhanced scene graph for clicks/fills.
 - Durable Workflow Memory summarizes successful previous actions and goal progress across the full run. Treat it as source of truth unless a later observation clearly disproves it.
 - Do not reset completed substeps because a low-confidence visual analysis is incomplete.
 - If a dialog/overlay blocks a background click, interact with the visible dialog/overlay instead of closing it by default.

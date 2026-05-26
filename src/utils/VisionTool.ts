@@ -63,22 +63,7 @@ export class VisionTool {
         return undefined;
       }
 
-      const visualDescription = await this.vision.describeScreenshot({
-        screenshotBase64: screenshot.data,
-        prompt: this.buildVisionPrompt(input),
-      });
-
-      if (!visualDescription?.trim()) {
-        logger.warn("VisionTool received no visual description.");
-        return undefined;
-      }
-
-      const analysis = await this.structureAnalysis(input, visualDescription);
-      if (analysis) {
-        this.logStructuredAnalysis(analysis);
-      }
-
-      return analysis;
+      return await this.analyzeScreenshotBase64(screenshot.data, input);
     } catch (error) {
       logger.warn(
         "VisionTool failed:",
@@ -86,6 +71,33 @@ export class VisionTool {
       );
       return undefined;
     }
+  }
+
+  public async analyzeScreenshotBase64(
+    screenshotBase64: string,
+    input: VisionToolInput
+  ): Promise<VisionToolResult | undefined> {
+    if (process.env.MINIMAX_VISION_ENABLED !== "true") {
+      logger.debug("VisionTool skipped. Set MINIMAX_VISION_ENABLED=true to enable it.");
+      return undefined;
+    }
+
+    const visualDescription = await this.vision.describeScreenshot({
+      screenshotBase64,
+      prompt: this.buildVisionPrompt(input),
+    });
+
+    if (!visualDescription?.trim()) {
+      logger.warn("VisionTool received no visual description.");
+      return undefined;
+    }
+
+    const analysis = await this.structureAnalysis(input, visualDescription);
+    if (analysis) {
+      this.logStructuredAnalysis(analysis);
+    }
+
+    return analysis;
   }
 
   private buildVisionPrompt(input: VisionToolInput): string {

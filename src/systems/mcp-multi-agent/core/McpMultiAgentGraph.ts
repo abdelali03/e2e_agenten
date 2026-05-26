@@ -10,7 +10,7 @@ import { VisionTool } from "../../../utils/VisionTool";
 import { EnhancedMcpSnapshotTool } from "../../../utils/EnhancedMcpSnapshotTool";
 import { validateMcpActionTarget } from "../../../utils/SelectorGuard";
 import type { GoalInput } from "../../../core/types";
-import type { McpToolInfo } from "../../../utils/PlaywrightMcpClient";
+import type { McpImageResult, McpToolInfo } from "../../../utils/PlaywrightMcpClient";
 import {
   appendObservation,
   buildWorkflowMemory,
@@ -360,6 +360,7 @@ export function buildMcpMultiAgentGraph(deps: McpMultiAgentGraphDeps) {
       latestVisualAnalysis: analysis,
       lastError: state.lastError,
       lastFailedPhase: undefined,
+      consecutiveSnapshots: 0,
       observations: appendObservation(state, {
         phase: "vision",
         agentName: "VisionTool",
@@ -420,26 +421,12 @@ async function observe(
   );
   const visualAnalysis =
     decision.toolName === "browser_take_screenshot" && !result.lastError
-      ? await deps.visionTool.analyzeCurrentPage(deps.mcp, {
-          goal: state.goal.goal,
-          currentSubgoal: state.currentSubgoal,
-          expectedOutcome: state.expectedOutcome,
-          visualTask: buildVisualTask(state),
-          lastError: state.lastError,
-          recentFailures: getRecentFailureMessages(state),
-          recentObservations: state.observations
-            .slice(-4)
-            .map((entry) =>
-              [
-                `[${entry.phase}] ${entry.agentName}`,
-                entry.toolName ? `tool=${entry.toolName}` : "",
-                entry.errorMessage ? `error=${entry.errorMessage}` : "",
-                entry.resultText ? `result=${entry.resultText.slice(0, 500)}` : "",
-              ]
-                .filter(Boolean)
-                .join(" ")
-            ),
-        })
+      ? result.images?.[0]?.data
+        ? await deps.visionTool.analyzeScreenshotBase64(
+            result.images[0].data,
+            buildVisionInput(state)
+          )
+        : await deps.visionTool.analyzeCurrentPage(deps.mcp, buildVisionInput(state))
       : undefined;
   const observations = visualAnalysis
     ? [
@@ -463,8 +450,9 @@ async function observe(
     observations,
     latestVisualAnalysis: visualAnalysis ?? state.latestVisualAnalysis,
     toolCallCount: state.toolCallCount + 1,
-    consecutiveSnapshots:
-      decision.toolName === "browser_snapshot" && !result.lastError
+    consecutiveSnapshots: visualAnalysis
+      ? 0
+      : decision.toolName === "browser_snapshot" && !result.lastError
         ? state.consecutiveSnapshots + 1
         : decision.toolName === "browser_take_screenshot" && !result.lastError
         ? state.consecutiveSnapshots
@@ -484,11 +472,14 @@ async function callMcpTool(
   toolName: string,
   args: Record<string, unknown>,
   reasoning?: string
-): Promise<{ observations: McpObservationEntry[]; lastError?: string }> {
+): Promise<{
+  observations: McpObservationEntry[];
+  lastError?: string;
+  images?: McpImageResult[];
+}> {
   try {
     logger.info(`Calling MCP tool: ${toolName}`, args);
-    const normalizedArgs =
-      toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args;
+    const normalizedArgs = normalizeMcpToolArgs(toolName, args, state);
     const result =
       toolName === "browser_snapshot"
         ? await deps.enhancedSnapshotTool.capture(deps.mcp, normalizedArgs)
@@ -507,6 +498,7 @@ async function callMcpTool(
         reasoning,
       }),
       lastError: errorMessage,
+      images: "images" in result ? result.images : undefined,
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -516,7 +508,7 @@ async function callMcpTool(
         phase,
         agentName,
         toolName,
-        arguments: toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args,
+        arguments: normalizeMcpToolArgs(toolName, args, state),
         success: false,
         resultText: "",
         errorMessage,
@@ -691,6 +683,29 @@ function getRecentFailureMessages(state: GraphState): string[] {
     );
 }
 
+function buildVisionInput(state: GraphState) {
+  return {
+    goal: state.goal.goal,
+    currentSubgoal: state.currentSubgoal,
+    expectedOutcome: state.expectedOutcome,
+    visualTask: buildVisualTask(state),
+    lastError: state.lastError,
+    recentFailures: getRecentFailureMessages(state),
+    recentObservations: state.observations
+      .slice(-4)
+      .map((entry) =>
+        [
+          `[${entry.phase}] ${entry.agentName}`,
+          entry.toolName ? `tool=${entry.toolName}` : "",
+          entry.errorMessage ? `error=${entry.errorMessage}` : "",
+          entry.resultText ? `result=${entry.resultText.slice(0, 500)}` : "",
+        ]
+          .filter(Boolean)
+          .join(" ")
+      ),
+  };
+}
+
 function buildVisualTask(state: GraphState): string {
   const goal = state.goal.goal;
   const subgoal = state.currentSubgoal || "No current subgoal.";
@@ -732,14 +747,35 @@ function normalizeObservationArgs(
   args: Record<string, unknown>,
   state: GraphState
 ): Record<string, unknown> {
-  return toolName === "browser_snapshot" ? normalizeSnapshotArgs(args, state) : args;
+  if (toolName === "browser_snapshot") {
+    return normalizeSnapshotArgs(args, state);
+  }
+
+  if (toolName === "browser_take_screenshot") {
+    return normalizeScreenshotArgs(args);
+  }
+
+  return args;
+}
+
+function normalizeMcpToolArgs(
+  toolName: string,
+  args: Record<string, unknown>,
+  state: GraphState
+): Record<string, unknown> {
+  return toolName === "browser_snapshot"
+    ? normalizeSnapshotArgs(args, state)
+    : toolName === "browser_take_screenshot"
+    ? normalizeScreenshotArgs(args)
+    : args;
 }
 
 function normalizeSnapshotArgs(
   args: Record<string, unknown> = {},
   state: GraphState
 ): Record<string, unknown> {
-  const requestedTarget = typeof args.target === "string" ? args.target : "";
+  const rawTarget = typeof args.target === "string" ? args.target : "";
+  const requestedTarget = sanitizeSnapshotTarget(rawTarget);
   const forcedActiveSurfaceTarget = getActiveSurfaceSnapshotTarget(
     requestedTarget,
     state
@@ -755,16 +791,87 @@ function normalizeSnapshotArgs(
     Boolean(state.latestVisualAnalysis) ||
     state.consecutiveSnapshots > 0;
   const minimumDepth = targetLooksLikeComplexSurface || recoveryContext ? 12 : 8;
+  const maximumDepth = target ? 60 : 24;
+  const desiredDepth = Math.max(
+    requestedDepth ?? (forcedActiveSurfaceTarget ? 16 : minimumDepth),
+    forcedActiveSurfaceTarget ? 16 : minimumDepth
+  );
 
   return {
     ...args,
+    perceptionQuestion: buildPerceptionQuestion(state, {
+      ...args,
+      target: target || undefined,
+    }),
     target: target || undefined,
     boxes: true,
-    depth: Math.max(
-      requestedDepth ?? (forcedActiveSurfaceTarget ? 16 : minimumDepth),
-      forcedActiveSurfaceTarget ? 16 : minimumDepth
-    ),
+    depth: Math.min(desiredDepth, maximumDepth),
   };
+}
+
+function normalizeScreenshotArgs(args: Record<string, unknown> = {}): Record<string, unknown> {
+  const rawTarget = typeof args.target === "string" ? args.target.trim() : "";
+  const isBareMcpRef = /^(ref=)?e\d+$/i.test(rawTarget) || /^target=e\d+$/i.test(rawTarget);
+  const target =
+    rawTarget && !isBareMcpRef ? sanitizeSnapshotTarget(rawTarget) || undefined : undefined;
+  const normalized: Record<string, unknown> = {
+    ...args,
+    type: typeof args.type === "string" ? args.type : "png",
+  };
+  delete normalized.target;
+  if (target) normalized.target = target;
+  return normalized;
+}
+
+function sanitizeSnapshotTarget(target: string): string {
+  const trimmed = target.trim();
+  if (!trimmed) return "";
+
+  if (/^(ref=)?e\d+$/i.test(trimmed) || /^target=e\d+$/i.test(trimmed)) {
+    return "";
+  }
+
+  if (/^css=/i.test(trimmed)) {
+    return trimmed.replace(/^css=/i, "").trim();
+  }
+
+  if (/^(dialog|modal|overlay)$/i.test(trimmed)) {
+    return "[role=\"dialog\"], [aria-modal=\"true\"], dialog, [class*=\"Dialog\"], [class*=\"Modal\"], [class*=\"modal\"]";
+  }
+
+  if (/^(main|content|main content)$/i.test(trimmed)) {
+    return "main, [role=\"main\"], #root main";
+  }
+
+  if (/^(menu|popup|popover|dropdown)$/i.test(trimmed)) {
+    return "[role=\"menu\"], [role=\"listbox\"], [role=\"tree\"], [role=\"tooltip\"], [class*=\"Popover\"], [class*=\"Popper\"], [class*=\"Menu\"]";
+  }
+
+  return trimmed;
+}
+
+function buildPerceptionQuestion(
+  state: GraphState,
+  args: Record<string, unknown>
+): string {
+  const target = typeof args.target === "string" ? args.target : "";
+  const scope = target ? `Requested snapshot target/scope: ${target}.` : "";
+  const need = state.proposedToolCall?.perceptionRequest;
+  const missing = state.verification?.missing?.slice(0, 4).join("; ");
+  const lastError = state.lastError ? `Last error: ${state.lastError.slice(0, 500)}` : "";
+
+  return [
+    `Current subgoal: ${state.currentSubgoal || "No current subgoal"}`,
+    state.expectedOutcome ? `Expected outcome: ${state.expectedOutcome}` : "",
+    need?.scopeHint ? `Requested perception scope: ${need.scopeHint}` : "",
+    need?.reasoning ? `Perception reason: ${need.reasoning}` : "",
+    missing ? `Missing evidence/actions: ${missing}` : "",
+    scope,
+    lastError,
+    `Return a compact generic scene graph with the most relevant region and actionable MCP refs for this question.`,
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function getActiveSurfaceSnapshotTarget(

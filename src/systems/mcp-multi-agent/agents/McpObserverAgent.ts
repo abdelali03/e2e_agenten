@@ -17,6 +17,9 @@ Your job is to decide which observation tool is needed before planning or acting
 Rules:
 - Prefer browser_snapshot for normal UI perception.
 - Use browser_take_screenshot only when accessibility snapshot is ambiguous.
+- For browser_take_screenshot, prefer a full visible viewport screenshot. Do not crop screenshots to bare MCP refs like e123 unless the latest snapshot clearly proves that exact ref is the intended visual region; stale/over-narrow crops mislead vision.
+- If repeated snapshots are not exposing the needed region, use browser_take_screenshot instead of increasing depth again.
+- If an enhanced snapshot contains GENERIC PAGE MAP, use its focusedRegion/regions to target perception; do not repeatedly request deeper whole-page snapshots.
 - Use browser_console_messages or browser_network_requests only when errors suggest it.
 - Never choose action tools such as browser_click, browser_type, browser_fill_form, browser_press_key, browser_select_option, browser_hover, or browser_drag.
 - If the next step is obvious from the latest snapshot, still return browser_snapshot only when this node is explicitly asked to observe; actions are selected by the DOM Analyst, not by the Observer.
@@ -51,6 +54,22 @@ export class McpObserverAgent {
           reasoning: "Last error suggests network state may explain the failure.",
         };
       }
+    }
+
+    if (
+      state.consecutiveSnapshots >= 3 &&
+      toolExists(state.tools, "browser_take_screenshot")
+    ) {
+      return {
+        shouldObserve: true,
+        toolName: "browser_take_screenshot",
+        arguments: {
+          type: "png",
+          filename: `snapshot-starvation-${Date.now()}.png`,
+        },
+        reasoning:
+          "Three consecutive accessibility snapshots did not expose the needed region. Use screenshot vision instead of increasing snapshot depth.",
+      };
     }
 
     const response = await this.llm.complete(
